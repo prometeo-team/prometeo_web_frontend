@@ -1,0 +1,70 @@
+.login-form {
+    margin:10%;
+}
+
+#components-form-demo-normal-login .login-form {
+    max-width: 300px;
+}
+
+#components-form-demo-normal-login .login-form-forgot {
+    float: right;
+}
+
+#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+    float: left;
+}
+
+#components-form-demo-normal-login .login-form-button {
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.custom-white-button {
+    width: 80%px;
+    height: 60%;
+    font-size: 150%;
+    background-color: #fff;
+    color: #97b749;
+    border-color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-white-button:hover {
+    background-color: #43737E;
+    color: #fff;
+}
+
+.custom-input {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+h3 {
+    color: white;
+    font-size: large;
+}
+
+.custom-white-color {
+    color: white;
+} 
+
+.site-form-item-icon { 
+    font-size: 18px;
+    color: #97b749;
+} 
+
+.custom-form .ant-input {
+    color: #97b749;
+    border-bottom: 3px solid #97b749 !important; 
+    border-radius: 2px !important; 
+}
+
+.transparent-background {
+    background-color: #97b749; 
+}
+
+
