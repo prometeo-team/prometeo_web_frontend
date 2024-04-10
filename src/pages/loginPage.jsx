@@ -9,12 +9,12 @@ const LoginPage = () => {
             <div className="container-content">
                 <img src={logoUni} alt="Logo de la Universidad El Bosque" />
                 <hr className="image-line" />
-                <h1>Facultad De Ingeniería Virtual</h1>
+                <h1 className='h1Login'>Facultad De Ingeniería Virtual</h1>
                 
             </div>
             <div className="square-container">
                 <div className="inner-div">
-                    <h1>Bienvenido</h1>
+                    <h1 className='h1Login'>Bienvenido</h1>
                     <LoginComponent />
                 </div>
             </div>

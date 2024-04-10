@@ -3,12 +3,11 @@ import './LoginComponent.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { Space, Typography } from 'antd';
-import { useHistory } from 'react-router-dom'; 
+import { Route } from 'react-router-dom'; 
 
 const { Text, Link } = Typography;
 
 const LoginComponent = () => {
-    const history = useHistory(); // Obtiene la instancia de useHistory
     const [form] = Form.useForm(); // Obtiene la instancia del formulario
 
     const testCredentials = {
@@ -34,7 +33,7 @@ const LoginComponent = () => {
 
         if (responseJson.success) {
             // Redirige a la página "/crear-solicitud" si las credenciales son correctas
-            history.push('/');
+            history.push('/crear-solicitud');
         } else {
             // Maneja el caso en el que las credenciales son incorrectas
             console.log('Credenciales incorrectas');
@@ -43,7 +42,6 @@ const LoginComponent = () => {
 
     return (
         <Form
-            form={form} // Pasa la instancia del formulario
             name="normal_login"
             className="login-form"
             initialValues={{

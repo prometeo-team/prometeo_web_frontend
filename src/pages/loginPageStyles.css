@@ -1,9 +1,44 @@
+/* Importa los estilos de Tailwind CSS */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+/* Establece el tamaño del cuerpo y el html */
 body,
 html {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
 }
+
+/* Aplica estilos dinámicos según el tamaño de la pantalla */
+@media (min-width: 640px) {
+    body,
+    html {
+        min-height: screen-75; /* Altura mínima del 75% de la pantalla en dispositivos pequeños */
+    }
+}
+
+@media (min-width: 768px) {
+    body,
+    html {
+        min-height: screen-80; /* Altura mínima del 80% de la pantalla en dispositivos medianos */
+    }
+}
+
+@media (min-width: 1024px) {
+    body,
+    html {
+        min-height: screen-90; /* Altura mínima del 90% de la pantalla en dispositivos grandes */
+    }
+}
+
+@media (min-width: 1280px) {
+    body,
+    html {
+        min-height: screen-95; /* Altura mínima del 95% de la pantalla en dispositivos extra grandes */
+    }
+}
+
 
 .container {
     min-height: 100vh;
@@ -20,17 +55,41 @@ html {
     width: 80%;
 }
 
-.container-content img {
-    max-width: 70%;
+.container-content {
+    max-width: 30%;
     height: auto;
 }
 
-h1 {
+.h1Login {
     font-family: 'Amiri Quran Colored';
-    /*Por ver, revisar*/
-    font-size: 2rem; /* Tamaño inicial en rem */
+    /* Por ver, revisar */
+    font-size: 1.5rem;
     margin-bottom: 1rem;
     color: white;
+}
+
+@media (min-width: 640px) {
+    .h1Login {
+        font-size: calc(1.5rem + 1vw); /* Aumenta el tamaño con el ancho de la ventana */
+    }
+}
+
+@media (min-width: 768px) {
+    .h1Login {
+        font-size: calc(1.75rem + 1vw);
+    }
+}
+
+@media (min-width: 1024px) {
+    .h1Login {
+        font-size: calc(2rem + 1vw);
+    }
+}
+
+@media (min-width: 1280px) {
+    .h1Login {
+        font-size: calc(2.25rem + 1vw);
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -42,7 +101,7 @@ h1 {
 .image-line {
     flex: 1;
     border: 2px solid #ccc;
-    margin: 20px 0;
+    margin: 10px 0;
     width: 100%;
 }
 

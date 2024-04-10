@@ -1,5 +1,7 @@
+/* Tailwind CSS */
 .login-form {
-    margin:10%;
+    margin: 10%;
+    @apply sm:max-w-md;
 }
 
 #components-form-demo-normal-login .login-form {
@@ -24,9 +26,9 @@
 }
 
 .custom-white-button {
-    width: 80%px;
+    width: 80%;
     height: 60%;
-    font-size: 150%;
+    font-size: 1.5rem;
     background-color: #fff;
     color: #97b749;
     border-color: #fff;
@@ -66,5 +68,3 @@ h3 {
 .transparent-background {
     background-color: #97b749; 
 }
-
-
