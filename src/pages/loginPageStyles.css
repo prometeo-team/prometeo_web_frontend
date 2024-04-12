@@ -1,44 +1,9 @@
-/* Importa los estilos de Tailwind CSS */
-@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
-
-/* Establece el tamaño del cuerpo y el html */
 body,
 html {
-    width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
+    height: 100%;
 }
-
-/* Aplica estilos dinámicos según el tamaño de la pantalla */
-@media (min-width: 640px) {
-    body,
-    html {
-        min-height: screen-75; /* Altura mínima del 75% de la pantalla en dispositivos pequeños */
-    }
-}
-
-@media (min-width: 768px) {
-    body,
-    html {
-        min-height: screen-80; /* Altura mínima del 80% de la pantalla en dispositivos medianos */
-    }
-}
-
-@media (min-width: 1024px) {
-    body,
-    html {
-        min-height: screen-90; /* Altura mínima del 90% de la pantalla en dispositivos grandes */
-    }
-}
-
-@media (min-width: 1280px) {
-    body,
-    html {
-        min-height: screen-95; /* Altura mínima del 95% de la pantalla en dispositivos extra grandes */
-    }
-}
-
 
 .container {
     min-height: 100vh;
@@ -56,39 +21,40 @@ html {
 }
 
 .container-content {
-    max-width: 30%;
+    max-width: 40%;
     height: auto;
 }
 
 .h1Login {
-    font-family: 'Amiri Quran Colored';
-    /* Por ver, revisar */
-    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100; /* Letras más delgadas */
+    font-size: 2rem;
     margin-bottom: 1rem;
     color: white;
 }
 
+
 @media (min-width: 640px) {
     .h1Login {
-        font-size: calc(1.5rem + 1vw); /* Aumenta el tamaño con el ancho de la ventana */
+        font-size: 2.5rem;
     }
 }
 
 @media (min-width: 768px) {
     .h1Login {
-        font-size: calc(1.75rem + 1vw);
+        font-size: 3rem;
     }
 }
 
 @media (min-width: 1024px) {
     .h1Login {
-        font-size: calc(2rem + 1vw);
+        font-size: 3.5rem;
     }
 }
 
 @media (min-width: 1280px) {
     .h1Login {
-        font-size: calc(2.25rem + 1vw);
+        font-size: 4rem;
     }
 }
 
@@ -109,7 +75,7 @@ html {
     margin: 20px;
     width: 90%;
     max-width: 700px;
-    height: 500px;
+    height: 600px;
     border: 2px solid #97B749;
     background-color: #97B749;
     display: flex;
@@ -135,4 +101,29 @@ html {
     margin-bottom: 12%;
 }
 
+/* Tamaño base para la imagen */
+.img-logo {
+    width: 100%;
+    max-width: 200px;
+}
 
+/* Media query para pantallas pequeñas (sm) */
+@media (min-width: 640px) {
+    .img-logo {
+        max-width: 250px; /* Ajusta el tamaño para pantallas más grandes */
+    }
+}
+
+/* Media query para pantallas medianas (md) */
+@media (min-width: 768px) {
+    .img-logo {
+        max-width: 300px; /* Ajusta el tamaño para pantallas medianas */
+    }
+}
+
+/* Media query para pantallas grandes (lg) */
+@media (min-width: 1024px) {
+    .img-logo {
+        max-width: 350px; /* Ajusta el tamaño para pantallas grandes */
+    }
+}

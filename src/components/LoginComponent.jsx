@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import './LoginComponent.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
-import { Space, Typography } from 'antd';
-import { Route } from 'react-router-dom'; 
+import { Button, Form, Input } from 'antd';
+import { Typography } from 'antd';
 
-const { Text, Link } = Typography;
+
+const { Text } = Typography;
 
 const LoginComponent = () => {
     const [form] = Form.useForm(); // Obtiene la instancia del formulario
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const testCredentials = {
         username: 'usuario_prueba',
         password: 'contraseña_prueba',
