@@ -4,7 +4,6 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import { Typography } from 'antd';
 
-
 const { Text } = Typography;
 
 const LoginComponent = () => {
@@ -50,37 +49,37 @@ const LoginComponent = () => {
             }}
             onFinish={onFinish}
         >
-            <h3>Nombre de usuario</h3>
+            <h3 className="text-lg font-bold mb-2">Nombre de usuario</h3>
             <Form.Item
-                className="custom-form transparent-background"
+                className="mb-4"
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your Username!',
+                        message: 'Por favor ingrese su nombre de usuario!',
                     },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon custom-form" />} placeholder="" />
+                <Input className="input-lg" prefix={<UserOutlined className="site-form-item-icon custom-form text-xl" />} placeholder="" />
             </Form.Item>
-            <h3 className='labels'>Contraseña</h3>
+            <h3 className='labels text-lg font-bold mb-2'>Contraseña</h3>
             <Form.Item
                 name="password"
-                className="custom-form transparent-background"
+                className="mb-4"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your Password!',
+                        message: 'Por favor ingrese su contraseña!',
                     },
                 ]}
             >
                 <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    className="input-lg"
+                    prefix={<LockOutlined className="site-form-item-icon text-xl" />}
                     type="password"
                     placeholder=""
                 />
             </Form.Item>
-
             <Form.Item className='buttons'>
                 <Button type="primary" htmlType="submit" className="login-form-button custom-white-button">
                     Ingresar
