@@ -1,0 +1,25 @@
+.chat-input input {
+    border-width: 2px;
+    border-color: #43737E;
+}
+
+.chat-input input:focus {
+    border-color: #43737E;
+}
+
+.chat-input input:hover {
+    border-color: #97B749;
+}
+
+.chat-input input:focus:not(:hover) {
+    border-color: #43737E;
+}
+
+.send-icon {
+    color: #97B749;
+}
+
+.button-respo {
+    color: #97B749;
+}
+
