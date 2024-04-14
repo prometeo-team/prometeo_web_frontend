@@ -1,7 +1,9 @@
+import { TitleComponent } from '../components/'
+
 const CreateRequestPage = () => {
     return (
         <div>
-            <h1>createRequest</h1>
+            <TitleComponent title="Crear solicitud" />
         </div>
     )
 }

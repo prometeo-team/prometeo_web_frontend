@@ -1,0 +1,29 @@
+.boxTitle {
+    border: 1px solid #007bff;
+    border: 2px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    border-radius: 20px;
+    font-size: 40px;
+}
+
+.separator {
+    background-color: #575A6B;
+    height: 4px;
+    width: 1000px;
+}
+
+@media (max-width: 830px) {
+    .boxTitle {
+        width: 500px;
+    }
+}
+
+@media (max-width: 530px) {
+    .boxTitle {
+        align-items: center;
+        width: 300px;
+        font-size: 28px;
+    }
+}
