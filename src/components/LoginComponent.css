@@ -1,0 +1,82 @@
+/* Tailwind CSS */
+
+#components-form-demo-normal-login .login-form {
+    max-width: 300px;
+}
+
+#components-form-demo-normal-login .login-form-forgot {
+    float: right;
+}
+
+#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+    float: left;
+}
+
+#components-form-demo-normal-login .login-form-button {
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.custom-white-button {
+    width: 80%;
+    height: 60%;
+    font-size: 1.5rem;
+    background-color: #fff;
+    color: #97b749;
+    border-color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+    border-top: 2rem;
+}
+
+.custom-white-button:hover {
+    background-color: #43737E;
+    color: #fff;
+}
+
+
+
+h3 {
+    color: white;
+    font-size: xx-large;
+}
+
+.custom-white-color {
+    color: white;
+} 
+
+.site-form-item-icon { 
+    font-size: 18px;
+    color: #97b749;
+} 
+
+.custom-form .ant-input {
+    color: #97b749;
+    border-bottom: 3px solid #97b749 !important; 
+    border-radius: 2px !important; 
+}
+
+.transparent-background {
+    background-color: #97b749; 
+}
+
+/* New styles for larger inputs and labels */
+.text-lg {
+    font-size: 1.25rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.input-lg {
+    font-size: 1.25rem;
+}
+
