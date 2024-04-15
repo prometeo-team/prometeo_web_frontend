@@ -1,8 +1,7 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage } from './pages';
-
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage } from './pages';
 
 function App() {
 
@@ -15,6 +14,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/crear-solicitud" element={<CreateRequestPage />} />
         <Route path="/mis-solicitudes" element={<StudentRequestPage />} />
+        <Route path="/mi-solicitud" element={<InfoRequestPage />} />
       </Routes>
     </>
   )

@@ -1,7 +1,10 @@
-import { TitleComponent, ComponentTable } from '../components/';
+import { TitleComponent, TableComponent } from '../components/';
 import { Tag } from 'antd';
 import './studentRequestPage.css'
-export default function studentRequestPage() {
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+
+const studentRequestPage = () => {
 
   const columns = [
     {
@@ -134,16 +137,20 @@ export default function studentRequestPage() {
   ];
 
   return (
-    <div>
-      <div className='white-container-tittle'>
-        <TitleComponent text={'Mis Solicitudes'} />
+    <div className="ml-4 mr-4 ml-4 mt-4">
+      <div>
+        <TitleComponent title={'Mis Solicitudes'} />
       </div>
 
-      <div className='white-container-table'>
-        <button>Crear Nueva Solicitud</button>
-        <ComponentTable dataSource={dataSource} columns={columns} parameterAction={handleView} />
-        <button>Volver</button>
+      <div className="m-5">
+        <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
+        
+      </div>
+      <div className="ml-5 mb-5">
+         <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
       </div>
     </div>
   )
 }
+
+export default studentRequestPage
