@@ -18,6 +18,9 @@
     .boxTitle {
         width: 500px;
     }
+    .separator {
+        width: 500px;
+    }
 }
 
 @media (max-width: 530px) {
@@ -25,5 +28,8 @@
         align-items: center;
         width: 300px;
         font-size: 28px;
+    }
+    .separator {
+        width: 300px;
     }
 }
