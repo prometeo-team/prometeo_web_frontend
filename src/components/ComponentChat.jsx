@@ -8,6 +8,7 @@ const ChatComponent = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [replyMessage, setReplyMessage] = useState('');
   const [replyingTo, setReplyingTo] = useState(null); // Guarda el mensaje al que se está respondiendo
+  const [isReplying, setIsReplying] = useState(false); // Estado para controlar si se está respondiendo
 
   const currentUser = 'User1'; // Nombre del usuario actual, puedes cambiar esto según tu lógica
 
@@ -46,6 +47,7 @@ const ChatComponent = () => {
       setMessages([...messages, newMessage]);
       setReplyMessage('');
       setReplyingTo(null); // Limpiar el estado de mensaje al que se está respondiendo
+      setIsReplying(false); // Ocultar el input y el botón de respuesta
     }
   };
 
@@ -82,7 +84,7 @@ const ChatComponent = () => {
                 <span className="ml-2">{message.repliedTo.text}</span>
               </div>
             )}
-            {replyingTo && replyingTo.id === message.id && (
+            {replyingTo && replyingTo.id === message.id && isReplying && (
               <div className="chat-input message-reply ml-12 flex items-center">
                 <input
                   type="text"
@@ -101,8 +103,11 @@ const ChatComponent = () => {
             )}
             {!replyingTo && (
               <button
-                className="button-respo ml-2 bg-transparent hover:bg-green-100 px-3 py-2 rounded-md"
-                onClick={() => setReplyingTo(message)}
+                className="button-respo ml-10 bg-transparent hover:bg-green-100 px-3 py-2 rounded-md text-xs font-bold"
+                onClick={() => {
+                  setReplyingTo(message);
+                  setIsReplying(true); // Mostrar el input y el botón de respuesta
+                }}
               >
                 Responder
               </button>
@@ -117,11 +122,13 @@ const ChatComponent = () => {
           value={inputMessage}
           onChange={handleInputChange}
           className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
+          style={{ display: isReplying ? 'none' : 'block' }} // Ocultar el input si se está respondiendo
         />
 
         <button
           onClick={sendMessage}
           className="ml-2 bg-transparent hover:bg-green-100 text-green-500 px-3 py-2 rounded-md"
+          style={{ display: isReplying ? 'none' : 'inline-block' }} // Ocultar el botón si se está respondiendo
         >
           <SendOutlined className="send-icon" />
         </button>

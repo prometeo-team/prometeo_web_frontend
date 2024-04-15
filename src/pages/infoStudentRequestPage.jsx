@@ -4,6 +4,7 @@ import Tittle from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
 import { Button } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const InfoStudentRequestPage = () => {
     return (
@@ -19,7 +20,9 @@ const InfoStudentRequestPage = () => {
                 <ChatSR />
             </div>
             <div>
-                <Button to="/studentRequestPage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+                <Link to="/mis-solicitudes">
+                    <Button type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+                </Link>
             </div>
         </div>
     )
