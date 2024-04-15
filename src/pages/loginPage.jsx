@@ -5,18 +5,22 @@ import LoginComponent from '../components/LoginComponent';
 const LoginPage = () => {
     return (
         <div>
-            <div className="containerLogin">
+            <div className="containerLogin ">
                 <div className="container-content">
                     <div className="flex justify-center items-center">
-                        <img src={logoUni} alt="Logo de la Universidad El Bosque" className="img-logo-u" />
+                        <img
+                            src={logoUni}
+                            alt="Logo de la Universidad El Bosque"
+                            className="img-logo-u w-full max-w-xs mx-auto"
+                        />
                     </div>
                     <hr className="image-line" />
                     <h1 className='h1Login'>Facultad De Ingeniería Virtual</h1>
                 </div>
-                <div className="square-container">
+                <div className="square-container p-6 rounded-lg">
                     <div className="flex flex-col items-center h-full">
                         <div>
-                            <h1 className='h1Login'>Bienvenido</h1>
+                            <h1 className='h1Login font-bold mb-4 text-center'>Bienvenido</h1>
                         </div>
                         <div className="flex justify-center items-center h-full">
                             <LoginComponent />

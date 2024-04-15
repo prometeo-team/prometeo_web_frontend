@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Table, Space, Input } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import { FaEye } from "react-icons/fa";
+import { HiSearchCircle } from "react-icons/hi";
+import './TableComponent.css';
 
-export function ComponentTable({ dataSource, columns, parameterAction }) {
+function TableComponent({ dataSource, columns, parameterAction }) {
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
     key: index,
@@ -19,12 +21,16 @@ export function ComponentTable({ dataSource, columns, parameterAction }) {
     setPageSize(pageSize);
   };
 
+
   const [columnsadd, setColumnsadd] = useState(columns);
 
   useEffect(() => {
     addActionColumn();
   }, []);
 
+
+
+  
   const addActionColumn = () => {
     setColumnsadd([
       ...columns,
@@ -33,8 +39,8 @@ export function ComponentTable({ dataSource, columns, parameterAction }) {
         key: 'action',
         render: (_, record) => (
           <Space size="middle">
-            <a href="#" onClick={(e) => parameterAction(e, record)}>
-              <EyeOutlined />
+            <a className="text-3xl" href="#" onClick={(e) => parameterAction(e, record)}>
+              <FaEye />
             </a>
           </Space>
         ),
@@ -49,14 +55,17 @@ export function ComponentTable({ dataSource, columns, parameterAction }) {
   );
 
   return (
-    <div>
+    <div className="boxTable" >
+      <div className = "mb-2 input-custom">
       <Input
-        placeholder="Buscar"
+        placeholder="Buscar aquí..."
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        style={{ marginBottom: 16 }}
+        prefix={<HiSearchCircle className="w-8 h-8" />}
       />
-      <Table
+      </div>
+      <div>
+      <Table 
         columns={columnsadd}
         dataSource={filteredData}
         pagination={{
@@ -69,6 +78,10 @@ export function ComponentTable({ dataSource, columns, parameterAction }) {
           pageSizeOptions: ['5', '10'],
         }}
       />
+      </div>
+      
     </div>
   );
 }
+
+export default TableComponent;
