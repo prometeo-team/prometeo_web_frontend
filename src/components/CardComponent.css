@@ -1,0 +1,17 @@
+.card {
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.card-body{
+    font-size: medium;
+    font-weight: bold;
+}
+
+.card:hover{
+    background-color: #e0dbdb;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
