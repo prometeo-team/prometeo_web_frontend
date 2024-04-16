@@ -6,7 +6,7 @@ const Tittle2 = () => {
   
     return (
       <div>
-        <h1 className="flex items-center text-3xl font-bold md:text-5xl mb-3">Solicitud <span className="ml-2">{data.codigo}</span></h1>
+        <h1 className="flex items-center text-3xl md:text-5xl mb-3">Solicitud <span className="ml-2">{data.codigo}</span></h1>
       </div>
     );
   };

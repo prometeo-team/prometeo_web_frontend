@@ -1,5 +1,6 @@
 import { Descriptions } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { BsInfoCircleFill } from "react-icons/bs";
+import './ComponentChat.css';
 
 const jsonData = {
   items: [
@@ -34,17 +35,19 @@ const jsonData = {
 const ComponentInfoSR = () => (
   <Descriptions
     title={
-      <span className="text-lg md:text-xl lg:text-3xl font-bold">
-        <InfoCircleOutlined style={{ marginRight: 8 }} />
-        Información General
-      </span>
+      <div className="flex items-center justify-between">
+        <span className="text-lg md:text-xl lg:text-3xl font-bold flex items-center">
+          <BsInfoCircleFill className="mr-2 w-6 h-6 color-icons mr-3.5" />
+          Información General
+        </span>
+      </div>
     }
-    layout="vertical" 
+    layout="vertical"
     column={5} //limite
   >
     {jsonData.items.map(item => (
-      <Descriptions.Item key={item.key} label={<span className="text-base md:text-lg lg:text-xl">{item.label}</span>}>
-        <span className="text-base md:text-lg lg:text-xl">{item.children}</span>
+      <Descriptions.Item key={item.key} label={<span className="ml-10 text-base md:text-lg lg:text-xl">{item.label}</span>}>
+        <span className="ml-10 text-base md:text-lg lg:text-xl font-bold">{item.children}</span>
       </Descriptions.Item>
     ))}
   </Descriptions>

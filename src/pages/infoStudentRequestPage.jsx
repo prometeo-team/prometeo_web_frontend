@@ -4,22 +4,25 @@ import Tittle from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
 import { Button } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const InfoStudentRequestPage = () => {
     return (
-        <div className="m-4 ">
+        <div className="m-4 ml-10">
             <div className='flex justify-between items-center'>
                 <Tittle />
-                <Button type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<FileTextFilled />}>Documentos adjuntos</Button>
+                <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto' icon={<FileTextFilled />}>Documentos adjuntos</Button>
             </div>
-            <div className="bg-white shadow-md p-4 rounded-md border border-gray-400">
+            <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
                 <InfoSRComponent />
             </div>
-            <div className="bg-white shadow-md p-4 rounded-md border border-gray-400 mt-4 mb-4">
+            <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">
                 <ChatSR />
             </div>
             <div>
-                <Button to="/studentRequestPage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+                <Link to="/mis-solicitudes">
+                    <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12' icon={<ArrowLeftOutlined />}>Volver</Button>
+                </Link>
             </div>
         </div>
     )
