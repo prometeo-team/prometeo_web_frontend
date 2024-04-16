@@ -1,0 +1,11 @@
+.boxTable {
+    border: 2px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    font-size: 40px;
+}
+
+.input-custom{
+    width: 30rem;
+}

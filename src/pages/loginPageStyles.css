@@ -61,8 +61,6 @@
     }
 }
 
-
-
 .image-line {
     flex: 1;
     border: 2px solid #ccc;
@@ -107,6 +105,6 @@
     }
 }
 
-.flex {
-    width: 600px;
+.flex-col {
+    width: 700px;
 }

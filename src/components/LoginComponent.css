@@ -37,7 +37,10 @@
     color: #fff;
 }
 
+.custom-input {
+    margin-bottom: 1rem;
 
+}
 
 h3 {
     color: white;
@@ -46,21 +49,21 @@ h3 {
 
 .custom-white-color {
     color: white;
-} 
+}
 
-.site-form-item-icon { 
+.site-form-item-icon {
     font-size: 18px;
     color: #97b749;
-} 
+}
 
 .custom-form .ant-input {
     color: #97b749;
-    border-bottom: 3px solid #97b749 !important; 
-    border-radius: 2px !important; 
+    border-bottom: 3px solid #97b749 !important;
+    border-radius: 2px !important;
 }
 
 .transparent-background {
-    background-color: #97b749; 
+    background-color: #97b749;
 }
 
 /* New styles for larger inputs and labels */
@@ -78,5 +81,23 @@ h3 {
 
 .input-lg {
     font-size: 1.25rem;
+
 }
 
+.width-size {
+    width: 100%;
+}
+
+.custom-white-button:hover {
+    background-color: #43737E !important;
+    border-color: #43737E;
+    color: #FFFFFF;
+}
+
+.ant-form-item-explain-error {
+    color: black !important;
+}
+
+.form-item.validate-status.error .input-lg:hover {
+    border-color: black;
+}

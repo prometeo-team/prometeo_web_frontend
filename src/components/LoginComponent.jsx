@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import './LoginComponent.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { Typography } from 'antd';
 
 const { Text } = Typography;
+
+const error = () => {
+    message.error('Para cambiar tu contraseña, debes comunicarte con mesadeservicio@unbosque.edu.co a través de tu correo electrónico institucional de la Universidad El Bosque..');
+};
 
 const LoginComponent = () => {
     const [form] = Form.useForm(); // Obtiene la instancia del formulario
@@ -40,36 +44,47 @@ const LoginComponent = () => {
         }
     };
 
+
+
     return (
         <Form
             name="normal_login"
-            className="login-form"
+            className="login-form width-size ml-4 mr-4 text-center"
             initialValues={{
                 remember: true,
             }}
             onFinish={onFinish}
         >
-            <h3 className="text-lg font-bold mb-2">Nombre de usuario</h3>
+            <h3 className="text-lg mb-2 text-left">Nombre de usuario</h3>
             <Form.Item
                 className="mb-4"
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: 'Por favor ingrese su nombre de usuario!',
+                        message: 'Por favor, ingrese su nombre de usuario!',
+                        validateStatus: 'error', // Agrega este atributo para controlar el color del mensaje
+                    },
+                    {
+                        pattern: /^[a-zA-Z0-9._%+-]+@unbosque\.edu\.co$/,
+                        message: 'Por favor, ingrese un correo electrónico válido de @unbosque.edu.co',
                     },
                 ]}
             >
-                <Input className="input-lg" prefix={<UserOutlined className="site-form-item-icon custom-form text-xl" />} placeholder="" />
+                <Input className="input-lg"
+                    prefix={<UserOutlined className="site-form-item-icon custom-form text-xl" />}
+                    placeholder="Ingrese su nombre de usuario"
+                />
             </Form.Item>
-            <h3 className='labels text-lg font-bold mb-2'>Contraseña</h3>
+            <h3 className='labels text-lg  mb-2 text-left'>Contraseña</h3>
             <Form.Item
                 name="password"
-                className="mb-4"
+                className="mb-4 "
                 rules={[
                     {
                         required: true,
-                        message: 'Por favor ingrese su contraseña!',
+                        message: 'Por favor, ingrese su contraseña!',
+                        validateStatus: 'error', // Agrega este atributo para controlar el color del mensaje
                     },
                 ]}
             >
@@ -77,19 +92,21 @@ const LoginComponent = () => {
                     className="input-lg"
                     prefix={<LockOutlined className="site-form-item-icon text-xl" />}
                     type="password"
-                    placeholder=""
+                    placeholder="Ingrese su contraseña"
                 />
             </Form.Item>
-            <Form.Item className='buttons'>
-                <Button type="primary" htmlType="submit" className="login-form-button custom-white-button">
+            <Form.Item className='buttons mt-12'>
+                <Button type="primary" htmlType="submit" className="login-form-button custom-white-button ">
                     Ingresar
                 </Button>
 
-                <Button type="secondary" htmlType="submit" className="login-form-button2 custom-white-color">
+                <Button type="secondary" onClick={error}>
                     <Text underline color='white'>Olvide mi contraseña</Text>
                 </Button>
+
             </Form.Item>
         </Form>
+
     );
 };
 
