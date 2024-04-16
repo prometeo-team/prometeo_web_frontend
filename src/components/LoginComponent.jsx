@@ -95,7 +95,7 @@ const LoginComponent = () => {
                     placeholder="Ingrese su contraseña"
                 />
             </Form.Item>
-            <Form.Item className='buttons'>
+            <Form.Item className='buttons mt-12'>
                 <Button type="primary" htmlType="submit" className="login-form-button custom-white-button ">
                     Ingresar
                 </Button>

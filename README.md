@@ -1,9 +1,16 @@
-# React + Vite
+# Prometeo Web - frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div>
+<p style = 'text-align:center;'>
+<img src="https://yt3.ggpht.com/ytc/AKedOLSMd2hyZPc9YzCrWY4XpGEQwrgXblzvBFu3843d=s900-c-k-c0x00ffffff-no-rj" alt="JuveYell" width="300px">
+</p>
+</div> 
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# prometeo_web_frontend
+# Integrantes
+1. Juan David Osma
+2. Daniel Mejia
+3. David Lopez
+4. David Real
+5. Felipe Segura
+6. Miguel Gonzales
