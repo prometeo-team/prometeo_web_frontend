@@ -1,20 +1,8 @@
 .color-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #97B749;
     transition: background-color 0.3s ease; 
-}
-
-.container-button{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .color-button:hover {
     background-color: #43737E;
 }
-
-
