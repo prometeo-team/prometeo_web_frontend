@@ -3,6 +3,7 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, RegistrationLegalizationPage, CouncilTablePage } from './pages';
 
+
 function App() {
 
 
