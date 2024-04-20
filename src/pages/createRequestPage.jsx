@@ -1,7 +1,12 @@
+import { TitleComponent, RequestTypeComponent } from '../components/'
+
 const CreateRequestPage = () => {
     return (
-        <div>
-            <h1>createRequest</h1>
+        <div className='mt-20'>
+            <TitleComponent title="Crear solicitud" />
+            <div className='requestContainer'>
+                <RequestTypeComponent />
+            </div>
         </div>
     )
 }

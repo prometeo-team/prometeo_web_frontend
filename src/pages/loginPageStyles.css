@@ -1,11 +1,5 @@
-body,
-html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
 
-.container {
+.containerLogin {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -17,22 +11,19 @@ html {
     margin: 5%;
     text-align: center;
     max-width: 80%;
-    width: 80%;
-}
-
-.container-content {
     max-width: 40%;
     height: auto;
+    align-items: center;
 }
-
+ 
 .h1Login {
     font-family: 'Poppins', sans-serif;
-    font-weight: 100; /* Letras más delgadas */
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-weight: 100;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
     color: white;
 }
-
 
 @media (min-width: 640px) {
     .h1Login {
@@ -54,13 +45,19 @@ html {
 
 @media (min-width: 1280px) {
     .h1Login {
-        font-size: 4rem;
+        font-size: 3.8rem; 
     }
 }
 
-@media screen and (max-width: 768px) {
-    h1 {
-        font-size: 1.5rem; /* Tamaño más pequeño en rem */
+@media (min-width: 1500px) {
+    .h1Login {
+        font-size: 3rem; 
+    }
+}
+
+@media (max-width: 768px) {
+    .h1Login {
+        font-size: 1.5rem; 
     }
 }
 
@@ -85,45 +82,29 @@ html {
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
 }
 
-.inner-div {
-    margin: 10px;
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
-    background-color: #97B749;
-    align-items: center;
-    justify-content: center;
-}
-
-
-
-.inner-div h1 {
-    text-align: center;
-    margin-bottom: 12%;
-}
-
-/* Tamaño base para la imagen */
-.img-logo {
+.img-logo-u {
     width: 100%;
     max-width: 200px;
 }
 
-/* Media query para pantallas pequeñas (sm) */
 @media (min-width: 640px) {
-    .img-logo {
-        max-width: 250px; /* Ajusta el tamaño para pantallas más grandes */
+    .img-logo-u {
+        max-width: 250px; 
     }
 }
 
-/* Media query para pantallas medianas (md) */
 @media (min-width: 768px) {
-    .img-logo {
-        max-width: 300px; /* Ajusta el tamaño para pantallas medianas */
+    .img-logo-u {
+        max-width: 300px; 
     }
 }
 
-/* Media query para pantallas grandes (lg) */
 @media (min-width: 1024px) {
-    .img-logo {
-        max-width: 350px; /* Ajusta el tamaño para pantallas grandes */
+    .img-logo-u {
+        max-width: 350px; 
     }
+}
+
+.flex-col {
+    width: 700px;
 }
