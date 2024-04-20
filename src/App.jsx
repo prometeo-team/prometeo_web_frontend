@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage } from './pages';
+import { HomePage, LoginPage , ViewRequest, CreateRequestPage, RequestManagement } from './pages';
 
 
 function App() {
@@ -17,7 +17,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/mis-solicitudes" element={<ViewRequest />}/>
         <Route path="/crear-solicitud" element={<CreateRequest />} />
+        <Route path="/gestionar-solicitudes" element={<RequestManagement/>} />
       </Routes>
     </>
   )
