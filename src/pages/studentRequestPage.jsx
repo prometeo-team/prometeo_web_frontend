@@ -137,7 +137,7 @@ const studentRequestPage = () => {
   ];
 
   return (
-    <div className="ml-4 mr-4 ml-4 mt-4">
+    <div className="mr-4 ml-4 mt-4">
       <div>
         <TitleComponent title={'Mis Solicitudes'} />
       </div>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import PropTypes from 'prop-types';
-import 'animate.css/animate.min.css';
 import './ModalComponent.css';
 
 const ModalComponent = ({ content, icon, visible, onClose }) => {
