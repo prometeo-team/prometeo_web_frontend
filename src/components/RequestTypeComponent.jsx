@@ -79,6 +79,14 @@ function RequestTypeComponent() {
                   <Col className='ml-16' span={4}> <CardComponent title="Reserva de cupo" icon="7" onCardClick={handleCardClick} /></Col>
                   <Col className='ml-16' span={4}> <CardComponent title="Legalización de matrícula" icon="8" onCardClick={handleCardClick} /></Col>
                </Row>
+               <FloatButton
+                     tooltip={<div>volver</div>}
+                     icon={<ArrowLeftOutlined className='iconButtonReturn' />}
+                     badge={{ color: 'green' }}
+                     href='/'
+                     className='button-return'
+                     shape='circle'
+                  />
             </div>)
          }
          {
@@ -95,6 +103,7 @@ function RequestTypeComponent() {
                </div>
             )
          }
+         
       </>
    )
 }
