@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { message, Form, Input } from "antd";
-import "animate.css/animate.min.css";
 import "./UploadDocumentComponent.css";
 import { AiFillFilePdf } from "react-icons/ai";
 import { MdCloudUpload, MdDelete } from "react-icons/md";

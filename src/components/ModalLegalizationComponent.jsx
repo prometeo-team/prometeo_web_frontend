@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Modal, Button } from "antd";
 import PropTypes from "prop-types";
-import "animate.css/animate.min.css";
 import "./ModalLegalizationComponent.css";
 import UploadDocumentComponent from "./UploadDocumentComponent";
 
