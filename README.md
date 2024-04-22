@@ -14,3 +14,9 @@
 4. David Real
 5. Felipe Segura
 6. Miguel Gonzales
+
+# Steps
+
+1. instalar dependecias
+
+   ``` npm install && npm install -D```
