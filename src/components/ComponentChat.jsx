@@ -139,7 +139,7 @@ const ChatComponent = () => {
                   placeholder="Responde aquí..."
                   value={replyMessage}
                   onChange={handleReplyChange}
-                  className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
+                  className="flex-1 px-4 py-2  rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
                 />
                 <button
                   onClick={() => sendReply(message.id)}
@@ -178,7 +178,7 @@ const ChatComponent = () => {
           placeholder="Escribe tu mensaje..."
           value={inputMessage}
           onChange={handleInputChange}
-          className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
+          className="flex-1 px-4 py-2  rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
           style={{ display: isReplying ? 'none' : 'block' }}
         />
 
