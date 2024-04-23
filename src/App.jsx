@@ -13,7 +13,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         {/* <Route path="/mis-solicitudes" element={<ViewRequest />}/> */}
-        <Route path="/crear-solicitud" element={<CreateRequest />} />
         {/* <Route path="/gestionar-solicitudes" element={<RequestManagement/>} /> */}
         <Route path="/crear-solicitud" element={<CreateRequestPage />} />
         <Route path="/mis-solicitudes" element={<StudentRequestPage />} />
