@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, RequestManagement } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, RegistrationLegalizationPage } from './pages';
 
 function App() {
 
@@ -17,6 +17,7 @@ function App() {
         <Route path="/crear-solicitud" element={<CreateRequestPage />} />
         <Route path="/mis-solicitudes" element={<StudentRequestPage />} />
         <Route path="/mi-solicitud" element={<InfoRequestPage />} />
+        <Route path="/legalizacion-matricula" element={<RegistrationLegalizationPage />} />
       </Routes>
     </>
   )

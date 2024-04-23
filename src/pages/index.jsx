@@ -5,6 +5,7 @@ import RequestManagement from "./requestManagement";
 import CreateRequestPage from "./createRequestPage";
 import StudentRequestPage from "./studentRequestPage";
 import InfoRequestPage from "./infoStudentRequestPage";
+import RegistrationLegalizationPage from "./registrationLegalizationPage";
 
 export {
     HomePage,
@@ -13,5 +14,6 @@ export {
     RequestManagement,
     CreateRequestPage,
     StudentRequestPage,
-    InfoRequestPage
+    InfoRequestPage,
+    RegistrationLegalizationPage,
 }
