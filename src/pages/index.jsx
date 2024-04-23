@@ -3,6 +3,7 @@ import LoginPage from "./loginPage";
 import CreateRequestPage from "./createRequestPage";
 import StudentRequestPage from "./studentRequestPage";
 import InfoRequestPage from "./infoStudentRequestPage";
+import InfoAdminRequestPage from "./infoAdminRequestPage";
 
 export {
     HomePage,
@@ -10,4 +11,5 @@ export {
     CreateRequestPage,
     StudentRequestPage,
     InfoRequestPage,
+    InfoAdminRequestPage,
 }
