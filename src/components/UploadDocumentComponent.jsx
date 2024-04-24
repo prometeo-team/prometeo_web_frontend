@@ -13,6 +13,7 @@ const UploadDocumentComponent = ({
   clickClassName,
   clickClassNameP,
   label,
+  detail,
   requiredValue,
 }) => {
   const handleFileChange = ({ target: { files } }) => {
@@ -48,10 +49,15 @@ const UploadDocumentComponent = ({
   };
 
   return (
-    <div>
-      <span>{label}</span>
+    <div className="text-center">
+      <div>
+        <div>
+          <p className="text-sm font-bold mb-1">{label}</p>
+          <p className="text-xs text-gray-600 mb-4">{detail}</p>
+        </div>
+      </div>
       <Form.Item
-        className="form-upload"
+        className="flex justify-center items-center border-dashed border-2  cursor-pointer rounded-md form-color h-20"
         action=""
         onClick={() => document.querySelector(clickClassNameP).click()}
       >
@@ -71,8 +77,8 @@ const UploadDocumentComponent = ({
         />
 
         {pdf ? (
-          <div className="pdf-preview">
-            <AiFillFilePdf color="#black" size={50} />
+          <div className="flex items-center">
+            <AiFillFilePdf color="#black" size={48} />
             <p>{truncateFileName(fileName)}</p>
           </div>
         ) : (
@@ -82,7 +88,7 @@ const UploadDocumentComponent = ({
         )}
       </Form.Item>
 
-      <span className="upload-content uploaded-row">
+      <span className="flex items-center uploaded-row">
         {fileName === "Archivo no seleccionado" ? (
           "Archivo no seleccionado"
         ) : (

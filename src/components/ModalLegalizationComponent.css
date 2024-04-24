@@ -13,6 +13,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 42%; 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
 }
 
 .modal-backdrop {
@@ -26,15 +31,3 @@
   z-index: 1000;
 }
 /*sdas¨*/
-
-.upload-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-  grid-gap: 20px; /* Espacio entre los elementos */
-}
-
-.upload-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas por fila */
-  grid-gap: 20px; /* Espacio entre los elementos */
-}

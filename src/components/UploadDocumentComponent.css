@@ -1,28 +1,11 @@
-.form-upload {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 2px dashed #97b749;
-  height: 90px;
-  width: 220px;
-  cursor: pointer;
-  border-radius: 5px;
+.form-color {
+  border: 2px dashed #97b749; /* Ajustar el ancho en función del 80% del ancho de la pantalla */
 }
 
 .delete-icon {
-  font-size: 28px; /* Tamaño del icono */
+  font-size: 22px; /* Tamaño del icono */
   color: #97b749; /* Color del icono */
   cursor: pointer; /* Cambiar el cursor a un puntero */
-}
-
-.pdf-preview {
-  display: flex;
-  align-items: center;
-}
-
-.pdf-preview p {
-  margin-left: 10px; /* Espacio entre el ícono de PDF y el nombre del archivo */
 }
 
 .uploaded-row {
@@ -30,11 +13,6 @@
   display: flex;
   justify-content: center;
   padding: 5px 5px;
-  border-radius: 2px;
+  border-radius: 4px;
   background-color: #e9f0ff;
-}
-
-.upload-content {
-  display: flex;
-  align-items: center;
 }
