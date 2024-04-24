@@ -1,0 +1,40 @@
+.form-upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #97b749;
+  height: 90px;
+  width: 220px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-icon {
+  font-size: 28px; /* Tamaño del icono */
+  color: #97b749; /* Color del icono */
+  cursor: pointer; /* Cambiar el cursor a un puntero */
+}
+
+.pdf-preview {
+  display: flex;
+  align-items: center;
+}
+
+.pdf-preview p {
+  margin-left: 10px; /* Espacio entre el ícono de PDF y el nombre del archivo */
+}
+
+.uploaded-row {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  padding: 5px 5px;
+  border-radius: 2px;
+  background-color: #e9f0ff;
+}
+
+.upload-content {
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,75 @@
+.navbar_container{
+    display: flex;
+    justify-content: start;
+    position: relative;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    height: 45.62em;
+    background-color: #43737E;
+}
+
+.logo_menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -1em;
+    margin-left: 1.8em;
+    padding-bottom: 1em;
+    max-width: 11.5em;
+    display: block;
+    user-select: none;
+}
+.navbar_menu{
+    display: none;
+}
+
+.navbar_wrapper{
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    height: 32px;
+    font-weight: 700;
+}
+
+
+
+/* Responsive, Logo universidad, tamaño del navbar_container y navbar_menu y lo que este por dentro*/
+
+@media (min-width: 768px){
+
+    .navbar_container{
+        width: 11.875em;
+    }
+    .logo_menu{
+        max-width: 9em;
+    }
+    .navbar_menu{
+        display: flex;
+        padding: 1em;
+        gap: 1.7em;
+        justify-content: space-between;
+        flex-direction: column;
+        width: 12rem;
+    }
+}
+
+@media (min-width: 1024px){
+
+    .navbar_container{
+        width: 15em;
+    }
+    .navbar_menu{
+        display: flex;
+        padding: 1em;
+        gap: 1.7em;
+        justify-content: space-between;
+        flex-direction: column;
+        width: 235px;
+    }
+    .logo_menu{
+        max-width: 11.5em;
+    }
+}
+
