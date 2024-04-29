@@ -1,4 +1,4 @@
-import { TitleComponent, TableComponent } from '../components/';
+import { TitleComponent, TableComponent, NavbarComponent } from '../components/';
 import { Tag } from 'antd';
 import './studentRequestPage.css'
 import { ArrowLeftOutlined } from '@ant-design/icons';
