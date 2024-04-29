@@ -1,0 +1,13 @@
+.itemp:hover{
+    background-color: #97B749;
+}
+
+
+.navbar_wrapper{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+
+
+/* Responsive, Logo universidad, tamaño del navbar_container y navbar_menu y lo que este por dentro*/
