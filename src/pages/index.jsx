@@ -6,6 +6,7 @@ import CreateRequestPage from "./createRequestPage";
 import StudentRequestPage from "./studentRequestPage";
 import InfoRequestPage from "./infoStudentRequestPage";
 import RegistrationLegalizationPage from "./registrationLegalizationPage";
+import CouncilTablePage from "./councilTablePage";
 
 export {
     HomePage,
@@ -16,4 +17,5 @@ export {
     StudentRequestPage,
     InfoRequestPage,
     RegistrationLegalizationPage,
+    CouncilTablePage,
 }
