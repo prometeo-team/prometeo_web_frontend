@@ -4,6 +4,7 @@ import CreateRequestPage from "./createRequestPage";
 import StudentRequestPage from "./studentRequestPage";
 import InfoRequestPage from "./infoStudentRequestPage";
 import RegistrationLegalizationPage from "./registrationLegalizationPage";
+import InfoAdminRequestPage from "./infoAdminRequestPage";
 import CouncilTablePage from "./councilTablePage";
 
 export {
@@ -13,5 +14,6 @@ export {
     StudentRequestPage,
     InfoRequestPage,
     RegistrationLegalizationPage,
+    InfoAdminRequestPage,
     CouncilTablePage,
 }
