@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./ModalLegalizationComponent.css";
 import UploadDocumentComponent from "./UploadDocumentComponent";
 
-const ModalLegalizationComponent = ({ visible, onClose }) => {
+const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf1, setPdf1] = useState(null);
   const [pdf2, setPdf2] = useState(null);
@@ -22,10 +22,21 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
+      const documentsWithNames = [
+        pdf1 && { url: pdf1, name: fileName1 },
+        pdf2 && { url: pdf2, name: fileName2 },
+        pdf3 && { url: pdf3, name: fileName3 },
+        pdf4 && { url: pdf4, name: fileName4 },
+        pdf5 && { url: pdf5, name: fileName5 },
+        pdf6 && { url: pdf6, name: fileName6 },
+      ].filter(doc => doc !== null);
+      setDocuments(documentsWithNames);
       onClose();
       setConfirmLoading(false);
     }, 1000);
   };
+
+  const allFilesSelected = pdf1 && pdf2 && pdf3 && pdf4 && pdf5 && pdf6;
 
   const handleCancel = () => {
     document.querySelector(".center-modal").classList.add("animate__zoomOut");
@@ -97,7 +108,7 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
   return (
     <>
       {visible && (
-        <div className="modal-backdrop">
+        <div className="modal-backdrop ">
           <Modal
             open={visible}
             onOk={handleOk}
@@ -184,17 +195,19 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 isRequired={true}
               />
 
-              
+
             </div>
             <div className="text-center mt-2">
-                <Button
-                  key="cancel"
-                  onClick={handleCancel}
-                  className="text-white mx-auto custom-btn"
-                >
+              {allFilesSelected ? (
+                <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
                   Cargar documentos
                 </Button>
-              </div>
+              ) : (
+                <Button disabled className="text-white mx-auto custom-btn">
+                  Cargar documentos
+                </Button>
+              )}
+            </div>
           </Modal>
         </div>
       )}
@@ -205,6 +218,7 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
 ModalLegalizationComponent.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  setDocuments: PropTypes.func.isRequired,
 };
 
 export default ModalLegalizationComponent;
