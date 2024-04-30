@@ -1,14 +1,27 @@
-import { TitleComponent, RequestTypeComponent } from '../components/'
+import { TitleComponent, RequestTypeComponent, NavbarComponent} from "../components/"
+
 
 const CreateRequestPage = () => {
+
+    const menuItems = [
+        { name: 'Inicio'},
+        { name: 'Mis Solicitudes'},
+        { name: 'Crear Solicitud'},
+        { name: 'Calendario Académico'},
+        { name: 'Otras Solicitudes'},
+        { name: 'Ayuda'}
+    ];
+
     return (
-        <div className='mt-20'>
-            <TitleComponent title="Crear solicitud" />
-            <div className='requestContainer'>
-                <RequestTypeComponent />
+        <div className="flex w-full h-full">  
+            <NavbarComponent menuItems={menuItems}/> 
+            <div>
+                <TitleComponent title="Crear solicitud" />
+                <RequestTypeComponent/>
             </div>
+
         </div>
     )
 }
 
-export default CreateRequestPage
+export default CreateRequestPage;
