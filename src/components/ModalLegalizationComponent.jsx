@@ -106,9 +106,12 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
             footer={null}
             closable={false}
             centered
-            wrapClassName="center-modal animate__animated animate__zoomIn"
+            wrapClassName="center-modal animate__animated animate__zoomIn "
           >
-            <div className=".upload-grid upload-row">
+            <div className="text-center mb-4">
+              <h4 className="text-lg font-bold">Documentos de Legalizacion Matricula - Formato .pdf*</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
               <UploadDocumentComponent
                 onChange={handleFileChange1}
                 pdf={pdf1}
@@ -116,7 +119,8 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 onDelete={handleDelete1}
                 clickClassNameP=".input-field1"
                 clickClassName="input-field1"
-                label="Anexo documento de identidad al 150% (Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente)  en formato PDF"
+                label="Documento de identidad al 150%"
+                detail="Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente"
                 isRequired={true}
               />
 
@@ -127,8 +131,8 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 onDelete={handleDelete2}
                 clickClassNameP=".input-field2"
                 clickClassName="input-field2"
-                label="Anexo 
-                Pregrado (Saber 11, acta de grado o diploma) Postgrado (acta de grado y diploma) Nota: Esta parte es obligatoria para los estudiantes de 1° semestre"
+                label="Anexo Pregrado o Postgrado"
+                detail="Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)"
                 isRequired={false}
               />
 
@@ -139,7 +143,8 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 onDelete={handleDelete3}
                 clickClassNameP=".input-field3"
                 clickClassName="input-field3"
-                label="Anexo Estudiantes extranjeros ( Visa, PEP, PPT, según corresponda para cada caso)"
+                label="Anexo Estudiantes extranjeros"
+                detail="Visa, PEP, PPT, según corresponda para cada caso"
                 isRequired={false}
               />
 
@@ -151,6 +156,7 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 clickClassNameP=".input-field4"
                 clickClassName="input-field4"
                 label="Anexo Comprobante de Pago de Matrícula*"
+                detail="-"
                 isRequired={false}
               />
 
@@ -161,7 +167,8 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 onDelete={handleDelete5}
                 clickClassNameP=".input-field5"
                 clickClassName="input-field5"
-                label="Link donde encontrara el Formato de Registro de Matrícula:"
+                label="Formato de registro de matricula"
+                detail="-"
                 isRequired={false}
               />
 
@@ -172,12 +179,14 @@ const ModalLegalizationComponent = ({ visible, onClose }) => {
                 onDelete={handleDelete6}
                 clickClassNameP=".input-field6"
                 clickClassName="input-field6"
-                label="Anexo de Afiliación EPS (Vigencia NO mayor a 30 días) (Sin claves)"
+                label="Anexo de Afiliación EPS (Sin claves)"
+                detail="Vigencia NO mayor a 30 días"
+                isRequired={true}
               />
 
               
             </div>
-            <div className="text-center">
+            <div className="text-center mt-2">
                 <Button
                   key="cancel"
                   onClick={handleCancel}

@@ -1,7 +1,8 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage,RegistrationLegalizationPage } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage,RegistrationLegalizationPage, CouncilTablePage} from './pages';
+
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/mi-solicitud" element={<InfoRequestPage />} />
         <Route path="/legalizacion-matricula" element={<RegistrationLegalizationPage />} />
         <Route path="/dashboard" element={<InfoAdminRequestPage />} />
+        <Route path="/consejo-tabla" element={<CouncilTablePage />} />
       </Routes>
     </>
   )
