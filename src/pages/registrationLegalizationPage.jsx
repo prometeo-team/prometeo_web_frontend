@@ -1,31 +1,21 @@
-import { Button } from 'antd';
-import { useState } from 'react';
-import ModalLegalizationComponent from '../components/ModalLegalizationComponent';
 
-const RegistrationLegalizationPage= () => {
+import Title from '../components/TitleComponent';
+import FormLegalizationC from '../components/FormLegalizationComponent'
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const handleOpenModal = () => {
-        setModalVisible(true);
-    };
-    const handleCloseModal = () => {
-        setModalVisible(false);
-    };
+const RegistrationLegalizationPage = () => {
 
-    
-  return (
-    <div>
-        <div>RegistrationLegalizationPage</div>
+
+
+    return (
+        <div>
+            <Title title="Legalización de matrícula" />
             <div>
-                <Button onClick={handleOpenModal}>Crear Solicitud</Button>
+                <FormLegalizationC />
             </div>
-            <ModalLegalizationComponent
-                visible={modalVisible}
-                onClose={handleCloseModal}
-            />
-    </div>
-    
-  )
+
+        </div>
+
+    )
 }
 
-export default RegistrationLegalizationPage
+export default RegistrationLegalizationPage;

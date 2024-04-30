@@ -3,16 +3,11 @@ import './ComponentChat.css';
 import { PiUserCircleBold } from "react-icons/pi";
 import { RiMessage3Fill } from "react-icons/ri";
 import { IoSend } from "react-icons/io5";
-import { RiCloseCircleFill } from "react-icons/ri";
 
 // Componente de chat
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [replyMessage, setReplyMessage] = useState('');
-  const [replyingTo, setReplyingTo] = useState(null); // Guarda el mensaje al que se está respondiendo
-  const [isReplying, setIsReplying] = useState(false); // Estado para controlar si se está respondiendo
-  //const [currentUser, setCurrentUser] = useState(null);
 
 
   {/*useEffect(() => {
@@ -42,9 +37,6 @@ const ChatComponent = () => {
     setInputMessage(e.target.value);
   };
 
-  const handleReplyChange = (e) => {
-    setReplyMessage(e.target.value);
-  };
 
   const sendMessage = () => {
     if (inputMessage.trim() !== '') {
@@ -59,23 +51,6 @@ const ChatComponent = () => {
     }
   };
 
-  const sendReply = (messageId) => {
-    if (replyMessage.trim() !== '') {
-      console.log(`Respuesta para el mensaje con ID ${messageId}: ${replyMessage}`);
-      const repliedMessage = messages.find((msg) => msg.id === messageId);
-      const newMessage = {
-        id: messages.length + 1,
-        text: replyMessage,
-        sender: currentUser,
-        timestamp: new Date().toISOString(),
-        repliedTo: repliedMessage,
-      };
-      setMessages([...messages, newMessage]);
-      setReplyMessage('');
-      setReplyingTo(null);
-      setIsReplying(false);
-    }
-  };
 
 
   useEffect(() => {
@@ -126,49 +101,8 @@ const ChatComponent = () => {
                 <span className="message-text">{message.text}</span>
               </div>
             </div>
-            {message.repliedTo && (
-              <div className="message-reply ml-12 border-l-2 pl-2">
-                <span className="text-gray-500 italic">Respuesta:</span>
-                <span className="ml-2">{message.repliedTo.text}</span>
-              </div>
-            )}
-            {replyingTo && replyingTo.id === message.id && isReplying && (
-              <div className="chat-input message-reply ml-12 flex items-center">
-                <input
-                  type="text"
-                  placeholder="Responde aquí..."
-                  value={replyMessage}
-                  onChange={handleReplyChange}
-                  className="flex-1 px-4 py-2  rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
-                />
-                <button
-                  onClick={() => sendReply(message.id)}
-                  className="ml-2 bg-transparent hover:bg-green-100 text-green-500 px-3 py-2 rounded-md"
-                >
-                  <IoSend className="send-icon color-icons" />
-                </button>
-                <button
-                  onClick={() => {
-                    setReplyingTo(null);
-                    setIsReplying(false);
-                  }}
-                  className="ml-2 bg-transparent hover:bg-gray-100 text-black-500 px-3 py-2 rounded-md"
-                >
-                  <RiCloseCircleFill className="send-icon w-5 h-5" />
-                </button>
-              </div>
-            )}
-            {!replyingTo && (
-              <button
-                className="button-respo ml-10 bg-transparent hover:bg-green-100 px-3 py-2 rounded-md text-xs font-bold"
-                onClick={() => {
-                  setReplyingTo(message);
-                  setIsReplying(true);
-                }}
-              >
-                Responder
-              </button>
-            )}
+            
+            
           </div>
         ))}
       </div>
@@ -179,13 +113,13 @@ const ChatComponent = () => {
           value={inputMessage}
           onChange={handleInputChange}
           className="flex-1 px-4 py-2  rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
-          style={{ display: isReplying ? 'none' : 'block' }}
+          
         />
 
         <button
           onClick={sendMessage}
           className="ml-2 bg-transparent hover:bg-green-100 text-green-500 px-3 py-2 rounded-md"
-          style={{ display: isReplying ? 'none' : 'inline-block' }}
+          
         >
           <IoSend className="send-icon color-icons" />
         </button>

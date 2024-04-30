@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, RegistrationLegalizationPage } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, RegistrationLegalizationPage,  } from './pages';
 
 function App() {
 

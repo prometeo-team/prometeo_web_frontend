@@ -1,7 +1,8 @@
 .custom-btn {
-  background-color: #97b749;
+  background-color: #97b749 !important;
   border: 1px solid transparent;
   transition: border-color 0.3s ease, color 0.3s ease;
+  color: #FFF;
 }
 
 .custom-btn:hover {
