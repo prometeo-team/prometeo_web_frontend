@@ -14,7 +14,6 @@ function RequestTypeComponent() {
    const handleCardClick = (option) => {
       const options = document.getElementById('options');
       options.classList.add('animate__animated', 'animate__fadeOut');
-      //has un timeout de 1 segundo
       setTimeout(() => {
          toggleVisibility();
       }, 600);
@@ -57,7 +56,7 @@ function RequestTypeComponent() {
    return (
       <>
          {
-            isVisible && (<div className="requestLayout mt-20 ml-12" id="options">
+            isVisible && (<div className="requestLayout mt-16 ml-12" id="options">
                <Row>
                   <Col span={4}>
                      <CardComponent title="Adición de créditos" icon="1" onCardClick={handleCardClick} />
@@ -92,6 +91,7 @@ function RequestTypeComponent() {
          {
             !isVisible && (
                <div className="forms" id="forms">
+
                   <FloatButton
                      tooltip={<div>volver</div>}
                      icon={<ArrowLeftOutlined className='iconButtonReturn' />}
