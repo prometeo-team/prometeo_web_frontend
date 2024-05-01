@@ -1,4 +1,4 @@
-import { TitleComponent, TableComponent, NavbarComponent } from '../components/';
+import { TitleComponent, TableComponent } from '../components/';
 import { Tag } from 'antd';
 import './studentRequestPage.css'
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -137,7 +137,7 @@ const studentRequestPage = () => {
   ];
 
   return (
-    <div className="mr-4 ml-4 mt-4">
+    <div className="mr-52 mt-4">
       <div>
         <TitleComponent title={'Mis Solicitudes'} />
       </div>

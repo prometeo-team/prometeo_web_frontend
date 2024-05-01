@@ -7,7 +7,7 @@ const RegistrationLegalizationPage = () => {
 
 
     return (
-        <div>
+        <div className='mr-48 mt-32'>
             <Title title="Legalización de matrícula" />
             <div>
                 <FormLegalizationC />
