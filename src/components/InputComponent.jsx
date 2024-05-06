@@ -53,6 +53,8 @@ const InputComponent = ({ type, placeholder, variant, options }) => {
             onChange={handleInputChange}
           />
         );
+      case 'readOnly':
+        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly/>;
       case 'string':
         return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} />;
       case 'date':
@@ -95,7 +97,7 @@ const InputComponent = ({ type, placeholder, variant, options }) => {
 };
 
 InputComponent.propTypes = {
-  type: PropTypes.oneOf(['number', 'string', 'date', 'boolean', 'box', 'correo']).isRequired,
+  type: PropTypes.oneOf(['number','readOnly', 'string', 'date', 'boolean', 'box', 'correo']).isRequired,
   placeholder: PropTypes.string.isRequired,
   variant: PropTypes.string,
   options: PropTypes.arrayOf(
