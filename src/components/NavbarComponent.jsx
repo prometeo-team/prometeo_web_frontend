@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import './NavbarComponent.css';
 import logoUni from '../assets/Logo_de_la_Universidad_El_Bosque.png';
 import { useState } from 'react';
@@ -22,7 +23,7 @@ function NavbarComponent({ menuItems }) {
 
     return (
         <>
-            <div className={`navbar md:flex flex-col w-fit bg-[#43737e] h-screen ${!menuVisible ? 'hidden' : ''}`}>
+            <div className={`navbar md:flex flex-col w-fit fixed bg-[#43737e] h-screen ${!menuVisible ? 'hidden' : ''}`}>
                 <img className='logo_menu block justify-center content-center select-none ml-6 pb-5 max-w-32 md:max-w-44 mt-8' src={logoUni} alt="Logo de la Universidad el Bosque" />
                 <div className='bg-[#43737e]'>
                     <ul className='navbar_menu flex justify-between flex-col gap-4 ml-2 p-2 w-40 md:w-56'>
@@ -51,12 +52,13 @@ function NavbarComponent({ menuItems }) {
                             const liClass = isLastItem ? 'md:mt-52 2xl:mt-96' : '';
                             const isManagement = index === 0 && item.name === "Gestión Solicitudes";
                             const liOption = isManagement ? 'mt-6' : '';
+                            const history = useNavigate();
                             return (
                                 <li key={index}
                                     className={`navbar_wrapper flex items-center gap-2 text-white sm:h-auto md:h-8
                                     transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp ${liClass} ${liOption}`}>
                                     {icon}
-                                    <button className='text-white'>{item.name}</button>
+                                    <button className='text-white' onClick={() => history(item.path)}>{item.name}</button>
                                 </li>
                             );
                         })}
