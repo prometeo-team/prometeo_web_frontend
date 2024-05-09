@@ -11,7 +11,7 @@ const ExtensionPage = () => {
                     <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
                 </div>
                 <div>
-                    <TitleComponent title="Solicitud Incapacidad" />
+                    <TitleComponent title="Solicitud Supletorio" />
                 </div>
                 <div>
                     <FormExtensionComponent />
