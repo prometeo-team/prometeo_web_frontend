@@ -7,6 +7,7 @@ import RegistrationLegalizationPage from "./registrationLegalizationPage";
 import InfoAdminRequestPage from "./infoAdminRequestPage";
 import CouncilTablePage from "./councilTablePage";
 import IncapacityPage from "./incapacityPage";
+import ExtensionPage from "./ExtensionPage";
 
 export {
     HomePage,
@@ -17,5 +18,6 @@ export {
     RegistrationLegalizationPage,
     InfoAdminRequestPage,
     CouncilTablePage,
-    IncapacityPage
+    IncapacityPage,
+    ExtensionPage
 }

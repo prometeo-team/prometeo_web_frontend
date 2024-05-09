@@ -22,3 +22,12 @@
     background-color: #B3B7BA;
     color: #ffffff;
 }
+.scroll-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento en navegadores WebKit */
+}

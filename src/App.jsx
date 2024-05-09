@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage, ExtensionPage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -60,7 +60,7 @@ function App() {
       <div className="flex">
         {/* Renderiza NavbarComponent solo si showNavbar es true */}
         {showNavbar() && (
-          <div className="w-1/4 h-max">
+          <div className="w-1/4 h-auto">
             <NavbarComponent menuItems={getMenu()} />
           </div>
         )}
@@ -75,6 +75,7 @@ function App() {
             <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
+            <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
           </Routes>
         </div>
       </div>

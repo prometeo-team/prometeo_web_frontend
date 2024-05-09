@@ -14,39 +14,34 @@ import { MdPerson } from "react-icons/md";
 // eslint-disable-next-line react/prop-types
 function NavbarComponent({ menuItems }) {
 
-    const [menuVisible, setMenuVisible] = useState(false);
-    const [leftArrow, setArrowVisible] = useState(false);
-    const toggleMenu = () => {
-        setMenuVisible(!menuVisible);
-        setArrowVisible(!leftArrow);
-    };
+    
 
     return (
         <>
-            <div className={`navbar md:flex flex-col w-fit fixed bg-[#43737e] h-screen ${!menuVisible ? 'hidden' : ''}`}>
-                <img className='logo_menu block justify-center content-center select-none ml-6 pb-5 max-w-32 md:max-w-44 mt-8' src={logoUni} alt="Logo de la Universidad el Bosque" />
-                <div className='bg-[#43737e]'>
-                    <ul className='navbar_menu flex justify-between flex-col gap-4 ml-2 p-2 w-40 md:w-56'>
+            <div className={`navbar flex-col w-60 flex bg-[#43737e] h-full max-md:w-20`}>
+                <img className='logo_menu block  justify-center content-center select-none  p-2 pb-5 ml-5 mt-2 max-w-32 md:max-w-44 max-md:w-16 max-md:ml-2 max-md:mt-6 max-md:p-0 ' src={logoUni} alt="Logo de la Universidad el Bosque" />
+                <div className='bg-[#43737e] max-md:p-3'>
+                    <ul className='navbar_menu flex justify-between fixed flex-col gap-4 ml-2 p-2 w-56 max-md:mt-20 max-md:ml-0 max-md:absolute'>
                         {menuItems.map((item, index) => {
                             let icon = item.icon;
                             if (item.name === "Inicio") {
-                                icon = <HiHome className='ml-1' />;
+                                icon = <HiHome className='ml-1 text-2xl' />;
                             } else if (item.name === "Mis Solicitudes") {
-                                icon = <AppstoreFilled className='ml-1' />;
+                                icon = <AppstoreFilled className='ml-1 text-2xl' />;
                             } else if (item.name === "Crear Solicitud") {
-                                icon = <HiOutlineDocumentPlus className='ml-1' />;
+                                icon = <HiOutlineDocumentPlus className='ml-1 text-2xl' />;
                             } else if (item.name === "Calendario Académico") {
-                                icon = <IoCalendar className='ml-1' />;
+                                icon = <IoCalendar className='ml-1 text-2xl' />;
                             } else if (item.name === "Otras Solicitudes") {
-                                icon = <InboxOutlined className='ml-1' />;
+                                icon = <InboxOutlined className='ml-1 text-2xl' />;
                             } else if (item.name === "Ayuda") {
-                                icon = <QuestionCircleOutlined className='ml-1' />;
+                                icon = <QuestionCircleOutlined className='ml-1 text-2xl' />;
                             } else if (item.name === "Gestión Solicitudes") {
-                                icon = <AppstoreFilled className="ml-1" />;
+                                icon = <AppstoreFilled className='ml-1 text-2xl' />;
                             } else if (item.name === "Consejo Facultad") {
-                                icon = <MdPerson className="ml-1" />;
+                                icon = <MdPerson className='ml-1 text-2xl' />;
                             } else if (item.name === "Configuración") {
-                                icon = <IoSettingsOutline className="ml-1" />;
+                                icon = <IoSettingsOutline className='ml-1 text-2xl' />;
                             }
                             const isLastItem = index === menuItems.length - 1 && item.name === "Ayuda"; // Verifica si es el último elemento
                             const liClass = isLastItem ? 'md:mt-52 2xl:mt-96' : '';
@@ -54,22 +49,16 @@ function NavbarComponent({ menuItems }) {
                             const liOption = isManagement ? 'mt-6' : '';
                             const history = useNavigate();
                             return (
-                                <li key={index}
-                                    className={`navbar_wrapper flex items-center gap-2 text-white sm:h-auto md:h-8
-                                    transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp ${liClass} ${liOption}`}>
+                                <li onClick={() => history(item.path)} key={index}
+                                    className={`navbar_wrapper flex items-center gap-2 mb-5 text-white  max-md:text-2xl max-md:mb-5 transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp ${liClass} ${liOption}`}>
                                     {icon}
-                                    <button className='text-white' onClick={() => history(item.path)}>{item.name}</button>
+                                    <button className='text-white w-full text-left ml-1 max-md:hidden'>{item.name}</button>
                                 </li>
                             );
                         })}
                     </ul>
                 </div>
             </div>
-            {leftArrow ? (
-                <IoArrowBackCircleOutline className="leftarrow md:fixed md:hidden w-fit h-10 text-[#97B749]" onClick={toggleMenu} />
-            ) : (
-                <IoArrowForwardCircleOutline className="leftarrow md:fixed md:hidden w-fit h-10 text-[#97B749]" onClick={toggleMenu} />
-            )}
         </>
 
     )

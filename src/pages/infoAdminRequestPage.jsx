@@ -1,28 +1,11 @@
 import UserCArdComponent from '../components/UserCardComponet';
-import Navbar from '../components/NavbarComponent';
 import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent';
 import CardGraficsComponent from '../components/CardGraficsComponent';
 import { Tag } from 'antd';
-import {
-  AppstoreFilled,
-  InboxOutlined,
-  QuestionCircleOutlined
-} from '@ant-design/icons';
-import { IoCalendar } from 'react-icons/io5'
-import { HiOutlineDocumentPlus, HiHome } from "react-icons/hi2";
 import './infoAdminRequestPage.css';
 
 const InfoAdminRequestPage = () => {
-
-  const menuItems = [
-    { name: 'Inicio', icon: <HiHome className='ml-1' /> },
-    { name: 'Solicitudes', icon: <AppstoreFilled className='ml-1' /> },
-    { name: 'Revisión Comite', icon: <HiOutlineDocumentPlus className='ml-1' /> },
-    { name: 'Calendario Académico', icon: <IoCalendar className='ml-1' /> },
-    { name: 'Configuración', icon: <InboxOutlined className='ml-1' /> },
-    { name: 'Ayuda', icon: <QuestionCircleOutlined className='ml-1' /> }
-  ];
 
   const columns = [
     {
@@ -187,7 +170,7 @@ const InfoAdminRequestPage = () => {
 
   return (
     <div className='flex'>
-      <div className="w-full m-4 ml-10 flex flex-col">
+      <div className="w-full m-4 flex flex-col">
         <div className='w-full mt-0 float-right h-20'>
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
@@ -195,14 +178,14 @@ const InfoAdminRequestPage = () => {
           <NavbarTypeComponent />
         </div>
         <div className='w-full mt-16'>
-          <div className='ml-8 w-11/12 flex flex-row'>
+          <div className='ml-8 max-md:ml-0 w-11/12 flex flex-row'>
             <CardGraficsComponent type="1" number="2" grafico="grafico1" data={data1} />
             <CardGraficsComponent type="2" number="10" grafico="grafico2" data={data2} />
             <CardGraficsComponent type="3" number="10" grafico="grafico3" data={data3} />
           </div>
         </div>
         <div className='w-full mt-16'>
-          <div className='ml-8 w-11/12'>
+          <div className='ml-8 max-md:ml-2 w-11/12'>
             <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
           </div>
         </div>
