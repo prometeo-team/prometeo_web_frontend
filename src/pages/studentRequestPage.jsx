@@ -2,6 +2,7 @@ import { TitleComponent, TableComponent } from '../components/';
 import { Tag } from 'antd';
 import './studentRequestPage.css'
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { MdAssignmentAdd } from "react-icons/md";
 import { Button } from 'antd';
 
 const studentRequestPage = () => {
@@ -27,11 +28,20 @@ const studentRequestPage = () => {
         let color;
         if (estado === 'Iniciado') {
           color = 'green';
-        } else if (estado === 'Proceso') {
+        } else if (estado === 'Revisión Comite') {
+          color = 'green';
+        } else if (estado === 'Consejo') {
+          color = 'orange';
+        } else if (estado === 'Pendiente Firma') {
           color = 'yellow';
-        } else {
-          (estado === 'Finalizado')
+        } else if (estado === 'En Finanzas') {
+          color = 'yellow';
+        } else if (estado === 'No Aprobado'){
           color = 'red';
+        } else if (estado === 'Finalizado'){
+          color = 'red';
+        } else {
+          color = 'black';
         }
         return (
           <Tag color={color}>
@@ -66,17 +76,18 @@ const studentRequestPage = () => {
     obtenerDatos();
   }, []);*/
 
+
   const dataSource = [
     {
       id_solicitud: 'C231231',
       fecha: '2023-03-15',
-      estado: 'Finalizado',
+      estado: 'Revisión Comite',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
       fecha: '2023-04-17',
-      estado: 'Proceso',
+      estado: 'Consejo',
       tipo_solicitud: 'Reintegro'
     },
     {
@@ -88,7 +99,7 @@ const studentRequestPage = () => {
     {
       id_solicitud: 'C231231',
       fecha: '2023-03-16',
-      estado: 'Iniciado',
+      estado: 'Pendiente Firma',
       tipo_solicitud: 'Reintegro'
     },
     {
@@ -100,13 +111,13 @@ const studentRequestPage = () => {
     {
       id_solicitud: 'C231231',
       fecha: '2023-03-16',
-      estado: 'Iniciado',
+      estado: 'En Finanzas',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
       fecha: '2023-03-16',
-      estado: 'Iniciado',
+      estado: 'No Aprobado',
       tipo_solicitud: 'Reintegro'
     },
     {
@@ -135,19 +146,32 @@ const studentRequestPage = () => {
       tipo_solicitud: 'Reintegro'
     },
   ];
+  
+  //const dataSource =[];
 
   return (
-    <div className="mr-52 mt-4">
+    <div className="ml-4 mr-4 mt-4">
       <div>
         <TitleComponent title={'Mis Solicitudes'} />
       </div>
-
-      <div className="m-5">
-        <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
-        
+      {dataSource.length === 0 ? (
+      <div className="justify-center ">
+      <div className="text-center container-button">
+        <p className="m-10">No presentan solicitudes en el sistema</p>
+        <Button to="/crear-solicitud" type="primary" className="color-button md:text-base lg:text-lg h-auto mb-10" icon={<MdAssignmentAdd className="w-5 h-5" />}>
+          Crear Solicitud
+        </Button>
       </div>
+    </div>
+      ) : (
+        <div className="m-5">
+          <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
+        </div>
+      )}
       <div className="ml-5 mb-5">
-         <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+         <Button to="/homePage" type="primary" className='color-button md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>
+            Volver
+          </Button>
       </div>
     </div>
   )

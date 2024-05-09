@@ -7,7 +7,7 @@ import { Typography } from 'antd';
 const { Text } = Typography;
 
 const error = () => {
-    message.error('Para cambiar tu contraseña, debes comunicarte con mesadeservicio@unbosque.edu.co a través de tu correo electrónico institucional de la Universidad El Bosque.');
+    message.error('Para cambiar tu contraseña, debes comunicarte con mesadeservicio@unbosque.edu.co a través de tu correo electrónico institucional de la Universidad El Bosque..');
 };
 
 const LoginComponent = () => {

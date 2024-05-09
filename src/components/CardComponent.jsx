@@ -11,8 +11,7 @@ import { GrDocumentUser } from "react-icons/gr";
 
 
 // eslint-disable-next-line react/prop-types
-function CardComponent({ title, icon, onCardClick  }) {
-    const index = icon; 
+function CardComponent({ title, icon }) {
     const size = 120;
     if (icon == 1) {
         icon = <TiDocumentAdd size={size} />;
@@ -33,7 +32,7 @@ function CardComponent({ title, icon, onCardClick  }) {
     }
 
     return (
-        <div className="card" onClick={() => onCardClick(index)}>
+        <div className="card">
             <Row>
                 <Col span={24} className='flex flex-col items-center mt-6'>
                     <div className="card-title">{icon}</div>

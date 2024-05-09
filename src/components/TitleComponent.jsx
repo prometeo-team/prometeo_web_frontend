@@ -6,7 +6,7 @@ import './TitleComponent.css';
 function TitleComponent({ title }) {
     return (
         <div>
-            <div className={classNames('grid justify-center text-center mt-10 text-2xl font-bold', 'text-gray-800')}>
+            <div className={classNames('grid justify-center text-center mt-20 text-2xl font-bold', 'text-gray-800')}>
                 <div className="boxTitle ">
                     {title}
                 </div>

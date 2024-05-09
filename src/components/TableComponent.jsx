@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 
-import { useState, useEffect } from "react";
-import { Table, Space, Input } from "antd";
+import { useState, useEffect } from 'react';
+import { Table, Space, Input } from 'antd';
 import { FaEye } from "react-icons/fa";
 import { HiSearchCircle } from "react-icons/hi";
-import "./TableComponent.css";
+import './TableComponent.css';
 
 function TableComponent({ dataSource, columns, parameterAction }) {
   const filasConKey = dataSource.map((fila, index) => ({
@@ -14,12 +14,13 @@ function TableComponent({ dataSource, columns, parameterAction }) {
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
     setPageSize(pageSize);
   };
+
 
   const [columnsadd, setColumnsadd] = useState(columns);
 
@@ -27,19 +28,18 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     addActionColumn();
   }, []);
 
+
+
+  
   const addActionColumn = () => {
     setColumnsadd([
       ...columns,
       {
-        title: "Acción",
-        key: "action",
+        title: 'Acción',
+        key: 'action',
         render: (_, record) => (
           <Space size="middle">
-            <a
-              className="text-3xl"
-              href="#"
-              onClick={(e) => parameterAction(e, record)}
-            >
+            <a className="text-3xl" href="#" onClick={(e) => parameterAction(e, record)}>
               <FaEye />
             </a>
           </Space>
@@ -55,34 +55,31 @@ function TableComponent({ dataSource, columns, parameterAction }) {
   );
 
   return (
-    <div className="mx-auto">
-      <div className="boxTable border-2 border-gray-300 p-5 rounded-2xl text-5xl">
-        <div className="mb-3 w-full md:w-[40rem] ">
-          <Input
-            placeholder="Buscar aquí..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            prefix={<HiSearchCircle className="w-8 h-8" />}
-          />
-        </div>
-        <div className="overflow-x-auto">
-          <Table
-            columns={columnsadd}
-            dataSource={filteredData}
-            rowClassName={() => "bg-white"}
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: filteredData.length,
-              onChange: handlePageChange,
-              showSizeChanger: true,
-              onShowSizeChange: handlePageChange,
-              pageSizeOptions: ["5", "10"],
-            }}
-           
-          />
-        </div>
+    <div className="boxTable" >
+      <div className = "mb-2 input-custom">
+      <Input
+        placeholder="Buscar aquí..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        prefix={<HiSearchCircle className="w-8 h-8" />}
+      />
       </div>
+      <div>
+      <Table 
+        columns={columnsadd}
+        dataSource={filteredData}
+        pagination={{
+          current: page,
+          pageSize: pageSize,
+          total: filteredData.length,
+          onChange: handlePageChange,
+          showSizeChanger: true,
+          onShowSizeChange: handlePageChange,
+          pageSizeOptions: ['5', '10'],
+        }}
+      />
+      </div>
+      
     </div>
   );
 }

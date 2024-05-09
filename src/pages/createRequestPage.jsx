@@ -1,17 +1,14 @@
-import { TitleComponent, RequestTypeComponent } from "../components/"
-
+import { TitleComponent, RequestTypeComponent } from '../components/'
 
 const CreateRequestPage = () => {
-
-
     return (
-        <div className="mr-40 w-max">
+        <div className='mt-20'>
             <TitleComponent title="Crear solicitud" />
-            <RequestTypeComponent />
+            <div className='requestContainer'>
+                <RequestTypeComponent />
+            </div>
         </div>
-
-
     )
 }
 
-export default CreateRequestPage;
+export default CreateRequestPage
