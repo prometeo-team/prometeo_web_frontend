@@ -1,10 +1,11 @@
-import { TitleComponent, TableComponent } from '../components/';
+import UserCArdComponent from '../components/UserCardComponet';
+import NavbarTypeComponent from '../components/NavbarTypeComponent';
+import TableComponent from '../components/TableComponent';
+import CardGraficsComponent from '../components/CardGraficsComponent';
 import { Tag } from 'antd';
-import './studentRequestPage.css'
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import './infoAdminRequestPage.css';
 
-const studentRequestPage = () => {
+const InfoAdminRequestPage = () => {
 
   const columns = [
     {
@@ -13,14 +14,18 @@ const studentRequestPage = () => {
       key: 'id_solicitud',
     },
     {
+      title: 'Solicitante',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
       title: 'Fecha de Creacion',
       dataIndex: 'fecha',
       key: 'fecha',
       sorter: (a, b) => new Date(a.fecha) - new Date(b.fecha),
-
     },
     {
-      title: 'Estado de la solicitud',
+      title: 'Estado',
       key: 'estado',
       dataIndex: 'estado',
       render: (estado) => {
@@ -54,69 +59,66 @@ const studentRequestPage = () => {
     console.log('Ver registro:', record.id_solicitud);
   };
 
-  /*const [filas, setFilas] = useState([]);
-
-  useEffect(() => {
-    // Obtener los datos del JSON y almacenarlos en la variable de estado 'filas'
-    const obtenerDatos = async () => {
-      const response = await fetch('/api/datos');
-      const data = await response.json();
-      setFilas(data);
-    };
-    obtenerDatos();
-  }, []);*/
-
   const dataSource = [
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-15',
       estado: 'Finalizado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-04-17',
       estado: 'Proceso',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
@@ -124,33 +126,72 @@ const studentRequestPage = () => {
     {
 
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
     {
       id_solicitud: 'C231231',
+      name: 'Pepito Perez',
       fecha: '2023-03-16',
       estado: 'Iniciado',
       tipo_solicitud: 'Reintegro'
     },
   ];
 
-  return (
-    <div className="mr-52 mt-4">
-      <div>
-        <TitleComponent title={'Mis Solicitudes'} />
-      </div>
+  const data1 = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+  const data2 = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+  const data3 = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
 
-      <div className="m-5">
-        <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
-        
-      </div>
-      <div className="ml-5 mb-5">
-         <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+  return (
+    <div className='flex'>
+      <div className="w-full m-4 flex flex-col">
+        <div className='w-full mt-0 float-right h-20'>
+          <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
+        </div>
+        <div className='w-full'>
+          <NavbarTypeComponent />
+        </div>
+        <div className='w-full mt-16'>
+          <div className='ml-8 max-md:ml-0 w-11/12 flex flex-row'>
+            <CardGraficsComponent type="1" number="2" grafico="grafico1" data={data1} />
+            <CardGraficsComponent type="2" number="10" grafico="grafico2" data={data2} />
+            <CardGraficsComponent type="3" number="10" grafico="grafico3" data={data3} />
+          </div>
+        </div>
+        <div className='w-full mt-16'>
+          <div className='ml-8 max-md:ml-2 w-11/12'>
+            <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-export default studentRequestPage
+export default InfoAdminRequestPage;
