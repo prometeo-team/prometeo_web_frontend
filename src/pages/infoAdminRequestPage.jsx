@@ -3,7 +3,7 @@ import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent';
 import CardGraficsComponent from '../components/CardGraficsComponent';
 import { Tag } from 'antd';
-import './infoAdminRequestPage.css';
+import '../App.css';
 
 const InfoAdminRequestPage = () => {
 
@@ -169,23 +169,23 @@ const InfoAdminRequestPage = () => {
   ];
 
   return (
-    <div className='flex'>
-      <div className="w-full m-4 flex flex-col">
+    <div className='w-full flex mr-24 h-screen'>
+      <div className="w-full  mt-6 scroll-container flex flex-col">
         <div className='w-full mt-0 float-right h-20'>
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
-        <div className='w-full'>
+        <div className='w-full mt-6'>
           <NavbarTypeComponent />
         </div>
         <div className='w-full mt-16'>
-          <div className='ml-8 max-md:ml-0 w-11/12 flex flex-row'>
+          <div className='ml-8 max-md:ml-2 w-11/12 flex flex-row'>
             <CardGraficsComponent type="1" number="2" grafico="grafico1" data={data1} />
             <CardGraficsComponent type="2" number="10" grafico="grafico2" data={data2} />
             <CardGraficsComponent type="3" number="10" grafico="grafico3" data={data3} />
           </div>
         </div>
         <div className='w-full mt-16'>
-          <div className='ml-8 max-md:ml-2 w-11/12'>
+          <div className='ml-8 max-md:ml-3 mb-20 w-11/12'>
             <TableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
           </div>
         </div>

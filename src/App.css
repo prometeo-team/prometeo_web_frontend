@@ -1,0 +1,9 @@
+.scroll-container {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento en navegadores WebKit */
+}

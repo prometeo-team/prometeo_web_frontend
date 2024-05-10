@@ -12,7 +12,7 @@ function NavbarTypeComponent() {
                 <span className={classNames(' text-type transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300')}>Adición</span>
                 <div className={classNames('v-line')}></div>
             </div>
-            <div className={classNames('grid grid-flow-col-dense full-bar scroll-container w-full')}> 
+            <div className={classNames('grid grid-flow-col-dense full-bar scroll-container2 w-full')}> 
                 <div className={classNames('w-full text-hover cursor-pointer text-center  flex flex-row items-center h-full justify-between')}>
                     <span className={classNames('ml-2 mr-2 text-type transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300')}>Cancelación</span>
                     <div className={classNames('v-line')}></div>

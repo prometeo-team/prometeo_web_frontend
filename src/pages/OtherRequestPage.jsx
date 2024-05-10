@@ -1,9 +1,9 @@
 import { TitleComponent } from "../components";
-import FormExtensionComponent from "../components/FormExtensionComponent";
+import FormOtherRequestComponent from "../components/FormOtherRequestComponent";
 import UserCArdComponent from '../components/UserCardComponet';
-import '../App.css';
+import '../App.css'
 
-const ExtensionPage = () => {
+const OtherRequestPage = () => {
 
     return (
         <div className="flex mr-24 h-screen">
@@ -12,10 +12,10 @@ const ExtensionPage = () => {
                     <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
                 </div>
                 <div>
-                    <TitleComponent title="Solicitud Supletorio" />
+                    <TitleComponent title="Otras Solicitudes" />
                 </div>
                 <div>
-                    <FormExtensionComponent />
+                    <FormOtherRequestComponent />
                 </div>
             </div>
         </div>
@@ -25,4 +25,4 @@ const ExtensionPage = () => {
 
 }
 
-export default ExtensionPage;
+export default OtherRequestPage;
