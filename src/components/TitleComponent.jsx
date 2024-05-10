@@ -7,7 +7,7 @@ function TitleComponent({ title }) {
     return (
         <div>
             <div className={classNames('grid justify-center text-center mt-10 text-2xl font-bold', 'text-gray-800')}>
-                <div className="boxTitle ">
+                <div className="boxTitle bg-white">
                     {title}
                 </div>
             </div>

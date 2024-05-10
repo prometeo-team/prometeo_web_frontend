@@ -45,16 +45,16 @@ function CardGraficsComponent({ type, number,grafico , data }) {
     let card = null;
 
     if (type === '1') {
-        card = <span className={classNames('flex')}><FaFile />Solicitudes pendientes</span>;
+        card = <span className={classNames('flex max-md:flex-col-reverse text-balance')}><FaFile />Solicitudes pendientes</span>;
     } else if (type === '2') {
-        card = <span className={classNames('flex')}><CiUser />Solicitudes en proceso</span>;
+        card = <span className={classNames('flex max-md:flex-col-reverse text-balance')}><CiUser />Solicitudes en proceso</span>;
     } else if (type === '3') {
-        card = <span className={classNames('flex')}><MdCheckCircleOutline />Solicitudes finalizadas</span>;
+        card = <span className={classNames('flex max-md:flex-col-reverse text-balance')}><MdCheckCircleOutline />Solicitudes finalizadas</span>;
     }
 
     return (
         <>
-            <div className={classNames('w-1/3 h-full bg-white letter rounded-2xl cursor-pointer p-3 m-2 flex flex-col')}>
+            <div className={classNames('w-1/3 h-full bg-white letter rounded-2xl cursor-pointer p-3 m-1 flex flex-col')}>
                 <div className={classNames('w-full float-left')}>
                     {card}
                 </div>

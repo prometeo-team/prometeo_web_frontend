@@ -18,10 +18,10 @@ function NavbarComponent({ menuItems }) {
 
     return (
         <>
-            <div className={`navbar flex-col w-60 flex bg-[#43737e] h-full max-md:w-20`}>
+            <div className={`h-screen flex-col w-60 flex bg-[#43737e] max-md:w-20`}>
                 <img className='logo_menu block  justify-center content-center select-none  p-2 pb-5 ml-5 mt-2 max-w-32 md:max-w-44 max-md:w-16 max-md:ml-2 max-md:mt-6 max-md:p-0 ' src={logoUni} alt="Logo de la Universidad el Bosque" />
                 <div className='bg-[#43737e] max-md:p-3'>
-                    <ul className='navbar_menu flex justify-between fixed flex-col gap-4 ml-2 p-2 w-56 max-md:mt-20 max-md:ml-0 max-md:absolute'>
+                    <ul className='navbar_menu flex justify-between  flex-col gap-4 ml-2 p-2 w-56 max-md:mt-20 max-md:ml-0 max-md:absolute'>
                         {menuItems.map((item, index) => {
                             let icon = item.icon;
                             if (item.name === "Inicio") {

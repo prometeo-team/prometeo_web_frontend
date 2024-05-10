@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage, ExtensionPage } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage, ExtensionPage,OtherRequestPage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -12,7 +12,7 @@ function App() {
     { name: 'Mis Solicitudes', path: '/student/mis-solicitudes' },
     { name: 'Crear Solicitud', path: '/student/crear-solicitud' },
     { name: 'Calendario Académico', path: '' },
-    { name: 'Otras Solicitudes', },
+    { name: 'Otras Solicitudes',path: '/student/solicitud-otra' },
     { name: 'Ayuda' }
   ];
 
@@ -57,14 +57,13 @@ function App() {
 
       {/* //con tailwind crea dos div uno que ocupe 25% y otro 75% */}
 
-      <div className="flex">
+      <div className="flex h-full">
         {/* Renderiza NavbarComponent solo si showNavbar es true */}
         {showNavbar() && (
-          <div className="w-1/4 h-auto">
+          <div className="w-1/4">
             <NavbarComponent menuItems={getMenu()} />
           </div>
         )}
-        <div className="w-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -76,8 +75,8 @@ function App() {
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
             <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
+            <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />
           </Routes>
-        </div>
       </div>
     </>
   )

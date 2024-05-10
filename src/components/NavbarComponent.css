@@ -7,6 +7,9 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
 }
+.navbar{
+    height: 100%;
+}
 
 
 /* Responsive, Logo universidad, tamaño del navbar_container y navbar_menu y lo que este por dentro*/

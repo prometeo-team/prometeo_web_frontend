@@ -22,12 +22,12 @@
     background-color: #B3B7BA;
     color: #ffffff;
 }
-.scroll-container {
+.scroll-container2 {
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
 }
 
-.scroll-container::-webkit-scrollbar {
+.scroll-container2::-webkit-scrollbar {
     display: none; /* Oculta la barra de desplazamiento en navegadores WebKit */
 }
