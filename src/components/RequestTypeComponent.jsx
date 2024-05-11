@@ -4,6 +4,7 @@ import CardComponent from './CardComponent';
 import { FloatButton } from 'antd';
 import { useState } from 'react';
 import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined';
+import { Link } from 'react-router-dom';
 
 function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
@@ -73,19 +74,38 @@ function RequestTypeComponent() {
                   </Col>
                </Row>
                <Row className='mt-10'>
-                  <Col span={4}> <CardComponent title="Reintegro" icon="5" onCardClick={handleCardClick} /></Col>
+                  <Col span={4}> 
+                  <Link to="/student/reintegro" onClick={(e) => {
+                        e.preventDefault();
+                        setTimeout(() => {
+                           window.location.href = "/student/reintegro";
+                        }, 600);
+                     }}>
+                        <CardComponent title="Reintegro" icon="5" onCardClick={handleCardClick} />
+                     </Link>
+                  </Col>
                   <Col className='ml-16' span={4}> <CardComponent title="Reembolso" icon="6" onCardClick={handleCardClick} /></Col>
                   <Col className='ml-16' span={4}> <CardComponent title="Reserva de cupo" icon="7" onCardClick={handleCardClick} /></Col>
-                  <Col className='ml-16' span={4}> <CardComponent title="Legalización de matrícula" icon="8" onCardClick={handleCardClick} /></Col>
+                  <Col className='ml-16' span={4}>
+                     <Link to="/student/legalizacion-matricula" onClick={(e) => {
+                        e.preventDefault();
+                        setTimeout(() => {
+                           window.location.href = "/student/legalizacion-matricula";
+                        }, 600);
+                     }}>
+                        <CardComponent title="Legalización de matrícula" icon="8" onCardClick={handleCardClick} />
+                     </Link>
+                  </Col>
+
                </Row>
                <FloatButton
-                     tooltip={<div>volver</div>}
-                     icon={<ArrowLeftOutlined className='iconButtonReturn' />}
-                     badge={{ color: 'green' }}
-                     href='/'
-                     className='button-return'
-                     shape='circle'
-                  />
+                  tooltip={<div>volver</div>}
+                  icon={<ArrowLeftOutlined className='iconButtonReturn' />}
+                  badge={{ color: 'green' }}
+                  href='/'
+                  className='button-return'
+                  shape='circle'
+               />
             </div>)
          }
          {
@@ -103,7 +123,7 @@ function RequestTypeComponent() {
                </div>
             )
          }
-         
+
       </>
    )
 }

@@ -137,7 +137,7 @@ const studentRequestPage = () => {
   ];
 
   return (
-    <div className="mr-52 mt-4">
+    <div className="h-screen scroll-container ml-4">
       <div>
         <TitleComponent title={'Mis Solicitudes'} />
       </div>
