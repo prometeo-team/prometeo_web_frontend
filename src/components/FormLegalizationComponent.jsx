@@ -37,8 +37,8 @@ const FormLegalizationComponent = () => {
 
     return (
         <div className='legalization-container bg-white p-4 rounded-lg shadow-md m-5'>
-            <Link to='/crear-solicitud'>
-                <button className='w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color'>
+            <Link to='/student/crear-solicitud'>
+                <button className='w-auto h-auto font-bold text-lg flex items-center mb-5 font-color'>
                     <IoIosArrowBack className=" h-7 w-7" />
                     <span className="ml-2">Volver</span>
                 </button>
@@ -46,6 +46,8 @@ const FormLegalizationComponent = () => {
             <h2 className="text-xl font-bold text-black mt-5 mb-5">Información del estudiante</h2>
             <div className=" grid grid-cols-4 gap-4">
                 <div>
+                    <h3 className='text-black'>Nombre(s)</h3>
+                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input" />
                     <h3 className='text-black'>Tipo de documento</h3>
                     <InputComponent
                         type="box"
@@ -59,8 +61,7 @@ const FormLegalizationComponent = () => {
                             { value: 'RC', label: 'Registro Civil' },
                         ]}
                     />
-                    <h3 className='text-black'>Apellidos</h3>
-                    <InputComponent type="string" placeholder="Ingrese sus apellidos" variant="form-input" />
+
                     <h3 className='text-black'>Carrera</h3>
                     <InputComponent
                         type="box"
@@ -77,17 +78,17 @@ const FormLegalizationComponent = () => {
                 </div>
 
                 <div>
+                    <h3 className='text-black'>Apellidos</h3>
+                    <InputComponent type="string" placeholder="Ingrese sus apellidos" variant="form-input" />
                     <h3 className='text-black'>No. de documento</h3>
                     <InputComponent type="number" placeholder="Ingrese su número de documento" variant="form-input" />
-                    <h3 className='text-black'>Telefono</h3>
-                    <InputComponent type="number" placeholder="Ingrese su número de telefono" variant="form-input" />
                     <h3 className='text-black'>Semestre</h3>
                     <InputComponent type="string" placeholder="Ingrese su Semestre" variant="form-input" />
                 </div>
 
                 <div>
-                    <h3 className='text-black'>Nombre</h3>
-                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input" />
+                    <h3 className='text-black'>Telefono</h3>
+                    <InputComponent type="number" placeholder="Ingrese su número de telefono" variant="form-input" />
                     <h3 className='text-black'>Correo electrónico</h3>
                     <InputComponent type="correo" placeholder="Ingrese su correo electrónico" variant="form-input" />
                     <h3 className='text-black'>Dirección</h3>
