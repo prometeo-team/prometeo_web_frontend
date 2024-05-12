@@ -4,7 +4,7 @@ import LoginComponent from '../components/LoginComponent';
 
 const LoginPage = () => {
     return (
-        <div className="containerLogin">
+        <div className="containerLogin h-full w-full">
             <div className="container-content">
                 <div className="flex justify-center items-center">
                     <img

@@ -1,0 +1,4 @@
+.max-width-container {
+    max-width: 960px; /* Puedes ajustar este valor según tus necesidades */
+    margin: 0 auto; /* Para centrar el contenido horizontalmente */
+}
