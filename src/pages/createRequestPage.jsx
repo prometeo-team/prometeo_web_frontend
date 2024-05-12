@@ -5,7 +5,7 @@ const CreateRequestPage = () => {
 
 
     return (
-        <div className="mr-40 w-max">
+        <div className="h-screen scroll-container">
             <TitleComponent title="Crear solicitud" />
             <RequestTypeComponent />
         </div>

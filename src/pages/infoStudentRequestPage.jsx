@@ -13,7 +13,7 @@ const InfoStudentRequestPage = () => {
     return (
         <div>
 
-            <div className='m-4 mr-52 mt-24' >
+            <div className='h-screen scroll-container mr-4 ml-4' >
                 <div className='flex justify-between items-center'>
                     <Tittle />
                     <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto' icon={<FileTextFilled />}>Documentos adjuntos</Button>

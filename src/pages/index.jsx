@@ -10,6 +10,8 @@ import IncapacityPage from "./incapacityPage";
 import ExtensionPage from "./ExtensionPage";
 import OtherRequestPage from "./OtherRequestPage";
 import CouncilFacultyPage from "./councilFacultyPage"
+import RegistrationReEnroolmentPage from "./registrationReEnrollmentPage"
+
 
 export {
     HomePage,
@@ -24,4 +26,5 @@ export {
     ExtensionPage,
     OtherRequestPage,
     CouncilFacultyPage,
+    RegistrationReEnroolmentPage
 }

@@ -15,8 +15,10 @@ const CouncilFacultyPage = () => {
             </div>
             <div className="flex justify-center">
                 <div className='legalization-container bg-white p-4 rounded-lg shadow-md m-5 w-1/2'>
-                    <div className=" grid grid-cols-4 gap-4">
-                        
+                    <div className=" grid grid-cols-3 gap-2">
+                        <div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>

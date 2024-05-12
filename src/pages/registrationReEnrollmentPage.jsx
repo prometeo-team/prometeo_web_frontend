@@ -1,6 +1,6 @@
 
 import Title from '../components/TitleComponent';
-import FormLegalizationC from '../components/FormLegalizationComponent'
+import FormReEnroolment from '../components/FormReEnrollmentComponent'
 
 const RegistrationLegalizationPage = () => {
 
@@ -8,9 +8,9 @@ const RegistrationLegalizationPage = () => {
 
     return (
         <div className='h-screen scroll-container ml-4'>
-            <Title title="Legalización de matrícula" />
+            <Title title="Reintegro" />
             <div>
-                <FormLegalizationC />
+                <FormReEnroolment />
             </div>
 
         </div>
