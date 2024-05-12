@@ -29,7 +29,7 @@ const FormIncapacityComponent = () => {
   };
 
   const handleCloseModalCheck = () => {
-    setModalVisibleCheck(true);
+    setModalVisibleCheck(false);
   };
 
   const [value, setValue] = useState("");
