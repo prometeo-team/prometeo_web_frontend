@@ -1,0 +1,5 @@
+.max-w-titleComponent {
+    max-width: calc(100% - 2rem); /* Considerando un padding de 1rem en TitleComponent */
+    margin-right: auto;
+    margin-left: auto;
+}

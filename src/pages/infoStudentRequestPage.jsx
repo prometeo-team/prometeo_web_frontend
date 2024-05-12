@@ -5,7 +5,6 @@ import './infoStudentRequestPage.css';
 import { Button } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { NavbarComponent } from "../components/"
 
 const InfoStudentRequestPage = () => {
 

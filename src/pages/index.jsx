@@ -9,6 +9,7 @@ import CouncilTablePage from "./councilTablePage";
 import IncapacityPage from "./incapacityPage";
 import ExtensionPage from "./ExtensionPage";
 import OtherRequestPage from "./OtherRequestPage";
+import CouncilFacultyPage from "./councilFacultyPage"
 
 export {
     HomePage,
@@ -21,5 +22,6 @@ export {
     CouncilTablePage,
     IncapacityPage,
     ExtensionPage,
-    OtherRequestPage
+    OtherRequestPage,
+    CouncilFacultyPage,
 }

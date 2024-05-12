@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage, ExtensionPage,OtherRequestPage } from './pages';
+import { HomePage, LoginPage, StudentRequestPage, CreateRequestPage, InfoRequestPage, InfoAdminRequestPage, RegistrationLegalizationPage, CouncilTablePage, IncapacityPage, ExtensionPage,OtherRequestPage ,CouncilFacultyPage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -73,6 +73,7 @@ function App() {
             <Route path="/student/legalizacion-matricula" element={<RegistrationLegalizationPage />} />
             <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
+            <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />
             <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
             <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
             <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />

@@ -66,7 +66,7 @@ const LoginComponent = () => {
                         validateStatus: 'error', // Agrega este atributo para controlar el color del mensaje
                     },
                     {
-                        pattern: /^[a-zA-Z0-9._%+-]+@unbosque\.edu\.co$/,
+                        pattern: /^[a-zA-Z0-9._%+-]/,
                         message: 'Por favor, ingrese un correo electrónico válido de @unbosque.edu.co',
                     },
                 ]}
