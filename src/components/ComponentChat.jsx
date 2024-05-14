@@ -80,7 +80,7 @@ const ChatComponent = () => {
         <span className="text-lg md:text-xl lg:text-3xl font-bold">
           <div className="flex items-center">
             <RiMessage3Fill className="mr-4 w-7 h-7 color-icons" />
-            Conversación
+            Comentarios
           </div>
         </span>
       </div>

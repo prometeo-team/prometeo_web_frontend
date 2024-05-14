@@ -12,6 +12,7 @@ import OtherRequestPage from "./OtherRequestPage";
 import CouncilFacultyPage from "./councilFacultyPage"
 import RegistrationReEnroolmentPage from "./registrationReEnrollmentPage"
 import RegistrationAdditionPage from "./registrationAdditionPage"
+import InfoAdminSRequestPage from "./infoAdminSRequestPage"
 
 
 export {
@@ -28,5 +29,6 @@ export {
     OtherRequestPage,
     CouncilFacultyPage,
     RegistrationReEnroolmentPage,
-    RegistrationAdditionPage
+    RegistrationAdditionPage,
+    InfoAdminSRequestPage
 }

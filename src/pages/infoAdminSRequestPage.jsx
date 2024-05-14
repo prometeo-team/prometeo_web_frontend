@@ -1,4 +1,4 @@
-import InfoSRComponent from '../components/ComponentInfoStudentRequest';
+import InfoSRComponent from '../components/AdminInfoRrequest';
 import ChatSR from '../components/ComponentChat';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
@@ -15,7 +15,7 @@ const InfoStudentRequestPage = () => {
 
             <div className='h-screen scroll-container mr-4 ml-4' >
                 <div className='flex justify-between items-center'>
-                <Title title="Solicitud" codigo={'CE000215'} />
+                    <Title title="Solicitud" codigo={'CE000215'} />
                     <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto' icon={<FileTextFilled />}>Documentos adjuntos</Button>
                 </div>
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
