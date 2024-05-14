@@ -15,7 +15,8 @@ import { HomePage,
           CouncilFacultyPage, 
           RegistrationReEnroolmentPage, 
           RegistrationAdditionPage,
-          InfoAdminSRequestPage } from './pages';
+          InfoAdminSRequestPage,
+          RegistrationCancelPage, } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -94,6 +95,7 @@ function App() {
             <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
             <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />
             <Route path="/student/solicitud-adicion" element={<RegistrationAdditionPage />} />
+            <Route path="/student/solicitud-cancelacion" element={<RegistrationCancelPage />} />
           </Routes>
       </div>
     </>

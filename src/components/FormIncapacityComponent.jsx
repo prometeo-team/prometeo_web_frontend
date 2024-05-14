@@ -36,7 +36,7 @@ const FormIncapacityComponent = () => {
 
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
-      <Link to="/crear-solicitud">
+      <Link to="/student/crear-solicitud">
         <button className="w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color">
           <IoIosArrowBack className=" h-7 w-7" />
           <span className="ml-2">Volver</span>

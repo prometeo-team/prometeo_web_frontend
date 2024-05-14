@@ -60,17 +60,44 @@ function RequestTypeComponent() {
             isVisible && (<div className="requestLayout mt-16 ml-12" id="options">
                <Row>
                   <Col span={4}>
-                     <CardComponent title="Adición de créditos" icon="1" onCardClick={handleCardClick} />
+                     <Link to="/student/solicitud-adicion" onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/solicitud-adicion";
+                           }, 600);
+                        }}>
+                           <CardComponent title="Adición de créditos" icon="1" onCardClick={handleCardClick} />
+                     </Link>
                   </Col>
                   <Col className='ml-16' span={4}>
-                     <CardComponent title="Cancelación de créditos" icon="2" onCardClick={handleCardClick} />
-
+                     <Link to="/student/solicitud-cancelacion" onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/solicitud-cancelacion";
+                           }, 600);
+                        }}>
+                           <CardComponent title="Cancelación de créditos" icon="2" onCardClick={handleCardClick} />
+                     </Link>
                   </Col>
                   <Col className='ml-16' span={4}>
-                     <CardComponent title="Incapacidades Medicas" icon="3" onCardClick={handleCardClick} />
+                     <Link to="/student/solicitud-incapacidad" onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/solicitud-incapacidad";
+                           }, 600);
+                        }}>
+                        <CardComponent title="Incapacidades Medicas" icon="3" onCardClick={handleCardClick} />
+                     </Link>
                   </Col>
                   <Col className='ml-16' span={4}>
-                     <CardComponent title="Supletorios" icon="4" onCardClick={handleCardClick} />
+                     <Link to="/student/solicitud-supletorio" onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/solicitud-supletorio";
+                           }, 600);
+                        }}>
+                           <CardComponent title="Supletorios" icon="4" onCardClick={handleCardClick} />
+                     </Link>
                   </Col>
                </Row>
                <Row className='mt-10'>

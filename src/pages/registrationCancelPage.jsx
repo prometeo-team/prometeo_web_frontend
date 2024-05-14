@@ -1,8 +1,9 @@
-import { FormIncapacityComponent, TitleComponent } from "../components";
+import  TitleComponent  from "../components/TitleComponent";
+import  FormAddition_CancelComponent from "../components/FormAddition_CancelComponent";
+
 import UserCArdComponent from '../components/UserCardComponet';
 import '../App.css';
-
-const incapacityPage = () => {
+const registrationCancelPage = () => {
 
     return (
         <div className="flex mr-48 h-screen">
@@ -11,10 +12,10 @@ const incapacityPage = () => {
                     <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
                 </div>
                 <div>
-                    <TitleComponent title="Solicitud Incapacidad" />
+                    <TitleComponent title="Solicitud Cancelación" />
                 </div>
                 <div>
-                    <FormIncapacityComponent />
+                    <FormAddition_CancelComponent type="Cancelación de creditos" />
                 </div>
             </div>
         </div>
@@ -24,4 +25,4 @@ const incapacityPage = () => {
 
 }
 
-export default incapacityPage;
+export default registrationCancelPage;
