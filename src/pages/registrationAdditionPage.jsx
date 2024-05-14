@@ -3,7 +3,7 @@ import  FormAddition_CancelComponent from "../components/FormAddition_CancelComp
 
 import UserCArdComponent from '../components/UserCardComponet';
 import '../App.css';
-const incapacityPage = () => {
+const registrationAdditionPage = () => {
 
     return (
         <div className="flex mr-48 h-screen">
@@ -25,4 +25,4 @@ const incapacityPage = () => {
 
 }
 
-export default incapacityPage;
+export default registrationAdditionPage;
