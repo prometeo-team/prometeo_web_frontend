@@ -14,7 +14,8 @@ import { HomePage,
           OtherRequestPage,
           CouncilFacultyPage, 
           RegistrationReEnroolmentPage, 
-          RegistrationAdditionPage } from './pages';
+          RegistrationAdditionPage,
+          InfoAdminSRequestPage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -88,6 +89,7 @@ function App() {
             <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />
+            <Route path="/admin/solicitud" element={<InfoAdminSRequestPage />} />
             <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
             <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
             <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />
