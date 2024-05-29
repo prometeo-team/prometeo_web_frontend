@@ -1,19 +1,49 @@
-.requestLayout {
+.card-col {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    width: 100%
-}
-
-
-.button-return {
-    height: 80px;
-    width: 80px;
-}
-
-.iconButtonReturn{
-    height: 70px;
-    width: 70px;
-}
+    padding: 8px;
+    max-width: 250px;
+    margin: 0 auto;
+    transition: all 0.3s ease-in-out; /* Transición suave para los cambios */
+ }
+ @keyframes fadeIn {
+    from {
+       opacity: 0;
+       transform: translateY(20px);
+    }
+    to {
+       opacity: 1;
+       transform: translateY(0);
+    }
+ }
+ 
+ 
+ /* Animación para reacomodar las cartas */
+ @keyframes rearrange {
+    0% {
+       opacity: 0;
+       transform: scale(0.9);
+    }
+    100% {
+       opacity: 1;
+       transform: scale(1);
+    }
+ }
+ 
+ .card-col {
+    animation: rearrange 0.3s ease-in-out;
+    animation: fadeIn 0.6s ease;
+ }
+ 
+ .requestLayout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease-in-out; /* Transición para cambios en la disposición */
+ }
+ 
+ .mt-10 {
+    margin-top: 10px;
+ }
+ 

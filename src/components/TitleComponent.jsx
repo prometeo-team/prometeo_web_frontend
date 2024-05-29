@@ -1,20 +1,22 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './TitleComponent.css';
 
-
-// eslint-disable-next-line react/prop-types
 function TitleComponent({ title }) {
     return (
-        <div>
-            <div className={classNames('grid justify-center text-center mt-10 text-2xl font-bold', 'text-gray-800')}>
-                <div className="boxTitle bg-white">
+        <div className="mt-10">
+            <div className={classNames('text-center font-bold text-gray-800 mx-2')}>
+                <div className="bg-white px-4 py-2 inline-block boxTitle">
                     {title}
                 </div>
             </div>
-            <div className={classNames('mx-auto separator mt-7')}>
-            </div>
+            <div className="mt-7 mx-auto separator"></div>
         </div>
     )
 }
+
+TitleComponent.propTypes = {
+    title: PropTypes.string.isRequired,
+};
 
 export default TitleComponent;

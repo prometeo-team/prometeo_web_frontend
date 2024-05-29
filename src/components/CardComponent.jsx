@@ -8,6 +8,7 @@ import { MdAssignmentReturn } from "react-icons/md"
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { RiUserSharedFill } from "react-icons/ri";
 import { GrDocumentUser } from "react-icons/gr";
+import { BsFillPersonPlusFill } from "react-icons/bs";
 
 
 // eslint-disable-next-line react/prop-types
@@ -30,6 +31,8 @@ function CardComponent({ title, icon, onCardClick  }) {
         icon = <RiUserSharedFill size={size} />;
     } if (icon == 8) {
         icon = <GrDocumentUser size={size} />;
+    } if (icon == 9) {
+        icon = <BsFillPersonPlusFill size={size} />;
     }
 
     return (
