@@ -14,7 +14,7 @@
     width: 1000px;
 }
 
-@media (max-width: 830px) {
+@media (max-width: 1000px) {
     .boxTitle {
         width: 500px;
     }
@@ -23,7 +23,7 @@
     }
 }
 
-@media (max-width: 530px) {
+@media (max-width: 803px) {
     .boxTitle {
         align-items: center;
         width: 300px;
