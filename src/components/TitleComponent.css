@@ -18,6 +18,7 @@
     .boxTitle {
         width: 500px;
     }
+
     .separator {
         width: 500px;
     }
@@ -29,7 +30,24 @@
         width: 300px;
         font-size: 28px;
     }
+
     .separator {
         width: 300px;
+    }
+}
+
+.boxTitle {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+@media (max-width: 425px) {
+    .boxTitle {
+        font-size: 25px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        width: 180px;
     }
 }

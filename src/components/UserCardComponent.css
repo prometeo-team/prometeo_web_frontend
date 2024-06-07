@@ -1,8 +1,31 @@
-.text_font{
+.text_font {
     align-items: center;
     gap: 0.6em;
     color: black;
     font-family: 'Poppins', sans-serif;
     height: 32px;
     font-weight: 700;
+}
+
+@media (max-width: 767px) {
+    .text_font {
+        font-size: 14px;
+        height: 24px; 
+    }
+
+    .text_font span {
+        font-size: 12px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        line-height: 1.1 !important;
+    }
+
+    .text_font .w-6,
+    .text_font .h-6,
+    .text_font .w-8,
+    .text_font .h-8 {
+        width: 20px; 
+        height: 20px;
+    }
 }

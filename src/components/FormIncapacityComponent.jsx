@@ -32,7 +32,7 @@ const FormIncapacityComponent = () => {
     setModalVisibleCheck(false);
   };
 
-  const [value, setValue] = useState("");
+  const [setValue] = useState("");
 
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
