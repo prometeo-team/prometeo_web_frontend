@@ -106,112 +106,110 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
   };
 
   return (
-    <>
-      {visible && (
-        <div className="modal-backdrop ">
-          <Modal
-            open={visible}
-            onOk={handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={handleCancel}
-            footer={null}
-            closable={false}
-            centered
-            wrapClassName="center-modal animate__animated animate__zoomIn "
-          >
-            <div className="text-center mb-4">
-              <h4 className="text-lg font-bold">Documentos de Legalizacion Matricula - Formato .pdf*</h4>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-              <UploadDocumentComponent
-                onChange={handleFileChange1}
-                pdf={pdf1}
-                fileName={fileName1}
-                onDelete={handleDelete1}
-                clickClassNameP=".input-field1"
-                clickClassName="input-field1"
-                label="Documento de identidad al 150%"
-                detail="Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente"
-                isRequired={true}
-              />
-
-              <UploadDocumentComponent
-                onChange={handleFileChange2}
-                pdf={pdf2}
-                fileName={fileName2}
-                onDelete={handleDelete2}
-                clickClassNameP=".input-field2"
-                clickClassName="input-field2"
-                label="Anexo Pregrado o Postgrado"
-                detail="Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)"
-                isRequired={false}
-              />
-
-              <UploadDocumentComponent
-                onChange={handleFileChange3}
-                pdf={pdf3}
-                fileName={fileName3}
-                onDelete={handleDelete3}
-                clickClassNameP=".input-field3"
-                clickClassName="input-field3"
-                label="Anexo Estudiantes extranjeros"
-                detail="Visa, PEP, PPT, según corresponda para cada caso"
-                isRequired={false}
-              />
-
-              <UploadDocumentComponent
-                onChange={handleFileChange4}
-                pdf={pdf4}
-                fileName={fileName4}
-                onDelete={handleDelete4}
-                clickClassNameP=".input-field4"
-                clickClassName="input-field4"
-                label="Anexo Comprobante de Pago de Matrícula*"
-                detail="-"
-                isRequired={false}
-              />
-
-              <UploadDocumentComponent
-                onChange={handleFileChange5}
-                pdf={pdf5}
-                fileName={fileName5}
-                onDelete={handleDelete5}
-                clickClassNameP=".input-field5"
-                clickClassName="input-field5"
-                label="Formato de registro de matricula"
-                detail="-"
-                isRequired={false}
-              />
-
-              <UploadDocumentComponent
-                onChange={handleFileChange6}
-                pdf={pdf6}
-                fileName={fileName6}
-                onDelete={handleDelete6}
-                clickClassNameP=".input-field6"
-                clickClassName="input-field6"
-                label="Anexo de Afiliación EPS (Sin claves)"
-                detail="Vigencia NO mayor a 30 días"
-                isRequired={true}
-              />
-
-
-            </div>
-            <div className="text-center mt-2">
-              {allFilesSelected ? (
-                <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              ) : (
-                <Button disabled className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              )}
-            </div>
-          </Modal>
-        </div>
-      )}
-    </>
+      <>
+        {visible && (
+          <div className="modal-backdrop ">
+            <Modal
+              open={visible}
+              onOk={handleOk}
+              confirmLoading={confirmLoading}
+              onCancel={handleCancel}
+              footer={null}
+              closable={false}
+              centered
+              wrapClassName="center-modal animate__animated animate__zoomIn "
+            >
+              <div className="text-center mb-4">
+                <h4 className="text-lg font-bold">Documentos de Legalizacion Matricula - Formato .pdf*</h4>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+                <UploadDocumentComponent
+                  onChange={handleFileChange1}
+                  pdf={pdf1}
+                  fileName={fileName1}
+                  onDelete={handleDelete1}
+                  clickClassNameP=".input-field1"
+                  clickClassName="input-field1"
+                  label="Documento de identidad al 150%"
+                  detail="Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente"
+                  isRequired={true}
+                />
+    
+                <UploadDocumentComponent
+                  onChange={handleFileChange2}
+                  pdf={pdf2}
+                  fileName={fileName2}
+                  onDelete={handleDelete2}
+                  clickClassNameP=".input-field2"
+                  clickClassName="input-field2"
+                  label="Anexo Pregrado o Postgrado"
+                  detail="Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)"
+                  isRequired={false}
+                />
+    
+                <UploadDocumentComponent
+                  onChange={handleFileChange3}
+                  pdf={pdf3}
+                  fileName={fileName3}
+                  onDelete={handleDelete3}
+                  clickClassNameP=".input-field3"
+                  clickClassName="input-field3"
+                  label="Anexo Estudiantes extranjeros"
+                  detail="Visa, PEP, PPT, según corresponda para cada caso"
+                  isRequired={false}
+                />
+    
+                <UploadDocumentComponent
+                  onChange={handleFileChange4}
+                  pdf={pdf4}
+                  fileName={fileName4}
+                  onDelete={handleDelete4}
+                  clickClassNameP=".input-field4"
+                  clickClassName="input-field4"
+                  label="Anexo Comprobante de Pago de Matrícula*"
+                  detail="-"
+                  isRequired={false}
+                />
+    
+                <UploadDocumentComponent
+                  onChange={handleFileChange5}
+                  pdf={pdf5}
+                  fileName={fileName5}
+                  onDelete={handleDelete5}
+                  clickClassNameP=".input-field5"
+                  clickClassName="input-field5"
+                  label="Formato de registro de matricula"
+                  detail="-"
+                  isRequired={false}
+                />
+    
+                <UploadDocumentComponent
+                  onChange={handleFileChange6}
+                  pdf={pdf6}
+                  fileName={fileName6}
+                  onDelete={handleDelete6}
+                  clickClassNameP=".input-field6"
+                  clickClassName="input-field6"
+                  label="Anexo de Afiliación EPS (Sin claves)"
+                  detail="Vigencia NO mayor a 30 días"
+                  isRequired={true}
+                />
+              </div>
+              <div className="text-center mt-2">
+                {allFilesSelected ? (
+                  <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
+                    Cargar documentos
+                  </Button>
+                ) : (
+                  <Button disabled className="text-white mx-auto custom-btn">
+                    Cargar documentos
+                  </Button>
+                )}
+              </div>
+            </Modal>
+          </div>
+        )}
+      </>    
   );
 };
 
