@@ -18,7 +18,8 @@ import { HomePage,
           InfoAdminSRequestPage,
           RegistrationCancelPage,
           DegreeTablePage,
-          RegistrationDegreePage } from './pages';
+          RegistrationDegreePage,
+          ConfigDatePage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -28,7 +29,6 @@ function App() {
     { name: 'Inicio', path: '/' },
     { name: 'Mis Solicitudes', path: '/student/mis-solicitudes' },
     { name: 'Crear Solicitud', path: '/student/crear-solicitud' },
-    { name: 'Calendario Académico', path: '' },
     { name: 'Otras Solicitudes',path: '/student/solicitud-otra' },
     { name: 'Ayuda' }
   ];
@@ -37,7 +37,7 @@ function App() {
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Consejo Facultad', path: '/admin/consejo-tabla' },
     { name: 'Grados', path: '/admin/grados-tabla' },
-    { name: 'Configuración', },
+    { name: 'Configuración', path: '/admin/config' },
   ];
 
   const location = useLocation();
@@ -101,6 +101,7 @@ function App() {
             <Route path="/student/solicitud-adicion" element={<RegistrationAdditionPage />} />
             <Route path="/student/solicitud-cancelacion" element={<RegistrationCancelPage />} />
             <Route path="/student/postulacion-grado" element={<RegistrationDegreePage />} />
+            <Route path="/admin/config" element={<ConfigDatePage />} />
           </Routes>
       </div>
     </>
