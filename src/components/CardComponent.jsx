@@ -4,7 +4,7 @@ import { TiDocumentAdd } from "react-icons/ti";
 import { MdOutlineCancel } from "react-icons/md";
 import { RiHeartsFill } from "react-icons/ri";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
-import { MdAssignmentReturn } from "react-icons/md"
+import { MdAssignmentReturn , MdOutlineSchool } from "react-icons/md"
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { RiUserSharedFill } from "react-icons/ri";
 import { GrDocumentUser } from "react-icons/gr";
@@ -33,6 +33,8 @@ function CardComponent({ title, icon, onCardClick  }) {
         icon = <GrDocumentUser size={size} />;
     } if (icon == 9) {
         icon = <BsFillPersonPlusFill size={size} />;
+    } if (icon == 10) {
+        icon = <MdOutlineSchool  size={size} />;
     }
 
     return (

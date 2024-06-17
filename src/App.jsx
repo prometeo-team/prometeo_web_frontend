@@ -16,7 +16,9 @@ import { HomePage,
           RegistrationReEnroolmentPage, 
           RegistrationAdditionPage,
           InfoAdminSRequestPage,
-          RegistrationCancelPage, } from './pages';
+          RegistrationCancelPage,
+          DegreeTablePage,
+          RegistrationDegreePage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -32,8 +34,9 @@ function App() {
   ];
 
   const menuManagement = [
-    { name: 'Gestión Solicitudes', path: 'dashboard' },
-    { name: 'Consejo Facultad', path: 'consejo-tabla' },
+    { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
+    { name: 'Consejo Facultad', path: '/admin/consejo-tabla' },
+    { name: 'Grados', path: '/admin/grados-tabla' },
     { name: 'Configuración', },
   ];
 
@@ -91,11 +94,13 @@ function App() {
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />
             <Route path="/admin/solicitud" element={<InfoAdminSRequestPage />} />
+            <Route path="/admin/grados-tabla" element={<DegreeTablePage />} />
             <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
             <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
             <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />
             <Route path="/student/solicitud-adicion" element={<RegistrationAdditionPage />} />
             <Route path="/student/solicitud-cancelacion" element={<RegistrationCancelPage />} />
+            <Route path="/student/postulacion-grado" element={<RegistrationDegreePage />} />
           </Routes>
       </div>
     </>
