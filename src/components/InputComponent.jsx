@@ -3,37 +3,30 @@ import { useState } from 'react';
 import { Flex, Select, Input, Form } from 'antd';
 import './InputComponent.css';
 
-const InputComponent = ({ type, placeholder, variant, options }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const InputComponent = ({ type, placeholder, options, variant, value, onChange, }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showErrorBorder, setShowErrorBorder] = useState(false);
-
-  const handleOptionSelect = (value) => {
-    setSelectedOption(value);
-    setError(false);
-    setErrorMessage('');
-    setShowErrorBorder(false);
-  };
+  const [showErrorBorder, setShowErrorBorder] = useState(false);  const { Option } = Select;
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
 
     if (type === 'correo' && !isValidEmail(inputValue)) {
       setError(true);
-      setErrorMessage(<span className="text-font text-red-500 ">Por favor, ingrese un correo electrónico válido.</span>);
+      setErrorMessage('Por favor, ingrese un correo electrónico válido.');
       setShowErrorBorder(true);
     } else if (type === 'number' && isNaN(inputValue)) {
       setError(true);
-      setErrorMessage(<span className="text-font text-red-500">Por favor, ingrese un número válido.</span>);
+      setErrorMessage('Por favor, ingrese un número válido.');
       setShowErrorBorder(true);
     } else {
       setError(false);
       setErrorMessage('');
       setShowErrorBorder(false);
     }
-  };
 
+    if (onChange) onChange(inputValue);
+  };
 
   const isValidEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,25 +43,31 @@ const InputComponent = ({ type, placeholder, variant, options }) => {
             pattern="[0-9]*"
             placeholder={placeholder}
             className={`${variant} bg-gray-200 rounded-md p-2 ${showErrorBorder ? 'error-border' : ''}`}
+            value={value}
             onChange={handleInputChange}
           />
         );
       case 'readOnly':
-        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly/>;
+        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly value={value} />;
       case 'string':
-        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} />;
+        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} value={value} onChange={handleInputChange} />;
       case 'date':
-        return <Input type="date" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" />;
+        return <Input type="date" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" value={value} onChange={handleInputChange} />;
       case 'boolean':
-        return <Input type="checkbox" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" />;
+        return <Input type="checkbox" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" checked={value} onChange={handleInputChange} />;
       case 'box':
         return (
           <Select
-            value={selectedOption}
-            options={options}
-            onChange={handleOptionSelect}
+            value={value} 
+            onChange={onChange} 
             className={`w-full h-10 rounded-md ${variant} select-box`}
-          />
+          >
+            {options.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         );
       case 'correo':
         return (
@@ -76,6 +75,7 @@ const InputComponent = ({ type, placeholder, variant, options }) => {
             type="email"
             placeholder={placeholder}
             className={`${variant} bg-gray-200 rounded-md p-2 ${showErrorBorder ? 'error-border' : ''}`}
+            value={value}
             onChange={handleInputChange}
           />
         );
@@ -97,7 +97,7 @@ const InputComponent = ({ type, placeholder, variant, options }) => {
 };
 
 InputComponent.propTypes = {
-  type: PropTypes.oneOf(['number','readOnly', 'string', 'date', 'boolean', 'box', 'correo']).isRequired,
+  type: PropTypes.oneOf(['number', 'readOnly', 'string', 'date', 'boolean', 'box', 'correo']).isRequired,
   placeholder: PropTypes.string.isRequired,
   variant: PropTypes.string,
   options: PropTypes.arrayOf(
@@ -106,6 +106,9 @@ InputComponent.propTypes = {
       label: PropTypes.string.isRequired,
     })
   ),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+  onChange: PropTypes.func,
+  semestreIngreso: PropTypes.string.isRequired,
 };
 
 export default InputComponent;

@@ -6,3 +6,32 @@
 .font-color {
     color: #97B749;
 }
+.warp {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+@media (max-width: 757px) {
+    .warp2 {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        line-height: 1.1 !important;
+    }
+}
+
+@media (max-width: 757px) {
+
+
+    .icon-small {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+@media (min-width: 425px) and (max-width: 810px) {
+    .margenL {
+      margin-left: 35px !important; 
+    }
+  }
+  

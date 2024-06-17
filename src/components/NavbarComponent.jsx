@@ -1,20 +1,18 @@
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import './NavbarComponent.css';
 import logoUni from '../assets/Logo_de_la_Universidad_El_Bosque.png';
-import { useState } from 'react';
 import {
-AppstoreFilled,
-InboxOutlined,
-QuestionCircleOutlined
+  AppstoreFilled,
+  InboxOutlined,
+  QuestionCircleOutlined
 } from '@ant-design/icons';
 import { IoCalendar, IoSettingsOutline, IoSchoolOutline } from 'react-icons/io5';
 import { HiOutlineDocumentPlus, HiHome } from "react-icons/hi2";
 import { MdPerson } from "react-icons/md";
 
-// eslint-disable-next-line react/prop-types
-function NavbarComponent({ menuItems }) {
-
-    
+function NavbarComponent(props) {
+  const navigate = useNavigate();
 
     return (
         <>
