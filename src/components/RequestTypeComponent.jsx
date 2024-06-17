@@ -141,6 +141,20 @@ function RequestTypeComponent() {
                         <CardComponent title="Legalización de matrícula" icon="8" onCardClick={handleCardClick} />
                      </Link>
                   </Col>
+                  <Col id='postulacionG' className="card-col" xs={24} sm={12} md={8} lg={6}>
+                     <Link
+                        to="/student/postulacion-grado"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/postulacion-grado";
+                           }, 600);
+                        }}
+                     >
+                        <CardComponent title="Postulacion a Grados" icon="10" onCardClick={handleCardClick} />
+                     </Link>
+                  </Col>
+                  
                   
                </Row>
                <FloatButton

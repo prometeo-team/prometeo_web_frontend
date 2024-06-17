@@ -14,6 +14,9 @@ import RegistrationReEnroolmentPage from "./registrationReEnrollmentPage"
 import RegistrationAdditionPage from "./registrationAdditionPage"
 import InfoAdminSRequestPage from "./infoAdminSRequestPage"
 import RegistrationCancelPage from "./registrationCancelPage"
+import DegreeTablePage from "./degreeTablePage";
+import RegistrationDegreePage from "./registrationDegreePage";
+
 
 
 
@@ -33,5 +36,7 @@ export {
     RegistrationReEnroolmentPage,
     RegistrationAdditionPage,
     InfoAdminSRequestPage,
-    RegistrationCancelPage
+    RegistrationCancelPage,
+    DegreeTablePage,
+    RegistrationDegreePage
 }

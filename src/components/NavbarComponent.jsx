@@ -7,7 +7,7 @@ AppstoreFilled,
 InboxOutlined,
 QuestionCircleOutlined
 } from '@ant-design/icons';
-import { IoCalendar, IoSettingsOutline, IoArrowBackCircleOutline, IoArrowForwardCircleOutline } from 'react-icons/io5';
+import { IoCalendar, IoSettingsOutline, IoSchoolOutline } from 'react-icons/io5';
 import { HiOutlineDocumentPlus, HiHome } from "react-icons/hi2";
 import { MdPerson } from "react-icons/md";
 
@@ -42,6 +42,8 @@ function NavbarComponent({ menuItems }) {
                                 icon = <MdPerson className='ml-1 text-2xl' />;
                             } else if (item.name === "Configuración") {
                                 icon = <IoSettingsOutline className='ml-1 text-2xl' />;
+                            } else if (item.name === "Grados") {
+                                icon = <IoSchoolOutline className='ml-1 text-2xl' />;
                             }
                             const isLastItem = index === menuItems.length - 1 && item.name === "Ayuda"; // Verifica si es el último elemento
                             const liClass = isLastItem ? 'md:mt-52 2xl:mt-96' : '';
