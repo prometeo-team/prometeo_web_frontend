@@ -11,7 +11,7 @@ import { IoCalendar, IoSettingsOutline, IoSchoolOutline } from 'react-icons/io5'
 import { HiOutlineDocumentPlus, HiHome } from "react-icons/hi2";
 import { MdPerson } from "react-icons/md";
 
-function NavbarComponent(props) {
+function NavbarComponent({ menuItems }) {
   const navigate = useNavigate();
 
     return (

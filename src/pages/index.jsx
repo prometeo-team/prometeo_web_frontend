@@ -16,6 +16,7 @@ import InfoAdminSRequestPage from "./infoAdminSRequestPage"
 import RegistrationCancelPage from "./registrationCancelPage"
 import DegreeTablePage from "./degreeTablePage";
 import RegistrationDegreePage from "./registrationDegreePage";
+import ConfigDatePage from "./configDatePage";
 
 
 
@@ -38,5 +39,6 @@ export {
     InfoAdminSRequestPage,
     RegistrationCancelPage,
     DegreeTablePage,
-    RegistrationDegreePage
+    RegistrationDegreePage,
+    ConfigDatePage
 }
