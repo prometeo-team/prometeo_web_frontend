@@ -11,7 +11,9 @@ import { Link } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
 import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle } from "react-icons/io";
-
+import { Tooltip, notification } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { IoAlertCircleSharp } from "react-icons/io5";
 
 const FormLegalizationComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +29,12 @@ const FormLegalizationComponent = () => {
 
     const handleCloseModal = () => {
         setModalVisible(false);
-
+        notification.info({
+            message: 'Importante',
+            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
+            placement: 'bottomRight',
+            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+        });
     };
 
     const handleOpenModalCheck2 = () => {
@@ -63,7 +70,7 @@ const FormLegalizationComponent = () => {
     };
 
     return (
-        <div className='legalization-container bg-white p-4 rounded-lg shadow-md m-5'>
+        <div className='legalization-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
             <Link to='/student/crear-solicitud'>
                 <button className='w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color'>
                     <IoIosArrowBack className=" h-7 w-7" />
@@ -71,8 +78,8 @@ const FormLegalizationComponent = () => {
                 </button>
             </Link>
             <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Información del estudiante</h2>
-            <div className=" grid grid-cols-4 gap-4">
-                <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="max-w-xs">
                     <h3 className='text-black truncate '>Nombre(s)</h3>
                     <InputComponent type="readOnly" variant="form-input" />
                     <h3 className='text-black truncate'>Semestre</h3>
@@ -130,7 +137,11 @@ const FormLegalizationComponent = () => {
                 <div className="w-full border-t border-black truncate "></div>
             </div>
             <div>
-                <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Documento</h2>
+                <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Documento
+                    <Tooltip title="Para poder modificar o eliminar uno o varios archivos documentos, haz clic en el botón 'Subir archivos'">
+                        <QuestionCircleOutlined className="font-color ml-2" />
+                    </Tooltip>
+                </h2>
                 <div className="grid grid-cols-4 gap-4">
                     {documents.slice(0, 6).map((document, index) => (
                         <React.Fragment key={index}>

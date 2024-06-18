@@ -4,5 +4,5 @@
 }
 
 .color-button:hover {
-    background-color: #43737E;
+    background-color: #43737E !important;
 }
