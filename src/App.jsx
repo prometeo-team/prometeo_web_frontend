@@ -19,7 +19,8 @@ import { HomePage,
           RegistrationCancelPage,
           DegreeTablePage,
           RegistrationDegreePage,
-          ConfigDatePage } from './pages';
+          ConfigDatePage,
+          RegistrationRefundPage } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -90,6 +91,7 @@ function App() {
             <Route path="/student/mi-solicitud" element={<InfoRequestPage />} />
             <Route path="/student/legalizacion-matricula" element={<RegistrationLegalizationPage />} />
             <Route path="/student/reintegro" element={<RegistrationReEnroolmentPage />} />
+            <Route path="/student/reembolso" element={<RegistrationRefundPage />} />
             <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />

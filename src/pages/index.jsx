@@ -17,6 +17,7 @@ import RegistrationCancelPage from "./registrationCancelPage"
 import DegreeTablePage from "./degreeTablePage";
 import RegistrationDegreePage from "./registrationDegreePage";
 import ConfigDatePage from "./configDatePage";
+import RegistrationRefundPage from "./registrationRefundPage";
 
 
 
@@ -40,5 +41,6 @@ export {
     RegistrationCancelPage,
     DegreeTablePage,
     RegistrationDegreePage,
-    ConfigDatePage
+    ConfigDatePage,
+    RegistrationRefundPage,
 }
