@@ -18,8 +18,7 @@ import DegreeTablePage from "./degreeTablePage";
 import RegistrationDegreePage from "./registrationDegreePage";
 import ConfigDatePage from "./configDatePage";
 import RegistrationRefundPage from "./registrationRefundPage";
-
-
+import RegistrationSlotActivationPage from "./registrationSlotActivationPage";
 
 
 export {
@@ -43,4 +42,5 @@ export {
     RegistrationDegreePage,
     ConfigDatePage,
     RegistrationRefundPage,
+    RegistrationSlotActivationPage,
 }

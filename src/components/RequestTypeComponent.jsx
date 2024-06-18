@@ -120,10 +120,23 @@ function RequestTypeComponent() {
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
-                     <CardComponent title="Reembolso" icon="6" onCardClick={handleCardClick} />
+                     <Link to="/student/reembolso">
+                        <CardComponent
+                           title="Reembolso"
+                           icon="6"
+                           onCardClick={handleCardClick}
+                        />
+                     </Link>
                   </Col>
+
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
-                     <CardComponent title="Activación de cupo" icon="9" onCardClick={handleCardClick} />
+                     <Link to="/student/activacion-cupo">
+                        <CardComponent
+                           title="Activación de cupo"
+                           icon="9"
+                           onCardClick={handleCardClick}
+                        />
+                     </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <CardComponent title="Reserva de cupo" icon="7" onCardClick={handleCardClick} />
@@ -154,8 +167,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Postulacion a Grados" icon="10" onCardClick={handleCardClick} />
                      </Link>
                   </Col>
-                  
-                  
+
+
                </Row>
                <FloatButton
                   tooltip={<div>volver</div>}
@@ -180,7 +193,7 @@ function RequestTypeComponent() {
             </div>
          )}
       </>
-   );   
+   );
 }
 
 export default RequestTypeComponent;
