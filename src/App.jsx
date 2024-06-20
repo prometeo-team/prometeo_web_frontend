@@ -21,7 +21,8 @@ import { HomePage,
           RegistrationDegreePage,
           ConfigDatePage,
           RegistrationRefundPage,
-          RegistrationSlotActivationPage } from './pages';
+          RegistrationSlotActivationPage,
+          RegistrationReservationPage, } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -94,6 +95,7 @@ function App() {
             <Route path="/student/reintegro" element={<RegistrationReEnroolmentPage />} />
             <Route path="/student/reembolso" element={<RegistrationRefundPage />} />
             <Route path="/student/activacion-cupo" element={<RegistrationSlotActivationPage />} />
+            <Route path="/student/reserva" element={<RegistrationReservationPage />} />
             <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
             <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
             <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />
