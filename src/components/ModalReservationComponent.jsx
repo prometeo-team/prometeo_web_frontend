@@ -3,7 +3,7 @@ import { Modal, Button } from "antd";
 import PropTypes from "prop-types";
 import UploadDocumentComponent from "./UploadDocumentComponent";
 
-const ModalSlotActivationComponent = ({ visible, onClose, setDocuments }) => {
+const ModalReservationComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf, setPdf] = useState(null);
   const [fileName, setFileName] = useState("Archivo no seleccionado");
@@ -52,7 +52,7 @@ const ModalSlotActivationComponent = ({ visible, onClose, setDocuments }) => {
             wrapClassName="center-modal animate__animated animate__zoomIn "
           >
             <div className="text-center mb-4">
-              <h4 className="text-lg font-bold">Carta reserva de cupo - Formato .pdf*</h4>
+              <h4 className="text-lg font-bold">Carta activación de cupo - Formato .pdf*</h4>
             </div>
             <div className="grid">
               <UploadDocumentComponent
@@ -85,10 +85,10 @@ const ModalSlotActivationComponent = ({ visible, onClose, setDocuments }) => {
   );
 };
 
-ModalSlotActivationComponent.propTypes = {
+ModalReservationComponent.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   setDocuments: PropTypes.func.isRequired,
 };
 
-export default ModalSlotActivationComponent;
+export default ModalReservationComponent;
