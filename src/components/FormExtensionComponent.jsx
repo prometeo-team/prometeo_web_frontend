@@ -11,6 +11,16 @@ import ModalComponent from "./ModalComponent";
 const { TextArea } = Input;
 
 const FormExtensionComponent = () => {
+  
+  const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+
+  const handleOpenModalCheck = () => {
+    setModalVisibleCheck(true);
+  };
+
+  const handleCloseModalCheck = () => {
+    setModalVisibleCheck(false);
+  };
 
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
@@ -100,6 +110,21 @@ const FormExtensionComponent = () => {
             />
           </div>
         </div>
+        <div className='flex items-start justify-start mt-4'>
+            <button
+              className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+              onClick={handleOpenModalCheck}
+            >
+              <span>Generar Solicitud</span>
+              <BsPersonFillCheck className="ml-2 h-5 w-6" />
+            </button>
+            <ModalComponent
+              visible={modalVisibleCheck}
+              onClose={handleCloseModalCheck}
+              content="Supletorio solicitado correctamente"
+              icon={<IoMdCheckmarkCircle />}
+            />
+          </div>
       </div>
     </div>
   );

@@ -6,17 +6,15 @@ import '../App.css';
 const ExtensionPage = () => {
 
     return (
-        <div className="flex mr-24 h-screen">
-            <div className="w-full mt-6 scroll-container">
-                <div className='w-full'>
-                    <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
-                </div>
-                <div>
-                    <TitleComponent title="Solicitud Supletorio" />
-                </div>
-                <div>
-                    <FormExtensionComponent />
-                </div>
+        <div className="h-screen scroll-container">
+            <div className='w-full mt-4'>
+                <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
+            </div>
+            <div>
+                <TitleComponent title="Solicitud Supletorio" />
+            </div>
+            <div>
+                <FormExtensionComponent />
             </div>
         </div>
 

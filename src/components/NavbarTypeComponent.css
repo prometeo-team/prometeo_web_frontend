@@ -1,7 +1,7 @@
 .full-bar{
-    background-color: #D9E1E7;
+    background-color: #9db659;
     align-items: center;
-    color: #495154;
+    color: #ffffff;
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
 }
@@ -15,11 +15,11 @@
     margin-left: 20%;
 }
 .text-hover:hover{
-    background-color: #B3B7BA;
+    background-color: #4e727c;
     color: #ffffff;
 }
 .text-hover:active{
-    background-color: #B3B7BA;
+    background-color: #4e727c;
     color: #ffffff;
 }
 .scroll-container2 {
