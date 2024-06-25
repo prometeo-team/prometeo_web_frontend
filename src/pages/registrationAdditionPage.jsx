@@ -6,9 +6,8 @@ import '../App.css';
 const registrationAdditionPage = () => {
 
     return (
-        <div className="flex mr-48 h-screen">
-            <div className="w-full m-4 ml-10 flex flex-col scroll-container">
-                <div className='w-full'>
+        <div className=" h-screen w-full scroll-container">
+                <div className='w-full mt-4'>
                     <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
                 </div>
                 <div>
@@ -17,7 +16,6 @@ const registrationAdditionPage = () => {
                 <div>
                     <FormAddition_CancelComponent type="Adición de creditos" />
                 </div>
-            </div>
         </div>
 
     )

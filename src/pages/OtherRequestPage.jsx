@@ -6,9 +6,8 @@ import '../App.css'
 const OtherRequestPage = () => {
 
     return (
-        <div className="flex mr-24 h-screen">
-            <div className="w-full mt-6 scroll-container">
-                <div className='w-full'>
+        <div className="h-screen scroll-container">
+                <div className='w-full mt-4'>
                     <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
                 </div>
                 <div>
@@ -17,7 +16,6 @@ const OtherRequestPage = () => {
                 <div>
                     <FormOtherRequestComponent />
                 </div>
-            </div>
         </div>
 
     )
