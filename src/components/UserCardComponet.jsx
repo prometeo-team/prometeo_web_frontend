@@ -15,7 +15,7 @@ function UserCardComponent({ user, number }) {
         <>
             <link href="https://api.fontshare.com/v2/css?f[]=poppins@700&display=swap" rel="stylesheet"></link>
             <div className={classNames('flex flex-row justify-end')}>
-                <div className={classNames('text_font w-53 rounded-full flex flex-row justify-center p-6 text-center font bg-white')}>
+                <div className={classNames('mt-2 text_font w-53 rounded-full flex flex-row justify-center p-6 text-center font bg-white')}>
                     <span>{user}</span>
                     <FaUserCircle className={classNames('w-6 h-6')} />
                 </div>

@@ -47,7 +47,9 @@ function App() {
 
 
   const showNavbar = () => {
-    return location.pathname !== '/login';
+    const noNavbarRoutes = ['/login', '/'];
+    return !noNavbarRoutes.includes(location.pathname);
+    
   };
   const getUserType = () => {
     const path = location.pathname;
