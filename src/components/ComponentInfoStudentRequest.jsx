@@ -36,7 +36,7 @@ const ComponentInfoSR = () => (
   <Descriptions
     title={
       <div className="flex items-center justify-between">
-        <span className="text-lg md:text-xl lg:text-3xl font-bold flex items-center">
+        <span className="text-lg md:text-xl lg:text-2xl font-bold flex items-center">
           <BsInfoCircleFill className="w-6 h-6 color-icons mr-3.5" />
           Información General
         </span>

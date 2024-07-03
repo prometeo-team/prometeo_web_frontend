@@ -1,0 +1,26 @@
+@media (max-width: 666px) {
+    .logo-container {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .logo-container img {
+        height: 100px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.bg-nav {
+    background-color: #43737E;
+}
+
+.btn-hover:hover {
+    background-color: #97B749 !important;
+    transition: background-color 0.3s ease;
+}
+
+.bg-transparent {
+    background-color: transparent !important;
+}
