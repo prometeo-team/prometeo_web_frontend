@@ -1,16 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
-import ModalLegalizationComponent from './ModalLegalizationComponent';
+import ModalDegreeComponent from './ModalDegreeComponent';
 import InputComponent from './InputComponent';
-import './FormLegalizationComponent.css';
+import './FormDegreeComponent.css';
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from 'react-router-dom';
-import {Button}  from "antd";
+import {Button, notification}  from "antd";
 import { LuUpload } from "react-icons/lu";
 import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle } from "react-icons/io";
-import { CiSquarePlus } from "react-icons/ci";
-import { BsPersonFillCheck } from "react-icons/bs";
+import { FaCheck } from "react-icons/fa6";
+import { IoAlertCircleSharp } from "react-icons/io5";
 
 const FormLegalizationComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -24,6 +24,12 @@ const FormLegalizationComponent = () => {
 
     const handleCloseModal = () => {
         setModalVisible(false);
+        notification.info({
+            message: 'Importante',
+            description: 'Recuerda que para poder modificar o eliminar uno o varios archivos documentos, haz clic en el botón "Subir archivos".',
+            placement: 'bottomRight',
+            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+        });
     };
 
     const handleOpenModalCheck = () => {
@@ -31,7 +37,7 @@ const FormLegalizationComponent = () => {
     };
 
     const handleCloseModalCheck = () => {
-        setModalVisibleCheck(true);
+        setModalVisibleCheck(false);
     };
 
 
@@ -99,14 +105,14 @@ const FormLegalizationComponent = () => {
                     </Button>
                 </div>
                 <div className="col-span-4">
-                    <ModalLegalizationComponent
+                    <ModalDegreeComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
                     />
                 </div>
                 <div className="grid grid-cols-4 gap-4">
-                    {documents.slice(0, 6).map((document, index) => (
+                    {documents.slice(0, 10).map((document, index) => (
                         <React.Fragment key={index}>
                             {index % 2 === 0 && (
                                 <div className="mb-4">
@@ -146,7 +152,7 @@ const FormLegalizationComponent = () => {
                                     <ModalComponent
                                         visible={modalVisibleCheck}
                                         onClose={handleCloseModalCheck}
-                                        content="Legalización realizada correctamente"
+                                        content="Postulacion realizada correctamente"
                                         icon={<IoMdCheckmarkCircle />}
                                     />
                                 </div>
