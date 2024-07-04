@@ -1,22 +1,53 @@
 .events {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.events .ant-badge-status {
-    width: 100%;
-    overflow: hidden;
-    font-size: 12px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.events .badge {
+  display: block;
+  margin-bottom: 5px;
 }
 
-.notes-month {
-    font-size: 28px;
-    text-align: center;
+.activity-item {
+  margin-bottom: 10px;
 }
 
-.notes-month section {
-    font-size: 28px;
+.badge-warning {
+  background-color: #faad14;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.badge-success {
+  background-color: #52c41a;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.badge-error {
+  background-color: #f5222d;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+}
+
+@media (max-width: 589px) {
+  .custom-flex-col {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 589px) {
+  .custom-calendar {
+    width: 100% !important; 
+  }
 }

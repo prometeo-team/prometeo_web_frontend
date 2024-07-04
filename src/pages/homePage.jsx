@@ -1,7 +1,7 @@
 import Navbar from "../components/homePageNavbar";
 import imgBackground from '../assets/engineer-home-page.jpg';
 import logo from '../assets/Logo_de_la_Universidad_El_Bosque.png';
-import Calendar from '../components/CalendarComponent1.jsx';
+import Calendar from '../components/CalendarComponent.jsx';
 
 const HomePage = () => {
     return (
@@ -9,6 +9,7 @@ const HomePage = () => {
             <Navbar />
             <div className="relative">
                 <img src={imgBackground} alt="Engineering Background" className="h-full filter blur-sm" />
+                
 
                 <div className="unilogo-container bg-[#97B749] p-4 rounded-2xl shadow-md m-5 absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                     <img src={logo} alt="Engineering Background" className="max-h-72 w-auto" />
@@ -19,7 +20,7 @@ const HomePage = () => {
                 </div>
 
             </div>
-            <div className="councill-container bg-white p-4 rounded-lg shadow-md m-5 w-1/2 mt-20">
+            <div className="councill-container bg-white p-4 rounded-lg shadow-md m-5 mt-20">
                 <Calendar />
             </div>
         </div>
