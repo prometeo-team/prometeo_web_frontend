@@ -24,3 +24,15 @@
 .bg-transparent {
     background-color: transparent !important;
 }
+
+.title {
+    font-weight: bold;
+    margin-left: 1rem;
+    font-size: 1.5rem; 
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1rem; 
+    }
+}
