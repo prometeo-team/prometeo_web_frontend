@@ -109,8 +109,9 @@ const App = () => {
   };
 
   const disabledDate = (current) => {
-    const year = current.year();
-    return year < currentYear || year > nextYear;
+    const selectedMonthStart = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+    const selectedMonthEnd = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+    return current < selectedMonthStart || current > selectedMonthEnd;
   };
 
   const headerRender = ({ value, onChange }) => {
@@ -182,30 +183,31 @@ const App = () => {
   const activities = getActivitiesForMonth(selectedMonth);
 
   return (
-      <div className="flex custom-flex-col">
-        <div className="w-10/12 custom-calendar">
-          <Calendar
-            cellRender={cellRender}
-            disabledDate={disabledDate}
-            headerRender={headerRender}
-          />
-        </div>
-        <div className="w-auto ml-3 pl-2 pt-2 bg-gray-200 rounded-lg shadow-md">
-          <h2 className='font-bold'>Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}</h2>
-          {activities.map((activity) => (
-            <div key={activity.date} >
-              <h3 className='text-black pt-2'>{activity.date}</h3>
-              <ul>
-                {activity.events.map((event, index) => (
-                  <li key={index}>
-                    <Badge status={event.type} text={event.content} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+    <div className="flex custom-flex-col">
+      <div className="w-10/12 custom-calendar">
+        <Calendar
+          cellRender={cellRender}
+          disabledDate={disabledDate}
+          headerRender={headerRender}
+          onPanelChange={(date) => setSelectedMonth(date.toDate())}
+        />
       </div>
+      <div className=" ml-3 pl-2 pt-2 bg-gray-200 rounded-lg shadow-md">
+        <h2 className="font-bold">Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}</h2>
+        {activities.map((activity) => (
+          <div key={activity.date}>
+            <h3 className="text-black pt-2">{activity.date}</h3>
+            <ul>
+              {activity.events.map((event, index) => (
+                <li key={index}>
+                  <Badge status={event.type} text={event.content} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

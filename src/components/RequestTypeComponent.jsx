@@ -139,7 +139,17 @@ function RequestTypeComponent() {
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
+                     <Link
+                        to="/student/reserva"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           setTimeout(() => {
+                              window.location.href = "/student/reserva";
+                           }, 600);
+                        }}
+                     >
                      <CardComponent title="Reserva de cupo" icon="7" onCardClick={handleCardClick} />
+                     </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link

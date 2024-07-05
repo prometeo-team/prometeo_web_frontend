@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { Flex, Select, Input, Form } from 'antd';
 import './InputComponent.css';
 
-const InputComponent = ({ type, placeholder, options, variant, value, onChange, }) => {
+const InputComponent = ({ type, placeholder, options, variant, value, onChange }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showErrorBorder, setShowErrorBorder] = useState(false);  const { Option } = Select;
+  const [showErrorBorder, setShowErrorBorder] = useState(false);
+  const { Option } = Select;
 
   const handleInputChange = (e) => {
-    const inputValue = e.target.value;
+    const inputValue = e?.target?.value || '';
 
     if (type === 'correo' && !isValidEmail(inputValue)) {
       setError(true);
@@ -25,7 +26,7 @@ const InputComponent = ({ type, placeholder, options, variant, value, onChange, 
       setShowErrorBorder(false);
     }
 
-    if (onChange) onChange(inputValue);
+    if (onChange) onChange(e);  // Pasar el evento completo
   };
 
   const isValidEmail = (email) => {
@@ -54,12 +55,20 @@ const InputComponent = ({ type, placeholder, options, variant, value, onChange, 
       case 'date':
         return <Input type="date" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" value={value} onChange={handleInputChange} />;
       case 'boolean':
-        return <Input type="checkbox" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" checked={value} onChange={handleInputChange} />;
+        return (
+          <Input
+            type="checkbox"
+            placeholder={placeholder}
+            className="bg-gray-200 rounded-md p-2"
+            checked={!!value}
+            onChange={(e) => handleInputChange({ target: { value: e.target.checked } })}
+          />
+        );
       case 'box':
         return (
           <Select
-            value={value} 
-            onChange={onChange} 
+            value={value}
+            onChange={onChange}
             className={`w-full h-10 rounded-md ${variant} select-box`}
           >
             {options.map((option) => (
@@ -108,7 +117,6 @@ InputComponent.propTypes = {
   ),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
   onChange: PropTypes.func,
-  semestreIngreso: PropTypes.string.isRequired,
 };
 
 export default InputComponent;

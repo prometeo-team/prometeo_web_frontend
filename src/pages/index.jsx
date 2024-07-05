@@ -20,6 +20,7 @@ import ConfigDatePage from "./configDatePage";
 import RegistrationRefundPage from "./registrationRefundPage";
 import RegistrationSlotActivationPage from "./registrationSlotActivationPage";
 import RegistrationReservationPage from "./registrationReservationPage";
+import HistoryCouncil from "./HistoryCouncil"
 
 export {
     HomePage,
@@ -44,4 +45,5 @@ export {
     RegistrationRefundPage,
     RegistrationSlotActivationPage,
     RegistrationReservationPage,
+    HistoryCouncil,
 }
