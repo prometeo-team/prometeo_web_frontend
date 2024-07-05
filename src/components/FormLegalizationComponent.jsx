@@ -136,6 +136,15 @@ const FormLegalizationComponent = () => {
         });
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+    
+
     const handleOpenModalCheck = () => {
         setModalVisibleCheck(true);
     };
@@ -159,7 +168,7 @@ const FormLegalizationComponent = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="max-w-xs">
                     <h3 className='text-black truncate'>Nombre(s)</h3>
-                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input" value={formData.nombre} />
+                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input" value={formData.nombre}  onChange={handleInputChange}/>
                     <h3 className='text-black truncate'>Tipo de documento</h3>
                     <InputComponent
                         type="box"
@@ -175,6 +184,7 @@ const FormLegalizationComponent = () => {
                             { value: 'OTRA', label: 'Otra' },
                         ]}
                         value={formData.tipoDocumento}
+                        onChange={handleInputChange}
                     />
 
                     <h3 className='text-black truncate'>Carrera</h3>

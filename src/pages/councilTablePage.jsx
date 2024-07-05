@@ -121,7 +121,7 @@ function councilTablePage() {
   return (
     <div className="mr-4 ml-4 mt-4">
       <div>
-        <TitleComponent title={"Bioingeniería"} />
+        <TitleComponent title={"Solicitudes"} />
       </div>
 
       <div className="m-5">

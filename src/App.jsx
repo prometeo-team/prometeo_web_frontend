@@ -22,7 +22,8 @@ import { HomePage,
           ConfigDatePage,
           RegistrationRefundPage,
           RegistrationSlotActivationPage,
-          RegistrationReservationPage, } from './pages';
+          RegistrationReservationPage,
+          HistoryCouncil } from './pages';
 import { NavbarComponent } from './components';
 
 
@@ -110,6 +111,7 @@ function App() {
             <Route path="/student/solicitud-cancelacion" element={<RegistrationCancelPage />} />
             <Route path="/student/postulacion-grado" element={<RegistrationDegreePage />} />
             <Route path="/admin/config" element={<ConfigDatePage />} />
+            <Route path="/admin/historial-consejo" element={<HistoryCouncil />} />
           </Routes>
       </div>
     </>
