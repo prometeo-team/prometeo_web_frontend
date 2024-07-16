@@ -29,18 +29,28 @@ const LoginComponent = () => {
         const userCredentials = { username, password };
         console.log('User credentials:', userCredentials);
 
-        // Aquí deberías enviar las credenciales al servidor y recibir la respuesta
-        // Puedes simularlo con una función asíncrona y un setTimeout en este ejemplo
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simula una solicitud al servidor
-
-        const responseJson = { success: true }; // Simula una respuesta del servidor (true si las credenciales son correctas)
-
-        if (responseJson.success) {
-            // Redirige a la página "/crear-solicitud" si las credenciales son correctas
-            history.push('/crear-solicitud');
-        } else {
-            // Maneja el caso en el que las credenciales son incorrectas
-            console.log('Credenciales incorrectas');
+        try {
+            // Realiza la solicitud al servidor
+            const response = await fetch('http://127.0.0.1:3030/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userCredentials),
+            });
+            const responseJson = await response.json();
+            if (responseJson.status == 200) {
+                // Redirige a la página "/crear-solicitud" si las credenciales son correctas
+                const token = responseJson.data.split(' ')[1];
+                sessionStorage.setItem('token', token);
+                window.location.href = '/student/crear-solicitud';
+            } else {
+                // Maneja el caso en el que las credenciales son incorrectas
+                message.error('Credenciales incorrectas');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            message.error('Ocurrió un error al intentar iniciar sesión');
         }
     };
 

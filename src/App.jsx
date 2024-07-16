@@ -48,7 +48,7 @@ function App() {
 
 
   const showNavbar = () => {
-    const noNavbarRoutes = ['/login', '/'];
+    const noNavbarRoutes = ['/login', '/', '/home'];
     return !noNavbarRoutes.includes(location.pathname);
     
   };
@@ -89,8 +89,9 @@ function App() {
           </div>
         )}
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={< HomePage />} />
             <Route path="/student/crear-solicitud" element={<CreateRequestPage />} />
             <Route path="/student/mis-solicitudes" element={<StudentRequestPage />} />
             <Route path="/student/mi-solicitud" element={<InfoRequestPage />} />

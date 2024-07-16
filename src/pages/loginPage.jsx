@@ -2,6 +2,8 @@ import './loginPageStyles.css';
 import logoUni from '../assets/Logo_de_la_Universidad_El_Bosque.png';
 import LoginComponent from '../components/LoginComponent';
 
+
+
 const LoginPage = () => {
     return (
         <div className="containerLogin h-full w-full">
