@@ -13,7 +13,7 @@ const InfoStudentRequestPage = () => {
     return (
         <div className='mx-14'>
             <div className='w-full mt-0 float-right h-20'>
-                <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
+                <UserCArdComponent number={2}></UserCArdComponent>
             </div>
             <div className='h-screen scroll-container mr-4 ml-4' >
 

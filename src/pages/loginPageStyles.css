@@ -1,21 +1,21 @@
-
 .containerLogin {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #43737E;
+    width: 100vw;
+    overflow: hidden;
 }
 
 .container-content {
     margin: 5%;
     text-align: center;
     max-width: 80%;
-    max-width: 40%;
     height: auto;
     align-items: center;
 }
- 
+
 .h1Login {
     font-family: 'Poppins', sans-serif;
     font-weight: 100;
@@ -108,3 +108,4 @@
 .flex-col {
     width: 700px;
 }
+

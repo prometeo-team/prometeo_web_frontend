@@ -3,6 +3,7 @@ import { Tag } from 'antd';
 import './studentRequestPage.css'
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import UserCardComponent from '../components/UserCardComponet';
 
 const studentRequestPage = () => {
 
@@ -138,6 +139,7 @@ const studentRequestPage = () => {
 
   return (
     <div className="h-screen scroll-container ml-4">
+      <UserCardComponent  number={2} />
       <div>
         <TitleComponent title={'Mis Solicitudes'} />
       </div>

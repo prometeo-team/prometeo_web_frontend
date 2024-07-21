@@ -3,6 +3,7 @@ import { Tag } from "antd";
 import "./studentRequestPage.css";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import UserCardComponent from '../components/UserCardComponet';
 
 function councilTablePage() {
   const columns = [
@@ -120,6 +121,7 @@ function councilTablePage() {
 
   return (
     <div className="mr-4 ml-4 mt-4">
+      <UserCardComponent  number={2} />
       <div>
         <TitleComponent title={"Solicitudes"} />
       </div>

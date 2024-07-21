@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { LuUpload } from "react-icons/lu";
 import { Tag } from "antd";
 import { TableComponent } from "../components/";
+import UserCardComponent from '../components/UserCardComponet';
 
 const CouncilFacultyPage = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -150,6 +151,7 @@ const CouncilFacultyPage = () => {
     return (
         <div>
             <div className="max-w-titleComponent">
+            <UserCardComponent  number={2} />
                 <TitleComponent title="Inicio de Acta" />
             </div>
             <div className="m-5">
