@@ -9,7 +9,7 @@ const configDatePage = () => {
         <div className="flex mr-48 h-screen">
             <div className="w-full m-4 ml-10 flex flex-col scroll-container">
                 <div className='w-full'>
-                    <UserCArdComponent user={'Secretaría académica'} number={2}></UserCArdComponent>
+                    <UserCArdComponent number={2}></UserCArdComponent>
                 </div>
                 <div>
                     <TitleComponent title="Configuración" />

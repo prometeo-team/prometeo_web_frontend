@@ -1,57 +1,60 @@
-
-import './App.css'
-import { Route, Routes, useLocation } from 'react-router-dom'
-import { HomePage, 
-          LoginPage,
-          StudentRequestPage, 
-          CreateRequestPage, 
-          InfoRequestPage, 
-          InfoAdminRequestPage, 
-          RegistrationLegalizationPage, 
-          CouncilTablePage, 
-          IncapacityPage, 
-          ExtensionPage,
-          OtherRequestPage,
-          CouncilFacultyPage, 
-          RegistrationReEnroolmentPage, 
-          RegistrationAdditionPage,
-          InfoAdminSRequestPage,
-          RegistrationCancelPage,
-          DegreeTablePage,
-          RegistrationDegreePage,
-          ConfigDatePage,
-          RegistrationRefundPage,
-          RegistrationSlotActivationPage,
-          RegistrationReservationPage,
-          HistoryCouncil } from './pages';
+import { useEffect, useState } from 'react';
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import './App.css';
+import {
+  HomePage,
+  LoginPage,
+  StudentRequestPage,
+  CreateRequestPage,
+  InfoRequestPage,
+  InfoAdminRequestPage,
+  RegistrationLegalizationPage,
+  CouncilTablePage,
+  IncapacityPage,
+  ExtensionPage,
+  OtherRequestPage,
+  CouncilFacultyPage,
+  RegistrationReEnroolmentPage,
+  RegistrationAdditionPage,
+  InfoAdminSRequestPage,
+  RegistrationCancelPage,
+  DegreeTablePage,
+  RegistrationDegreePage,
+  ConfigDatePage,
+  RegistrationRefundPage,
+  RegistrationSlotActivationPage,
+  RegistrationReservationPage,
+  HistoryCouncil
+} from './pages';
 import { NavbarComponent } from './components';
 
-
 function App() {
+  const [role, setRole] = useState(null);
+  const [isTokenProcessed, setIsTokenProcessed] = useState(false);
+  const location = useLocation();
 
   const menuStudent = [
     { name: 'Inicio', path: '/' },
     { name: 'Mis Solicitudes', path: '/student/mis-solicitudes' },
     { name: 'Crear Solicitud', path: '/student/crear-solicitud' },
-    { name: 'Otras Solicitudes',path: '/student/solicitud-otra' },
+    { name: 'Otras Solicitudes', path: '/student/solicitud-otra' },
     { name: 'Ayuda' }
   ];
 
   const menuManagement = [
+    { name: 'Inicio', path: '/' },
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
-    { name: 'Consejo Facultad', path: '/admin/consejo-tabla' },
+    { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
     { name: 'Grados', path: '/admin/grados-tabla' },
     { name: 'Configuración', path: '/admin/config' },
   ];
 
-  const location = useLocation();
-
-
   const showNavbar = () => {
     const noNavbarRoutes = ['/login', '/', '/home'];
     return !noNavbarRoutes.includes(location.pathname);
-    
   };
+
   const getUserType = () => {
     const path = location.pathname;
     if (path.startsWith('/student')) {
@@ -62,7 +65,7 @@ function App() {
       return 0; // Otro tipo de usuario
     }
   };
-  // Función para obtener el menú según el tipo de usuario
+
   const getMenu = () => {
     const userType = getUserType();
     if (userType === 1) {
@@ -73,50 +76,171 @@ function App() {
       return [];
     }
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      console.log('Token:', token);
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
+        console.log('Decoded Token:', decodedToken);
+        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+          setRole('ROLE_STUDENT');
+        } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+          setRole('ROLE_ADMIN');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+    setIsTokenProcessed(true);
+  }, []);
+
+  const ProtectedRoute = ({ roleRequired, children }) => {
+    if (!isTokenProcessed) {
+      return <div>Loading...</div>;
+    }
+    if (!role) {
+      return <Navigate to="/login" />;
+    } else if (role !== roleRequired) {
+      return <Navigate to="/" />;
+    }
+    return children;
+  };
+
+  ProtectedRoute.propTypes = {
+    roleRequired: PropTypes.string.isRequired, // roleRequired debe ser una cadena y es requerido
+    children: PropTypes.node.isRequired, // children debe ser un nodo React y es requerido
+  };
+
+
   return (
-    <>
-      {/* <div >
-        <NavbarComponent menuItems={menuItems} />
-      </div> */}
-
-      {/* //con tailwind crea dos div uno que ocupe 25% y otro 75% */}
-
-      <div className="flex h-full">
-        {/* Renderiza NavbarComponent solo si showNavbar es true */}
-        {showNavbar() && (
-          <div className="w-1/4">
-            <NavbarComponent menuItems={getMenu()} />
-          </div>
-        )}
-          <Routes>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={< HomePage />} />
-            <Route path="/student/crear-solicitud" element={<CreateRequestPage />} />
-            <Route path="/student/mis-solicitudes" element={<StudentRequestPage />} />
-            <Route path="/student/mi-solicitud" element={<InfoRequestPage />} />
-            <Route path="/student/legalizacion-matricula" element={<RegistrationLegalizationPage />} />
-            <Route path="/student/reintegro" element={<RegistrationReEnroolmentPage />} />
-            <Route path="/student/reembolso" element={<RegistrationRefundPage />} />
-            <Route path="/student/activacion-cupo" element={<RegistrationSlotActivationPage />} />
-            <Route path="/student/reserva" element={<RegistrationReservationPage />} />
-            <Route path="/admin/dashboard" element={<InfoAdminRequestPage />} />
-            <Route path="/admin/consejo-tabla" element={<CouncilTablePage />} />
-            <Route path="/admin/consejo-facultad" element={<CouncilFacultyPage />} />
-            <Route path="/admin/solicitud" element={<InfoAdminSRequestPage />} />
-            <Route path="/admin/grados-tabla" element={<DegreeTablePage />} />
-            <Route path="/student/solicitud-incapacidad" element={<IncapacityPage />} />
-            <Route path="/student/solicitud-supletorio" element={<ExtensionPage />} />
-            <Route path="/student/solicitud-otra" element={<OtherRequestPage />} />
-            <Route path="/student/solicitud-adicion" element={<RegistrationAdditionPage />} />
-            <Route path="/student/solicitud-cancelacion" element={<RegistrationCancelPage />} />
-            <Route path="/student/postulacion-grado" element={<RegistrationDegreePage />} />
-            <Route path="/admin/config" element={<ConfigDatePage />} />
-            <Route path="/admin/historial-consejo" element={<HistoryCouncil />} />
-          </Routes>
-      </div>
-    </>
-  )
+    <div className="flex h-full">
+      {showNavbar() && (
+        <div className="w-1/4">
+          <NavbarComponent menuItems={getMenu()} />
+        </div>
+      )}
+      <Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/student/crear-solicitud" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <CreateRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/mis-solicitudes" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <StudentRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/mi-solicitud" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <InfoRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/legalizacion-matricula" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationLegalizationPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/reintegro" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationReEnroolmentPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/reembolso" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationRefundPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/activacion-cupo" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationSlotActivationPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/reserva" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationReservationPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/dashboard" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <InfoAdminRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/consejo-tabla" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <CouncilTablePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/consejo-facultad" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <CouncilFacultyPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/solicitud" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <InfoAdminSRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/grados-tabla" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <DegreeTablePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/solicitud-incapacidad" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <IncapacityPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/solicitud-supletorio" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <ExtensionPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/solicitud-otra" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <OtherRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/solicitud-adicion" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationAdditionPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/solicitud-cancelacion" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationCancelPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/postulacion-grado" element={
+          <ProtectedRoute roleRequired="ROLE_STUDENT">
+            <RegistrationDegreePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/config" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <ConfigDatePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/historial-consejo" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <HistoryCouncil />
+          </ProtectedRoute>
+        } />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
