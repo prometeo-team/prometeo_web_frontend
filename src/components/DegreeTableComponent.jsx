@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 
-import { useState, useEffect } from "react";
-import { Table, Space, Input, Button } from "antd";
+import { useState, useEffect, React  } from "react";
+import { Table, Space, Input, Button, Dropdown, message } from "antd";
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { FaEye } from "react-icons/fa";
 import { HiSearchCircle, HiPlus } from "react-icons/hi";
 import "./TableComponent.css";
@@ -54,6 +55,28 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     )
   );
 
+  const items = [
+    {
+      label: 'Pregrado',
+      key: '1',
+      icon: <UserOutlined />,
+    },
+    {
+      label: 'PosGrado',
+      key: '2',
+      icon: <UserOutlined />,
+    }
+  ]
+
+  const handleMenuClick = (e) => {
+    console.log('click', e);
+  };
+
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
+
   return (
     <div className="mx-auto">
       <div className="boxTable border-2 border-gray-300 p-5 rounded-2xl text-5xl">
@@ -65,6 +88,14 @@ function TableComponent({ dataSource, columns, parameterAction }) {
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiSearchCircle className="w-8 h-8" />}
           />
+          <Dropdown className="h-10" menu={menuProps}>
+            <Button>
+              <Space>
+                Seleccione
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
           <Button type="primary" className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12'>Crear Nueva Convocatoria <HiPlus /></Button>
 
         </div>
