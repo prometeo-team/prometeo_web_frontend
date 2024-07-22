@@ -74,7 +74,7 @@ function UserCardComponent({ number }) {
                             {notification}
                         </div>
                         <div className="mt-2 text_font flex items-center justify-center">
-                            <button onClick={handleLogout} className="bg-red-800 text-white font-bold rounded-full w-12 h-12 mt-4 flex items-center justify-center hover:bg-red-900 transition-colors duration-300 ml-2"
+                            <button onClick={handleLogout} className="bg-[#43737e] text-white font-bold rounded-full w-12 h-12 mt-4 flex items-center justify-center hover:bg-red-900 transition-colors duration-300 ml-2"
                                 title="Cerrar sesión">
                                 <MdLogout className="h-6 w-6" />
                             </button>
@@ -84,7 +84,7 @@ function UserCardComponent({ number }) {
                     <div className="mt-2 text_font flex items-center justify-center">
                         <Link to="/login" className="inline-block">
                             <button
-                                className="bg-[#97b749] text-white font-bold rounded-full px-4 py-2 mb-1.5 border border-transparent hover:bg-white hover:bg-[#43737e] hover:border-white transition-colors duration-300"
+                                className="bg-[#97b749] text-white font-bold rounded-full px-4 py-2 mb-1.5 border border-transparent  hover:bg-[#43737e] hover:border-white hover:text-white transition-colors duration-300"
                                 title="Iniciar sesión"
                             >
                                 Iniciar sesión

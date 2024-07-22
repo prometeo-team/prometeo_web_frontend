@@ -1,0 +1,33 @@
+.login-page-override {
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.login-page__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 24rem;
+    width: 100%;
+}
+
+.login-page__error-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.login-page__error-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.login-page__error-message {
+    font-size: 1.25rem;
+}
