@@ -33,11 +33,11 @@ const Navbar = () => {
   useEffect(() => {
     // Recupera el token desde sessionStorage
     const storedToken = sessionStorage.getItem('token');
-    console.log('Token recuperado:', storedToken);
+
 
     if (storedToken) {
       const decodedToken = decodeToken(storedToken);
-      console.log('Token decodificado:', decodedToken);
+
 
       if (decodedToken && decodedToken.authorities) {
         setUserRoles(decodedToken.authorities);
