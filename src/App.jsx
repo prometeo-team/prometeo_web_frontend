@@ -25,7 +25,8 @@ import {
   RegistrationRefundPage,
   RegistrationSlotActivationPage,
   RegistrationReservationPage,
-  HistoryCouncil
+  HistoryCouncil,
+  Error404Page
 } from './pages';
 import { NavbarComponent } from './components';
 
@@ -52,7 +53,13 @@ function App() {
 
   const showNavbar = () => {
     const noNavbarRoutes = ['/login', '/', '/home'];
-    return !noNavbarRoutes.includes(location.pathname);
+    const pathname = location.pathname;
+
+    const isNoNavbarRoute = noNavbarRoutes.includes(pathname);
+
+    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/student/mis-solicitudes', '/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo'].includes(pathname) && pathname !== '*';
+
+    return !(isNoNavbarRoute || isNotFoundRoute);
   };
 
   const getUserType = () => {
@@ -117,8 +124,8 @@ function App() {
   };
 
   ProtectedRoute.propTypes = {
-    roleRequired: PropTypes.string.isRequired, // roleRequired debe ser una cadena y es requerido
-    children: PropTypes.node.isRequired, // children debe ser un nodo React y es requerido
+    roleRequired: PropTypes.string.isRequired, 
+    children: PropTypes.node.isRequired,
   };
 
 
@@ -238,6 +245,7 @@ function App() {
             <HistoryCouncil />
           </ProtectedRoute>
         } />
+        <Route path="*" element={<Error404Page />} />
       </Routes>
     </div>
   );

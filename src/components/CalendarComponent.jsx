@@ -192,10 +192,14 @@ const App = () => {
           onPanelChange={(date) => setSelectedMonth(date.toDate())}
         />
       </div>
-      <div className=" ml-3 pl-2 pt-2 bg-gray-200 rounded-lg shadow-md">
-        <h2 className="font-bold">Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}</h2>
+      <div className="ml-3 pl-4 pt-4 pb-4 pr-4 bg-[#97B749] rounded-lg shadow-md">
+        <div className='bg-gray-200  rounded-lg p-5 '>
+
+        <h2 className="font-bold text-black mb-4">
+          Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}
+        </h2>
         {activities.map((activity) => (
-          <div key={activity.date}>
+          <div key={activity.date} className="mb-4">
             <h3 className="text-black pt-2">{activity.date}</h3>
             <ul>
               {activity.events.map((event, index) => (
@@ -206,9 +210,12 @@ const App = () => {
             </ul>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
+  
+  
 };
 
 export default App;

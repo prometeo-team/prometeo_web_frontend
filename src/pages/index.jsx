@@ -21,6 +21,7 @@ import RegistrationRefundPage from "./registrationRefundPage";
 import RegistrationSlotActivationPage from "./registrationSlotActivationPage";
 import RegistrationReservationPage from "./registrationReservationPage";
 import HistoryCouncil from "./HistoryCouncil"
+import Error404Page from "./Error404Page"
 
 export {
     HomePage,
@@ -46,4 +47,5 @@ export {
     RegistrationSlotActivationPage,
     RegistrationReservationPage,
     HistoryCouncil,
+    Error404Page,
 }

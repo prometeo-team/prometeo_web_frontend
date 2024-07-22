@@ -20,7 +20,7 @@ const HomePage = () => {
                 </div>
 
             </div>
-            <div className="councill-container bg-white p-4 rounded-lg shadow-md m-5 mt-20">
+            <div className="councill-container bg-white p-4 rounded-lg shadow-md m-5 mt-20 border-[#43737E] border-2">
                 <Calendar />
             </div>
         </div>
