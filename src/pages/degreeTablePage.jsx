@@ -76,8 +76,7 @@ function degreeTablePage() {
 
 
   return (
-    <div className='w-full flex mr-24 h-screen'>
-      <div className="w-full  mt-6 scroll-container flex flex-col">
+    <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>
         <div className='w-full mt-0 float-right h-20'>
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
@@ -90,7 +89,6 @@ function degreeTablePage() {
             <DegreeTableComponent dataSource={dataSource} columns={columns} parameterAction={handleView} />
           </div>
         </div>
-      </div>
     </div>
   );
 }

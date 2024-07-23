@@ -1,0 +1,16 @@
+.ant-steps-item-process .ant-steps-item-icon {
+    background-color: #9db659 !important;
+    border-color: #9db659 !important;
+  }
+  @media not all and (min-width: 768px) {
+    .ant-steps-item-title{
+      width: 90px !important;
+      text-wrap: wrap !important;
+      overflow-wrap: anywhere !important;
+    }
+}
+
+  
+  
+  
+  

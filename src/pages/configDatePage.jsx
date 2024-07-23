@@ -6,8 +6,7 @@ import '../App.css';
 const configDatePage = () => {
 
     return (
-        <div className="flex mr-48 h-screen">
-            <div className="w-full m-4 ml-10 flex flex-col scroll-container">
+        <div className="w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col">
                 <div className='w-full'>
                     <UserCArdComponent number={2}></UserCArdComponent>
                 </div>
@@ -17,7 +16,6 @@ const configDatePage = () => {
                 <div>
                     <FormConfigComponent type="Adición de creditos" />
                 </div>
-            </div>
         </div>
 
     )
