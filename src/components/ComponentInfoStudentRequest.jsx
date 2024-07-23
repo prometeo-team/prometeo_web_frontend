@@ -1,8 +1,38 @@
-import { Descriptions } from 'antd';
+import { Descriptions,Steps  } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
-
+import './ComponentInfoStudentRequest.css';
+const status = [
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  },
+  {
+    title: 'Inicio'
+  }
+]
 const jsonData = {
+  
   items: [
     {
       key: '1',
@@ -32,7 +62,7 @@ const jsonData = {
   ],
 };
 
-const ComponentInfoSR = () => (
+/*const ComponentInfoSR = () => (
   <Descriptions
     title={
       <div className="flex items-center justify-between">
@@ -51,6 +81,35 @@ const ComponentInfoSR = () => (
       </Descriptions.Item>
     ))}
   </Descriptions>
-);
+);*/
+
+function ComponentInfoSR(){
+  return(
+    <>
+      <div className="flex  justify-between p-4">
+          <span className="text-lg md:text-xl lg:text-2xl font-bold flex items-center">
+            <BsInfoCircleFill className="w-6 h-6 color-icons mr-3.5" />
+            Información General
+          </span>
+        </div>
+      <div className='flex flex-col max-md:flex-row items-center w-full'>
+        
+        <br />
+        <br />
+        <Steps current={0} labelPlacement="horizontal" items={status} />
+        <br />
+        <br />
+        <div className='flex flex-row w-full justify-center max-md:flex-col max-md:text-sm'>
+          {jsonData.items.map(item => (
+            <div className='p-4'>
+              <strong>{item.label}</strong>
+              <p className='text-wrap break-words'>{item.children}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
 
 export default ComponentInfoSR;

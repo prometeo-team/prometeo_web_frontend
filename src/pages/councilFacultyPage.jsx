@@ -149,7 +149,7 @@ const CouncilFacultyPage = () => {
     const combinedDataSource = [...filteredConsejoRows, ...filteredOtherRows];
 
     return (
-        <div>
+        <div className='h-screen scroll-container'>
             <div className="max-w-titleComponent">
             <UserCardComponent  number={2} />
                 <TitleComponent title="Inicio de Acta" />
@@ -161,46 +161,48 @@ const CouncilFacultyPage = () => {
                     parameterAction={handleView}
                 />
             </div>
-            <div className="flex justify-center">
-                <div className='councill-container bg-white p-4 rounded-lg shadow-md m-5 w-1/2'>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="col-span-2">
-                            <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Formato PROMETEO</h2>
-                            <h2 className="mt-4">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
-                        </div>
-                        <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
-                            <div>
-                                <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center ">
-                                    Descargar <LuDownload className="ml-2 h-7 w-7" />
-                                </Button>
+            <div className="max-md:h-screen">
+                <div className="flex justify-center">
+                    <div className='bg-white p-4 rounded-lg shadow-md m-5 w-1/2 max-md:w-full'>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="col-span-2">
+                                <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Formato PROMETEO</h2>
+                                <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
+                            </div>
+                            <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
+                                <div>
+                                    <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-between items-center  ">
+                                        <p className="max-md:hidden">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex justify-center">
-                <div className='councill-container bg-white p-4 rounded-lg shadow-md m-5 w-1/2'>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="col-span-2">
-                            <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Acta de consejo</h2>
-                            <h2 className="mt-4">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema prometeo</h2>
-                        </div>
-                        <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
-                            <div>
-                                <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center ">
-                                    Descargar <LuDownload className="ml-2 h-7 w-7" />
-                                </Button>
+                <div className="flex justify-center">
+                    <div className='councill-container bg-white p-4 rounded-lg shadow-md m-5 w-1/2 max-md:w-full max-md:h-auto'>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="col-span-2">
+                                <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Acta de consejo</h2>
+                                <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema prometeo</h2>
+                            </div>
+                            <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
+                                <div>
+                                    <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-between items-center ">
+                                        <p className="max-md:hidden">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex justify-center items-center mt-4">
-                        <Button onClick={handleOpenModal} className="w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center">
-                            Subir acta <LuUpload className="ml-2 h-7 w-7" />
-                        </Button>
-                        <ModalCouncilFacultyComponent
-                            visible={modalVisible}
-                            onClose={handleCloseModal}
-                        />
+                        <div className="flex justify-center items-center mt-4">
+                            <Button onClick={handleOpenModal} className="w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center">
+                                Subir acta <LuUpload className="ml-2 h-7 w-7" />
+                            </Button>
+                            <ModalCouncilFacultyComponent
+                                visible={modalVisible}
+                                onClose={handleCloseModal}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

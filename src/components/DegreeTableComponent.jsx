@@ -80,15 +80,15 @@ function TableComponent({ dataSource, columns, parameterAction }) {
   return (
     <div className="mx-auto">
       <div className="boxTable border-2 border-gray-300 p-5 rounded-2xl text-5xl">
-        <div className="mb-3 w-full  flex justify-around">
+        <div className="mb-3 w-full max-md:flex-col flex justify-around">
           <Input
-            className="w-1/2"
+            className="w-1/2 max-md:w-full max-md:mb-3"
             placeholder="Buscar aquí..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiSearchCircle className="w-8 h-8" />}
           />
-          <Dropdown className="h-10" menu={menuProps}>
+          <Dropdown className="h-10 max-md:mb-3" menu={menuProps}>
             <Button>
               <Space>
                 Seleccione
@@ -96,7 +96,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
               </Space>
             </Button>
           </Dropdown>
-          <Button type="primary" className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12'>Crear Nueva Convocatoria <HiPlus /></Button>
+          <Button type="primary" className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
 
         </div>
         <div className="overflow-x-auto">
