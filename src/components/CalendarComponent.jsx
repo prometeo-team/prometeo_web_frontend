@@ -5,65 +5,64 @@ import { Badge, Calendar, Select } from 'antd';
 const { Option } = Select;
 
 const getListData = (value) => {
-  let listData;
-  switch (value.getDate()) {
-    case 8:
+  const day = value.getDate();
+  const month = value.getMonth();
+  const year = value.getFullYear();
+  let listData = [];
+
+  switch (true) {
+    // Evento para el 15 de cada mes
+    case (day === 15):
       listData = [
         {
-          type: 'warning',
-          content: 'This is warning event.',
-        },
-        {
-          type: 'success',
-          content: 'This is usual event.',
+          type: 'error',
+          content: 'Este es un evento regular del día 15 del mes.',
         },
       ];
       break;
-    case 10:
+    // Eventos específicos para ciertas fechas
+    case (month === 0 && day === 1): // 1 de enero
       listData = [
         {
-          type: 'warning',
-          content: 'This is warning event.',
-        },
-        {
-          type: 'success',
-          content: 'This is usual event.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event.',
+          type: 'special',
+          content: 'Feliz Año Nuevo! Evento especial para el 1 de enero.',
         },
       ];
       break;
-    case 15:
+    case (month === 4 && day === 5): // 5 de mayo
       listData = [
         {
-          type: 'warning',
-          content: 'This is warning event',
-        },
-        {
-          type: 'success',
-          content: 'This is very long usual event......',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 1.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 2.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 3.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 4.',
+          type: 'celebration',
+          content: '¡Celebra el Día de la Batalla de Puebla!',
         },
       ];
       break;
+    case (month === 6 && day === 14): // 14 de julio
+      listData = [
+        {
+          type: 'festival',
+          content: '¡Feliz Día de la Bastilla!',
+        },
+      ];
+      break;
+    case (month === 11 && day === 25): // 25 de diciembre
+      listData = [
+        {
+          type: 'holiday',
+          content: '¡Feliz Navidad!',
+        },
+      ];
+      break;
+      case (month === 7 && day === 16 && year === 2024):
+        listData = [
+            {
+                type: 'special',
+                content: 'Evento especial para el 16 de agosto de 2024.',
+            },
+        ];
+        break;
     default:
+      listData = [];
   }
   return listData || [];
 };
@@ -161,6 +160,7 @@ const App = () => {
           ))}
         </Select>
       </div>
+      
     );
   };
 
@@ -193,29 +193,29 @@ const App = () => {
         />
       </div>
       <div className="ml-3 pl-4 pt-4 pb-4 pr-4 bg-[#97B749] rounded-lg shadow-md">
-        <div className='bg-gray-200  rounded-lg p-5 '>
-
-        <h2 className="font-bold text-black mb-4">
-          Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}
-        </h2>
-        {activities.map((activity) => (
-          <div key={activity.date} className="mb-4">
-            <h3 className="text-black pt-2">{activity.date}</h3>
-            <ul>
-              {activity.events.map((event, index) => (
-                <li key={index}>
-                  <Badge status={event.type} text={event.content} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <div className='bg-gray-100  rounded-lg p-5 '>
+          <h2 className="font-bold text-black mb-4">
+            Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}
+          </h2>
+          {activities.map((activity) => (
+            <div key={activity.date} className="mb-4">
+              <h3 className="text-black pt-2">{activity.date}</h3>
+              <ul>
+                {activity.events.map((event, index) => (
+                  <li key={index}>
+                    <Badge status={event.type} text={event.content} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
+      
     </div>
   );
-  
-  
+
+
 };
 
 export default App;

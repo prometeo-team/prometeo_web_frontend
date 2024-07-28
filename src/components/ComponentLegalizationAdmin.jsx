@@ -1,36 +1,7 @@
-import { Steps } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
 import './ComponentInfoStudentRequest.css';
-const status = [
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  },
-  {
-    title: 'Inicio'
-  }
-]
+
 const jsonData = {
 
   items: [
@@ -93,12 +64,6 @@ function ComponentInfoSR() {
         </span>
       </div>
       <div className='flex flex-col max-md:flex-row items-center w-full'>
-
-        <br />
-        <br />
-        <Steps current={0} labelPlacement="horizontal" items={status} />
-        <br />
-        <br />
         <div className='flex flex-row w-full justify-center max-md:flex-col max-md:text-sm'>
           {jsonData.items.map(item => (
             <div className='p-4' key={item.id}>

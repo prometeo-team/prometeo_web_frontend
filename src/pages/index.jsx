@@ -21,7 +21,8 @@ import RegistrationRefundPage from "./registrationRefundPage";
 import RegistrationSlotActivationPage from "./registrationSlotActivationPage";
 import RegistrationReservationPage from "./registrationReservationPage";
 import HistoryCouncil from "./HistoryCouncil"
-import Error404Page from "./Error404Page"
+import Error404Page from "./Error404Page";
+import LegalizationRequestAdmin from "./infoLegalizationAdmin"
 
 export {
     HomePage,
@@ -48,4 +49,5 @@ export {
     RegistrationReservationPage,
     HistoryCouncil,
     Error404Page,
+    LegalizationRequestAdmin,
 }
