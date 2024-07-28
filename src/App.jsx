@@ -26,7 +26,8 @@ import {
   RegistrationSlotActivationPage,
   RegistrationReservationPage,
   HistoryCouncil,
-  Error404Page
+  Error404Page,
+  LegalizationRequestAdmin
 } from './pages';
 import { NavbarComponent } from './components';
 
@@ -57,7 +58,7 @@ function App() {
 
     const isNoNavbarRoute = noNavbarRoutes.includes(pathname);
 
-    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/student/mis-solicitudes', '/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo'].includes(pathname) && pathname !== '*';
+    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/student/mis-solicitudes', '/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ].includes(pathname) && pathname !== '*';
 
     return !(isNoNavbarRoute || isNotFoundRoute);
   };
@@ -243,6 +244,11 @@ function App() {
         <Route path="/admin/historial-consejo" element={
           <ProtectedRoute roleRequired="ROLE_ADMIN">
             <HistoryCouncil />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/legalizacion-solicitud" element={
+          <ProtectedRoute roleRequired="ROLE_ADMIN">
+            <LegalizationRequestAdmin />
           </ProtectedRoute>
         } />
         <Route path="*" element={<Error404Page />} />
