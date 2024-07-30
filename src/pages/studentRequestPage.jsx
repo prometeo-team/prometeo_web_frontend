@@ -6,17 +6,17 @@ import { Button } from 'antd';
 import UserCardComponent from '../components/UserCardComponet';
 import { useState, useEffect } from 'react';
 import { getInfoToken } from '../utils/utils';
+
 const studentRequestPage = () => {
 
   const [filas, setFilas] = useState([]);
-
 
   useEffect(() => {
     const userInfo = getInfoToken();
     console.log('userInfo:', userInfo);
     const obtenerDatos = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/request/getAllRequest?page=1&username=${userInfo.sub}`, {
+        const response = await fetch(`http://127.0.0.1:3030/api/request/getRequestsByStudent?page=1&username=${userInfo.sub}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -24,23 +24,20 @@ const studentRequestPage = () => {
           },
         });
         const result = await response.json();
-        setFilas(result.data.content);
-        console.log('Datos obtenidos:', result.data.content[0].requestTypeEntity);
-     
+        setFilas(result.data); // Ajuste aquí para usar `result.data` en lugar de `result.data.content`
+        console.log('Datos obtenidos:', result.data);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
-      
       }
     };
     obtenerDatos();
   }, []);
 
-
   const columns = [
     {
       title: 'Solicitud',
-      dataIndex: 'idRequest',
-      key: 'idRequest',
+      dataIndex: 'request_id',
+      key: 'request_id',
     },
     {
       title: 'Fecha de Creacion',
@@ -59,18 +56,18 @@ const studentRequestPage = () => {
     },
     {
       title: 'Estado de la solicitud',
-      key: 'estado',
-      dataIndex: 'estado', // Assuming you will add this field to the response
-      render: (estado) => {
+      key: 'status',
+      dataIndex: 'status',
+      render: (status) => {
         let color;
-        if (estado === 'Iniciado') {
+        if (status === 'Iniciado') {
           color = 'green';
-        } else if (estado === 'Proceso') {
+        } else if (status === 'En Verificacion') {
           color = '#F1C40F';
-        } else if (estado === 'Finalizado') {
+        } else if (status === 'En Finanzas') {
           color = 'red';
         }
-        return <Tag color={color}>{estado ? estado.toUpperCase() : 'DESCONOCIDO'}</Tag>;
+        return <Tag color={color}>{status ? status : 'DESCONOCIDO'}</Tag>;
       },
     },
     {
@@ -91,7 +88,6 @@ const studentRequestPage = () => {
     console.log('Ver registro:', record.id_solicitud);
   };
 
-
   return (
     <div className="h-screen scroll-container ml-4">
       <UserCardComponent number={2} />
@@ -101,13 +97,12 @@ const studentRequestPage = () => {
 
       <div className="m-5">
         <TableComponent dataSource={filas} columns={columns} parameterAction={handleView} />
-
       </div>
       <div className="ml-5 mb-5">
         <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default studentRequestPage
+export default studentRequestPage;
