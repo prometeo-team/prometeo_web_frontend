@@ -1,22 +1,18 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { Flex, Spin } from 'antd';
+import { Spin } from 'antd';
+import './LoaderComponent.css';
 
 const Loader = () => (
-  <Flex align="center" gap="middle">
-    <Spin indicator={<LoadingOutlined spin />} size="small" />
-    <Spin indicator={<LoadingOutlined spin />} />
-    <Spin indicator={<LoadingOutlined spin />} size="large" />
+  <div className="flex items-center justify-center h-screen w-screen ml-[-20%]">
     <Spin
       indicator={
         <LoadingOutlined
-          style={{
-            fontSize: 48,
-          }}
+          className="custom-loading-icon"
           spin
         />
       }
     />
-  </Flex>
+  </div>
 );
 
 export default Loader;

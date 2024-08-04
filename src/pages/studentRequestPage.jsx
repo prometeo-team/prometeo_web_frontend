@@ -1,15 +1,15 @@
+import  { useState, useEffect } from 'react';
 import { TitleComponent, TableComponent } from '../components/';
-import { Tag } from 'antd';
-import './studentRequestPage.css';
+import { Tag, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
 import UserCardComponent from '../components/UserCardComponet';
-import { useState, useEffect } from 'react';
 import { getInfoToken } from '../utils/utils';
+import Loader from '../components/LoaderComponent.jsx';
+import './studentRequestPage.css';
 
-const studentRequestPage = () => {
-
+const StudentRequestPage = () => {
   const [filas, setFilas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const userInfo = getInfoToken();
@@ -24,10 +24,12 @@ const studentRequestPage = () => {
           },
         });
         const result = await response.json();
-        setFilas(result.data); // Ajuste aquí para usar `result.data` en lugar de `result.data.content`
+        setFilas(result.data);
         console.log('Datos obtenidos:', result.data);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     obtenerDatos();
@@ -90,19 +92,24 @@ const studentRequestPage = () => {
 
   return (
     <div className="h-screen scroll-container ml-4">
-      <UserCardComponent number={2} />
-      <div>
-        <TitleComponent title={'Mis Solicitudes'} />
-      </div>
-
-      <div className="m-5">
-        <TableComponent dataSource={filas} columns={columns} parameterAction={handleView} />
-      </div>
-      <div className="ml-5 mb-5">
-        <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <UserCardComponent number={2} />
+          <div>
+            <TitleComponent title={'Mis Solicitudes'} />
+          </div>
+          <div className="m-5">
+            <TableComponent dataSource={filas} columns={columns} parameterAction={handleView} />
+          </div>
+          <div className="ml-5 mb-5">
+            <Button to="/homePage" type="primary" className='color-button text-sm md:text-base lg:text-lg h-auto' icon={<ArrowLeftOutlined />}>Volver</Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
-export default studentRequestPage;
+export default StudentRequestPage;
