@@ -1,0 +1,7 @@
+.modal-body-blur .ant-modal-mask {
+    backdrop-filter: blur(5px) !important;
+}
+
+.modal-body-blur .ant-modal-content {
+    background: rgba(255, 255, 255, 0.9) !important; 
+}

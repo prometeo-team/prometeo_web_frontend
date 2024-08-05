@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 import './CardGraficsComponent.css';
 import { FaFile } from "react-icons/fa6";

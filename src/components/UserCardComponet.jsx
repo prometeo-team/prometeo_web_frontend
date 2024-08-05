@@ -85,8 +85,7 @@ function UserCardComponent({ number }) {
                         <Link to="/login" className="inline-block">
                             <button
                                 className="bg-[#97b749] text-white font-bold rounded-full px-4 py-2 mb-1.5 border border-transparent  hover:bg-[#43737e] hover:border-white hover:text-white transition-colors duration-300"
-                                title="Iniciar sesión"
-                            >
+                                title="Iniciar sesión">
                                 Iniciar sesión
                             </button>
                         </Link>
