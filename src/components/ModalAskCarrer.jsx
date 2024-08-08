@@ -15,7 +15,7 @@ const getInfoToken = () => {
     return JSON.parse(jsonPayload);
 };
 
-const ModalAskCarrer = ({ isVisible, onConfirm }) => {
+const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
     const [selectedOption, setSelectedOption] = useState('SELECT');
     const [programs, setPrograms] = useState([]);
     const navigate = useNavigate();
@@ -55,6 +55,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
 
     const handleSelectChange = (value) => {
         setSelectedOption(value);
+        onSelect(value); // Llama a la función de callback con la opción seleccionada
     };
 
     const handleCancel = () => {
@@ -69,6 +70,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
             okButtonProps={{ disabled: selectedOption === 'SELECT' }}
             closeIcon={null} 
         >
+            <h1 className='text-3xl mb-4'>Selecione una carrera:</h1>
             <InputComponent
                 type="box"
                 placeholder="Seleccione una carrera"
@@ -83,6 +85,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
 ModalAskCarrer.propTypes = {
     isVisible: PropTypes.bool.isRequired,
     onConfirm: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired, // Añadir la nueva prop
 };
 
 export default ModalAskCarrer;

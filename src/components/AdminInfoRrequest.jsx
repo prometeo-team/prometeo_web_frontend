@@ -1,25 +1,75 @@
-import { Descriptions, Button, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Descriptions, Button } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
 
-const { Option } = Select;
-
-const jsonData = {
-  items: [
-    { key: '1', label: 'Solicitante', children: 'Pepito Perez' },
-    { key: '2', label: 'Jornada', children: 'Diurna' },
-    { key: '3', label: 'Fecha Ingreso', children: '12-04-2024' },
-    { key: '4', label: 'Cant. perdida calidad estudiantil', children: '0' },
-    { key: '5', label: 'Tipo de documento', children: 'Cédula de ciudadania' },
-    { key: '6', label: 'Número de documento', children: '12345678' },
-    { key: '7', label: 'Semestre', children: 'Octavo' },
-    { key: '8', label: 'Carrera', children: 'Bioingeniería' },
-    { key: '9', label: 'Prom. Ult. Semestre', children: '3.9' },
-    { key: '10', label: 'Prom. acumulado', children: '4.0' },
-  ]
-};
-
 const ComponentInfoSR = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [statuses, setStatuses] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3030/api/user/getInformationForCouncil?idRequest=60`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+        const result = await response.json();
+        const { data: userInfo } = result;
+
+        if (userInfo.length > 0) {
+          const info = userInfo[0];
+          const jsonData = {
+            items: [
+              { key: '1', label: 'Solicitante', children: `${info.name} ${info.last_name}` },
+              { key: '2', label: 'Jornada', children: info.study_time },
+              { key: '3', label: 'Fecha Ingreso', children: new Date(info.admission_date).toLocaleDateString() },
+              { key: '4', label: 'Cant. perdida calidad estudiantil', children: info.count_lose_quality_study },
+              { key: '5', label: 'Tipo de documento', children: info.document_type },
+              { key: '6', label: 'Número de documento', children: info.document_number },
+              { key: '7', label: 'Semestre', children: info.period },
+              { key: '8', label: 'Carrera', children: info.description },
+              { key: '9', label: 'Prom. Ult. Semestre', children: info.average_last_period },
+              { key: '10', label: 'Prom. acumulado', children: info.average_accumulate },
+            ],
+          };
+          setData(jsonData.items);
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const fetchStatuses = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3030/api/request/getManageStatusByRequest?idRequest=62`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+        const result = await response.json();
+        const { data: statusData } = result.data;
+        setStatuses(statusData);
+      } catch (error) {
+        console.error("Error al obtener los estados:", error);
+      }
+    };
+
+    fetchData();
+    fetchStatuses();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Descriptions
@@ -31,9 +81,9 @@ const ComponentInfoSR = () => {
         </div>
       }
       layout="vertical"
-      column={Math.min(jsonData.items.length, 3)}
+      column={Math.min(data.length, 3)}
     >
-      {jsonData.items.map(item => (
+      {data.map(item => (
         <Descriptions.Item
           key={item.key}
           label={
@@ -55,10 +105,11 @@ const ComponentInfoSR = () => {
           </span>
         </Descriptions.Item>
       ))}
-      <Descriptions.Item className="ml-10 ">
-        <Button type="primary" className="mr-4 w-full h-14 text-white rounded-lg shadow-md color-button font-bold text-lg  items-center text-center">Ver Documentos</Button>
+      <Descriptions.Item className="ml-10">
+        <Button type="primary" className="mr-4 w-full h-14 text-white rounded-lg shadow-md color-button font-bold text-lg items-center text-center">
+          Ver Documentos
+        </Button>
       </Descriptions.Item>
-
 
       <Descriptions.Item className="ml-10">
         <div className="bg-[#97B749] p-2 rounded-lg w-full h-full">
@@ -66,8 +117,9 @@ const ComponentInfoSR = () => {
             className="w-full h-10 text-white rounded-lg font-bold text-lg flex justify-between items-center bg-transparent border-none outline-none text-center"
             defaultValue="Iniciado"
           >
-            <option className='text-black' value="Aprobado">Aprobado</option>
-            <option className='text-black' value="Denegado">Denegado</option>
+            {statuses.map(status => (
+              <option className='text-black' key={status} value={status}>{status}</option>
+            ))}
           </select>
         </div>
       </Descriptions.Item>
