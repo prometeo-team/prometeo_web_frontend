@@ -7,11 +7,12 @@ import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import ModalAskCarrer from '../components/ModalAskCarrer.jsx';
 import Loader from '../components/LoaderComponent.jsx';
-
+var where = "";
 function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
    const [isModalOpen, setIsModalOpen] = useState(false);
    const navigate = useNavigate();
+   
 
    const toggleVisibility = () => {
       setIsVisible(!isVisible);
@@ -26,24 +27,49 @@ function RequestTypeComponent() {
 
       switch (option) {
          case 1:
+            setIsModalOpen(true);
+            where = '/student/solicitud-adicion';
             console.log('Adición de créditos');
             break;
          case 2:
+            setIsModalOpen(true);
+            where="/student/solicitud-cancelacion";
             console.log('Cancelación de créditos');
             break;
          case 3:
+            setIsModalOpen(true);
+            where="/student/solicitud-incapacidad";
             console.log('Incapacidades Médicas');
             break;
          case 4:
+            setIsModalOpen(true);
+            where="/student/solicitud-supletorio";
             console.log('Supletorios');
             break;
          case 5:
-         case 6:
-         case 7:
-         case 8:
-         case 9:
-            console.log('Legalización, Reembolso, Reserva de cupo, Activación de cupo');
             setIsModalOpen(true);
+            where="/student/reintegro";
+            break;
+         case 6:
+            setIsModalOpen(true);
+            where="/student/reembolso";
+            break;
+         case 7:
+            setIsModalOpen(true);
+            where="/student/reserva";
+            break;
+         case 8:
+            setIsModalOpen(true);
+            where="/student/activacion-cupo";
+            break;
+         case 9:
+            setIsModalOpen(true);
+            where="/student/legalizacion-matricula";
+            console.log('Legalización, Reembolso, Reserva de cupo, Activación de cupo');
+            break;
+         case 10:
+            setIsModalOpen(true);
+            where="/student/postulacion-grado";
             break;
          default:
             break;
@@ -52,9 +78,10 @@ function RequestTypeComponent() {
 
    const handleModalConfirm = () => {
       var carrera = document.getElementById('carrer_select').value;
+      sessionStorage.setItem('Carrera', carrera);
       console.log('prueba osama'+carrera);
       setIsModalOpen(false);
-      navigate('/student/reintegro'); // Navigate to the reintegro page
+      navigate(where); // Navigate to the reintegro page
    };
    
 
@@ -85,9 +112,7 @@ function RequestTypeComponent() {
                         to="/student/solicitud-adicion"
                         onClick={(e) => {
                            e.preventDefault();
-                           setTimeout(() => {
-                              window.location.href = "/student/solicitud-adicion";
-                           }, 600);
+                           handleCardClick(1);
                         }}
                      >
                         <CardComponent title="Adición de créditos" icon="1" onCardClick={() => handleCardClick(1)} />
@@ -98,9 +123,7 @@ function RequestTypeComponent() {
                         to="/student/solicitud-cancelacion"
                         onClick={(e) => {
                            e.preventDefault();
-                           setTimeout(() => {
-                              window.location.href = "/student/solicitud-cancelacion";
-                           }, 600);
+                           handleCardClick(2);
                         }}
                      >
                         <CardComponent title="Cancelación de créditos" icon="2" onCardClick={() => handleCardClick(2)} />
@@ -111,9 +134,7 @@ function RequestTypeComponent() {
                         to="/student/solicitud-incapacidad"
                         onClick={(e) => {
                            e.preventDefault();
-                           setTimeout(() => {
-                              window.location.href = "/student/solicitud-incapacidad";
-                           }, 600);
+                           handleCardClick(3);
                         }}
                      >
                         <CardComponent title="Incapacidades Médicas" icon="3" onCardClick={() => handleCardClick(3)} />
@@ -124,9 +145,7 @@ function RequestTypeComponent() {
                         to="/student/solicitud-supletorio"
                         onClick={(e) => {
                            e.preventDefault();
-                           setTimeout(() => {
-                              window.location.href = "/student/solicitud-supletorio";
-                           }, 600);
+                           handleCardClick(4);
                         }}
                      >
                         <CardComponent title="Supletorios" icon="4" onCardClick={() => handleCardClick(4)} />
@@ -192,9 +211,7 @@ function RequestTypeComponent() {
                         to="/student/postulacion-grado"
                         onClick={(e) => {
                            e.preventDefault();
-                           setTimeout(() => {
-                              window.location.href = "/student/postulacion-grado";
-                           }, 600);
+                           handleCardClick(10);
                         }}
                      >
                         <CardComponent title="Postulacion a Grados" icon="10" onCardClick={() => handleCardClick(10)} />

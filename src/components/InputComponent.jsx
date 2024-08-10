@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Flex, Select, Input, Form } from 'antd';
 import './InputComponent.css';
 
-const InputComponent = ({ type, placeholder, options, variant, value, onChange }) => {
+const InputComponent = ({ type,id, placeholder, options, variant, value, onChange }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorBorder, setShowErrorBorder] = useState(false);
@@ -49,7 +49,7 @@ const InputComponent = ({ type, placeholder, options, variant, value, onChange }
           />
         );
       case 'readOnly':
-        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly value={value} />;
+        return <Input id={id} placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly value={value} />;
       case 'string':
         return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} value={value} onChange={handleInputChange} />;
       case 'date':
