@@ -9,11 +9,44 @@ import InputComponent from "./InputComponent";
 import { Button, Input } from "antd";
 import ModalComponent from "./ModalComponent";
 const { TextArea } = Input;
-
+const carrer = sessionStorage.getItem('Carrera');
+const user = sessionStorage.getItem('user');
+var info;
 const FormAddition_CancelComponent = ({type}) => {
 
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
 
+
+  const fetchInfo = async () => {
+    try {
+        const response = await fetch(`http://127.0.0.1:3030/api/user/getInformationStudentOverview?username=${user}&career=${carrer}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        });
+        const result = await response.json();
+        if (result.status === "200 OK") {
+            const programOptions = JSON.stringify(result.data);
+            info = JSON.parse(programOptions);
+            document.getElementById('document_type').setAttribute('placeholder',info[0].document_type);
+            document.getElementById('Last_name').setAttribute('placeholder',info[0].last_name);
+            document.getElementById('carrer_input').setAttribute('placeholder',carrer);
+            document.getElementById('num_documet').setAttribute('placeholder',info[0].document_number);
+            document.getElementById('phone_input').setAttribute('placeholder',info[0].phone);
+            document.getElementById('semester_input').setAttribute('placeholder',info[0].semester);
+            document.getElementById('name_input').setAttribute('placeholder',info[0].name);
+            document.getElementById('email_input').setAttribute('placeholder',info[0].email);
+            document.getElementById('address_input').setAttribute('placeholder',info[0].address);
+            console.log('Programas obtenidos:', info[0]);
+        } else {
+            console.error("Error en la respuesta:", result.message);
+        }
+    } catch (error) {
+        console.error("Error al obtener los programas:", error);
+    }
+};
 
   const handleOpenModalCheck = () => {
     setModalVisibleCheck(true);
@@ -24,7 +57,11 @@ const FormAddition_CancelComponent = ({type}) => {
   };
 
 
+  fetchInfo();
+
+
   return (
+    
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
       <Link to="/student/crear-solicitud">
         <button className="w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color">
@@ -39,38 +76,27 @@ const FormAddition_CancelComponent = ({type}) => {
       <div className="studentInfo_container ml-2 grid grid-cols-3 gap-4">
         <div className="First Row">
           <h3 className="text-black">Tipo de documento</h3>
-          <InputComponent type="readOnly" placeholder="Cédula de Ciudadanía" />
+          <InputComponent id="document_type" type="readOnly" placeholder="Cédula de Ciudadanía" />
           <h3 className="text-black">Apellidos</h3>
-          <InputComponent type="readOnly" placeholder="Perez" />
+          <InputComponent id="Last_name" type="readOnly" placeholder="Perez" />
           <h3 className="text-black">Carrera</h3>
-          <InputComponent
-            type="box"
-            placeholder="Carrera"
-            variant="form-input"
-            options={[
-              { value: "BI", label: "Bioingeniería" },
-              { value: "IA", label: "Ingeniería Ambiental" },
-              { value: "IS", label: "Ingeniería de Sistemas" },
-              { value: "IE", label: "Ingeniería Electrónica" },
-              { value: "II", label: "Ingeniería Industrial" },
-            ]}
-          />
+          <InputComponent id="carrer_input" type="readOnly"  placeholder="Carrera"/>
         </div>
         <div className="Second Row">
           <h3 className="text-black">No. de documento</h3>
-          <InputComponent type="readOnly" placeholder="Cédula de Ciudadanía" />
+          <InputComponent id="num_documet" type="readOnly" placeholder="Cédula de Ciudadanía" />
           <h3 className="text-black">Teléfono</h3>
-          <InputComponent type="readOnly" placeholder="Perez" />
+          <InputComponent id="phone_input" type="readOnly" placeholder="Perez" />
           <h3 className="text-black">Semestre</h3>
-          <InputComponent type="readOnly" placeholder="Octavo" />
+          <InputComponent id="semester_input" type="readOnly" placeholder="Octavo" />
         </div>
         <div className="Third Row">
           <h3 className="text-black">Pepito</h3>
-          <InputComponent type="readOnly" placeholder="Pepito" />
+          <InputComponent id="name_input" type="readOnly" placeholder="Pepito" />
           <h3 className="text-black">Correo Electrónico</h3>
-          <InputComponent type="readOnly" placeholder="Perez" />
+          <InputComponent id="email_input" type="readOnly" placeholder="Perez" />
           <h3 className="text-black">Carrera</h3>
-          <InputComponent type="readOnly" placeholder="Calle 134 #35-45" />
+          <InputComponent id="address_input" type="readOnly" placeholder="Calle 134 #35-45" />
         </div>
       </div>
       <div>

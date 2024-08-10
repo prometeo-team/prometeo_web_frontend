@@ -43,6 +43,26 @@ const LoginComponent = () => {
                 // Redirige a la página "/crear-solicitud" si las credenciales son correctas
                 const token = responseJson.data.split(' ')[1];
                 sessionStorage.setItem('token', token);
+                sessionStorage.setItem('user', username);
+                try {
+                    const response = await fetch(`http://127.0.0.1:3030/api/user/getProgramsStudent?username=${username}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    const result = await response.json();
+                    if (result.status === "200 OK") {
+                        const programOptions = result.data.map(program => ({ value: program, label: program }));
+                        sessionStorage.setItem('Carrera', programOptions[0].value);
+                        console.log('Programas obtenidos:', programOptions);
+                    } else {
+                        console.error("Error en la respuesta:", result.message);
+                    }
+                } catch (error) {
+                    console.error("Error al obtener los programas:", error);
+                }
                 window.location.href = '/student/crear-solicitud';
             } else {
                 // Maneja el caso en el que las credenciales son incorrectas
