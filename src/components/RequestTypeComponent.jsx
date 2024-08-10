@@ -51,9 +51,12 @@ function RequestTypeComponent() {
    };
 
    const handleModalConfirm = () => {
+      var carrera = document.getElementById('carrer_select').value;
+      console.log('prueba osama'+carrera);
       setIsModalOpen(false);
       navigate('/student/reintegro'); // Navigate to the reintegro page
    };
+   
 
    const handleModalCancel = () => {
       setIsModalOpen(false);

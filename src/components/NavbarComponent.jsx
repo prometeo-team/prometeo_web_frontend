@@ -19,7 +19,7 @@ function NavbarComponent({ menuItems }) {
             <div className={`h-screen flex-col w-60 flex bg-[#43737e] max-md:w-20`}>
                 <img className='logo_menu block  justify-center content-center select-none  p-2 pb-5 ml-5 mt-2 max-w-30 md:max-w-44 max-md:w-16 max-md:ml-2 max-md:mt-6 max-md:p-0 ' src={logoUni} alt="Logo de la Universidad el Bosque" />
                 <div className='bg-[#43737e] max-md:p-3 p-1'>
-                    <ul className='navbar_menu flex justify-between  flex-col gap-4 ml-2 p-2 w-56 max-md:w-1/6 max-md:mt-20 max-md:ml-0 max-md:absolute '>
+                    <ul className='navbar_menu flex justify-between  flex-col gap-4 ml-2 p-2 w-56 max-sm:w-16 max-md:w-16 max-md:mt-20 max-md:ml-0 max-md:absolute '>
                         {menuItems.map((item, index) => {
                             let icon = item.icon;
                             if (item.name === "Inicio") {
@@ -50,7 +50,7 @@ function NavbarComponent({ menuItems }) {
                             const history = useNavigate();
                             return (
                                 <li onClick={() => history(item.path)} key={index}
-                                    className={`navbar_wrapper flex items-center gap-2 mb-5 text-white  max-md:text-2xl max-md:mb-5 transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp w-fit p-1 ${liClass} ${liOption}`}>
+                                    className={`navbar_wrapper flex items-center gap-2 mb-5 text-white  max-md:text-2xl max-md:mb-5 transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp p-1 ${liClass} ${liOption}`}>
                                     {icon}
                                     <button className='text-white w-full text-left ml-1 max-md:hidden'>{item.name}</button>
                                 </li>
