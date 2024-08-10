@@ -43,7 +43,13 @@ const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
             const result = await response.json();
             if (result.status === "200 OK") {
                 const programOptions = result.data.map(program => ({ value: program, label: program }));
-                setPrograms(programOptions);
+                if(programOptions.length == 1){
+                    setPrograms(programOptions);
+                    document.getElementById('carrer_select').value = programOptions[0].value;
+                    setTimeout(onConfirm,10);
+                }else{
+                    setPrograms(programOptions);
+                }
                 console.log('Programas obtenidos:', programOptions);
             } else {
                 console.error("Error en la respuesta:", result.message);
@@ -67,17 +73,17 @@ const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
             open={isVisible}
             onOk={onConfirm}
             onCancel={handleCancel}
-            okButtonProps={{ disabled: selectedOption === 'SELECT' }}
             closeIcon={null} 
         >
             <h1 className='text-3xl mb-4'>Selecione una carrera:</h1>
-            <InputComponent
-                type="box"
-                placeholder="Seleccione una carrera"
-                variant="form-input"
-                options={[{ value: 'SELECT', label: 'Seleccione una opción' }, ...programs]}
-                onChange={handleSelectChange}
-            />
+            <select id="carrer_select" className='w-full h-10 rounded-md  select-box'>
+                <option selected disabled>Seleccione una opción</option>
+                {programs.map((programs) => (
+                <option id={programs.value} key={programs.value} value={programs.value}>
+                    {programs.label}
+                </option>
+                ))}
+            </select>
         </Modal>
     );
 };
