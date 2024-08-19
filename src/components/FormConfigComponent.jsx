@@ -1,17 +1,26 @@
-import React, { useState } from "react";
-import {  IoMdCheckmarkCircle } from "react-icons/io";
+import { useState, useEffect } from "react";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 import { CiSquarePlus } from "react-icons/ci";
-import { BsPersonFillCheck } from "react-icons/bs";
-import { Button, Input, DatePicker } from "antd";
+import { DatePicker, notification } from "antd";
 import ModalComponent from "./ModalComponent";
-const { TextArea } = Input;
+import { FiSave } from "react-icons/fi";
+import ModalConfigList from '../components/ModalConfigList.jsx';
+import { getInfoToken } from '../utils/utils';
+import { IoAlertCircleSharp } from "react-icons/io5";
 
-const FormConfigComponent = ({type}) => {
-
+const FormConfigComponent = ({ type }) => {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [processType, setProcessType] = useState("");
+  const [triggerPost, setTriggerPost] = useState(false);
+  const [savedDates, setSavedDates] = useState([]);
 
   const cambio1 = (date, dateString) => {
-    console.log(date, dateString);
+    setSelectedDate(dateString);
+  };
+
+  const cambio2 = (date, dateString) => {
+    setSelectedDate(dateString);
   };
 
   const handleOpenModalCheck = () => {
@@ -22,57 +31,116 @@ const FormConfigComponent = ({type}) => {
     setModalVisibleCheck(false);
   };
 
+  const handleSave = (type) => {
+    if (savedDates.some(item => item.date === selectedDate && item.type === type)) {
+      notification.info({
+        message: 'Importante',
+        description: 'Esa fecha ya existe, no la puedes agregar dos veces.',
+        placement: 'bottomRight',
+        icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+      });
+    } else {
+      setProcessType(type);
+      setTriggerPost(true);
+    }
+  };
+
+  useEffect(() => {
+    if (triggerPost && selectedDate) {
+      const userInfo = getInfoToken();
+
+      const saveDateProcess = async () => {
+        try {
+          const response = await fetch(`http://127.0.0.1:3030/api/processDate/saveDateProcess?process_type=${processType}&date=${selectedDate}&userAdmin=${userInfo.sub}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+
+          if (response.ok) {
+            console.log("Datos enviados exitosamente");
+            setSavedDates([...savedDates, { date: selectedDate, type: processType }]);
+          } else {
+            console.error("Error al enviar los datos:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error en la solicitud:", error);
+        } finally {
+          setTriggerPost(false);
+        }
+      };
+
+      saveDateProcess();
+    }
+  }, [triggerPost, selectedDate, processType, savedDates]);
 
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
+      <div className="activity_box ml-2 mb-6">
+        <div className="grid grid-flow-col">
+          <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
+            Comite de Procesos
+          </h2>
+        </div>
+        <div id="date_comite" className="flex flex-col md:flex-row w-full items-end">
+          <div className="w-full md:w-2/3 flex flex-col mb-3 md:mb-0">
+            <h4 className="text-md font-bold text-[#9ca3af]">Fecha</h4>
+            <DatePicker onChange={cambio1} />
+          </div>
+          <div className="w-full md:w-auto flex justify-end">
+            <button onClick={() => handleSave("Comité de Procesos")}>
+              <CiSquarePlus className="w-8 h-8 text-[#374151]" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="w-full border-t border-black"></div>
+      </div>
+      <div className="activity_box ml-2 mb-6">
+        <div className="grid grid-flow-col">
+          <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
+            Consejo académico
+          </h2>
+        </div>
+        <div id="date_consejo" className="flex flex-col md:flex-row w-full items-end">
+          <div className="w-full md:w-2/3 flex flex-col mb-3 md:mb-0">
+            <h4 className="text-md font-bold text-[#9ca3af]">Fecha</h4>
+            <DatePicker onChange={cambio1} />
+          </div>
+          <div className="w-full md:w-auto flex justify-end">
+            <button onClick={() => handleSave("Consejo de Facultad")}>
+              <CiSquarePlus className="w-8 h-8 text-[#374151]" />
+            </button>
+          </div>
+        </div>
+      </div>
       
-      {/* Actividades */}
-      <div className="activity_box ml-2 mb-6">
-        <div className="grid grid-flow-col">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
-            Comite academico
-          </h2>
-        </div>
-        <div id="date_comite" className="flex w-full flex-row items-end">
-          <div className="w-1/3 flex flex-col">
-            <h4 className="text-md font-bold text-[#9ca3af]">Fecha 1</h4>
-            <DatePicker onChange={cambio1} />
-          </div>
-          <CiSquarePlus className="w-8 h-8 text-[#374151] ml-3"  />
-        </div>
-      </div>
       <div>
-          <div className="w-full border-t border-black "></div>
+        <div className="w-full border-t border-black "></div>
       </div>
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
-            Consejo academico
-          </h2>
-        </div>
-        <div id="date_consejo" className="flex w-full flex-row items-end">
-          <div className="w-1/3 flex flex-col">
-            <h4 className="text-md font-bold text-[#9ca3af]">Fecha 1</h4>
-            <DatePicker onChange={cambio1} />
-          </div>
-          <CiSquarePlus className="w-8 h-8 text-[#374151] ml-3"  />
-        </div>
-      </div>
-      <div>
-          <div className="w-full border-t border-black "></div>
-      </div>
-      <div className="activity_box ml-2 mb-6">
-        <div className="grid grid-flow-col">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
+          <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
             Legalizacion de Matricula
           </h2>
         </div>
-        <div id="date_legalizacion" className="flex w-full flex-row items-end">
-          <div className="w-1/3 flex flex-col">
-            <h4 className="text-md font-bold text-[#9ca3af]">Fecha 1</h4>
-            <DatePicker onChange={cambio1} />
+        <div id="date_legalizacion" className="flex flex-col sm:flex-row w-full items-end">
+          <div className="flex flex-col sm:flex-row w-full sm:w-2/3">
+            <div className="flex flex-col items-start mr-6 mb-4 sm:mb-0 w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha inicio</h4>
+              <DatePicker onChange={cambio1} className="mt-2 w-full" />
+            </div>
+            <div className="flex flex-col items-start w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha fin</h4>
+              <DatePicker onChange={cambio2} className="mt-2 w-full" />
+            </div>
           </div>
-          <CiSquarePlus className="w-8 h-8 text-[#374151] ml-3"  />
+          <button>
+            <CiSquarePlus className="w-8 h-8 text-[#374151]" />
+          </button>
         </div>
       </div>
       <div>
@@ -80,16 +148,24 @@ const FormConfigComponent = ({type}) => {
       </div>
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
-           Adicion de Creditos
+          <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
+            Adicion de Creditos
           </h2>
         </div>
-        <div id="date_adicion" className="flex w-full flex-row items-end">
-          <div className="w-1/3 flex flex-col">
-            <h4 className="text-md font-bold text-[#9ca3af]">Fecha 1</h4>
-            <DatePicker onChange={cambio1} />
+        <div id="date_legalizacion" className="flex flex-col sm:flex-row w-full items-end">
+          <div className="flex flex-col sm:flex-row w-full sm:w-2/3">
+            <div className="flex flex-col items-start mr-6 mb-4 sm:mb-0 w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha inicio</h4>
+              <DatePicker onChange={cambio1} className="mt-2 w-full" />
+            </div>
+            <div className="flex flex-col items-start w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha fin</h4>
+              <DatePicker onChange={cambio2} className="mt-2 w-full" />
+            </div>
           </div>
-          <CiSquarePlus className="w-8 h-8 text-[#374151]  ml-3"  />
+          <button>
+            <CiSquarePlus className="w-8 h-8 text-[#374151]" />
+          </button>
         </div>
       </div>
       <div>
@@ -97,33 +173,35 @@ const FormConfigComponent = ({type}) => {
       </div>
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
+          <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
             Cancelacion de creditos
           </h2>
         </div>
-        <div id="date_cancelacion" className="flex w-full flex-row items-end">
-          <div className="w-1/3 flex flex-col">
-            <h4 className="text-md font-bold text-[#9ca3af]">Fecha 1</h4>
-            <DatePicker onChange={cambio1} />
+        <div id="date_legalizacion" className="flex flex-col sm:flex-row w-full items-end">
+          <div className="flex flex-col sm:flex-row w-full sm:w-2/3">
+            <div className="flex flex-col items-start mr-6 mb-4 sm:mb-0 w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha inicio</h4>
+              <DatePicker onChange={cambio1} className="mt-2 w-full" />
+            </div>
+            <div className="flex flex-col items-start w-full sm:w-1/2">
+              <h4 className="text-md font-bold text-[#9ca3af]">Fecha fin</h4>
+              <DatePicker onChange={cambio2} className="mt-2 w-full" />
+            </div>
           </div>
-          <CiSquarePlus className="w-8 h-8 text-[#374151] ml-3"  />
+          <button>
+            <CiSquarePlus className="w-8 h-8 text-[#374151]" />
+          </button>
         </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          className="w-52 h-12  text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
-          onClick={handleOpenModalCheck}
-        >
-          <span>Guardar Cambios</span>
-          <BsPersonFillCheck className="ml-2 h-5 w-6" />
-        </button>
+      <div className="flex items-center justify-center">
+        <ModalConfigList
+          visible={modalVisibleCheck}
+          onClose={handleCloseModalCheck}
+          content="Solicitud realizada correctamente"
+          icon={<IoMdCheckmarkCircle />}
+          className="modal-config-list" // Añade una clase si necesitas estilos adicionales
+        />
       </div>
-      <ModalComponent
-            visible={modalVisibleCheck}
-            onClose={handleCloseModalCheck}
-            content="Solicitud realizada correctamente"
-            icon={<IoMdCheckmarkCircle />}
-          />
     </div>
   );
 };
