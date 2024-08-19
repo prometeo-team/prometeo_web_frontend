@@ -31,7 +31,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
         const userInfo = getInfoToken();
         console.log('userInfo:', userInfo);
         try {
-            const response = await fetch(`http://127.0.0.1:3030/api/user/getProgramsStudent?username=${userInfo.sub}`, {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getProgramsStudent?username=${userInfo.sub}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

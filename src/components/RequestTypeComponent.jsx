@@ -81,7 +81,7 @@ function RequestTypeComponent() {
       sessionStorage.setItem('Carrera', carrera);
       console.log('prueba osama'+carrera);
       setIsModalOpen(false);
-      navigate(where); // Navigate to the reintegro page
+      navigate(where+'?carrera='+carrera); // Navigate to the reintegro page
    };
    
 
