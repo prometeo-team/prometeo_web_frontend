@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types'; 
-import InputComponent from '../components/InputComponent';
 import './ModalAskCarrer.css'; 
 
 const getInfoToken = () => {
@@ -15,15 +14,14 @@ const getInfoToken = () => {
     return JSON.parse(jsonPayload);
 };
 
-const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
-    const [selectedOption, setSelectedOption] = useState('SELECT');
+const ModalAskCarrer = ({ isVisible, onConfirm }) => {
     const [programs, setPrograms] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (isVisible) {
             document.body.classList.add('modal-body-blur');
-            fetchPrograms(); // Llama a la función para obtener los programas cuando el modal es visible
+            fetchPrograms(); 
         } else {
             document.body.classList.remove('modal-body-blur');
         }
@@ -59,11 +57,6 @@ const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
         }
     };
 
-    const handleSelectChange = (value) => {
-        setSelectedOption(value);
-        onSelect(value); // Llama a la función de callback con la opción seleccionada
-    };
-
     const handleCancel = () => {
         navigate('/student/crear-solicitud');
     };
@@ -91,7 +84,8 @@ const ModalAskCarrer = ({ isVisible, onConfirm, onSelect }) => {
 ModalAskCarrer.propTypes = {
     isVisible: PropTypes.bool.isRequired,
     onConfirm: PropTypes.func.isRequired,
-    onSelect: PropTypes.func.isRequired, // Añadir la nueva prop
+    onSelect: PropTypes.func.isRequired, 
+    
 };
 
 export default ModalAskCarrer;

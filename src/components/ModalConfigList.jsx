@@ -8,9 +8,10 @@ const ModalList = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [comiteDates, setComiteDates] = useState([]);
   const [consejoDates, setConsejoDates] = useState([]);
+  const userInfo = getInfoToken();
 
   useEffect(() => {
-    const userInfo = getInfoToken();
+
     console.log('userInfo:', userInfo);
 
     const fetchDates = async () => {
@@ -67,70 +68,27 @@ const ModalList = () => {
     setIsModalVisible(false);
   };
 
-  const fetchDates = async () => {
-    try {
-      const response = await fetch(`http://127.0.0.1:3030/api/processDate/getAllProcessDates`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log('Response Data:', result);
-      const data = result.data;
-
-      const comiteMatch = data.match(/Comité de Procesos, Dates: ([^}]*)/);
-      const consejoMatch = data.match(/Consejo de Facultad, Dates: ([^}]*)/);
-
-      if (comiteMatch) {
-        const comiteDatesArray = comiteMatch[1].split(',');
-        setComiteDates(comiteDatesArray);
-      }
-
-      if (consejoMatch) {
-        const consejoDatesArray = consejoMatch[1].split(',');
-        setConsejoDates(consejoDatesArray);
-      }
-    } catch (error) {
-      console.error("Error al obtener las fechas:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchDates();
-  }, []);
-
   const deleteDate = async (processType, date) => {
     try {
-      const response = await fetch(`http://localhost:3030/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}`, {
+      const response = await fetch(`http://127.0.0.1:3030/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}&userAdmin=${userInfo.sub}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-  
-      const responseData = await response.json();
-      console.log('Respuesta del servidor:', responseData);
-  
+
       if (!response.ok) {
-        throw new Error(`Error al eliminar la fecha: ${response.status} - ${responseData.message || 'Sin mensaje'}`);
+        throw new Error(`Error al eliminar la fecha: ${response.status}`);
       }
-  
+
+      // Actualizar las fechas en la interfaz después de la eliminación
       if (processType === 'Comité de Procesos') {
         setComiteDates(prevDates => prevDates.filter(d => d !== date));
       } else if (processType === 'Consejo de Facultad') {
         setConsejoDates(prevDates => prevDates.filter(d => d !== date));
       }
 
-      await fetchDates();
-  
       console.log(`Fecha ${date} eliminada con éxito del ${processType}`);
     } catch (error) {
       console.error("Error al eliminar la fecha:", error);

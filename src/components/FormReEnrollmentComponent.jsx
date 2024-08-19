@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
-import { useState } from 'react';
 import ModalReEnrollmentComponent from '../components/ModalReEnrollmentComponent';
 import InputComponent from '../components/InputComponent';
 import './FormLegalizationComponent.css';
@@ -20,7 +19,31 @@ const FormLegalizationComponent = () => {
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
 
+    const [studentData, setStudentData] = useState({
+        name: '',
+        lastName: '',
+        phone: '',
+        address: '',
+        documentType: '',
+        documentNumber: '',
+        semester: '',
+        description: '',
+        email: ''
+    });
 
+    const getInfoToken = () => {
+        const token = sessionStorage.getItem('token');
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    };
+
+    useEffect(() => {
+        fetchPrograms();
+    }, []);
 
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -43,6 +66,41 @@ const FormLegalizationComponent = () => {
 
     const handleCloseModalCheck2 = () => {
         setModalVisibleCheck(false);
+    };
+
+    const fetchPrograms = async () => {
+        const userInfo = getInfoToken();
+        const username = userInfo.username;
+        const careerId = document.getElementById('carrer_select').value; 
+        
+        try {
+            const response = await fetch(`http://127.0.0.1:3030/api/user/getInformationStudentOverview?username=${username}&career=${careerId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (result.status === "200 OK") {
+                const studentInfo = result.data[0];
+                setStudentData({
+                    name: studentInfo.name,
+                    lastName: studentInfo.last_name,
+                    phone: studentInfo.phone,
+                    address: studentInfo.address,
+                    documentType: studentInfo.document_type,
+                    documentNumber: studentInfo.document_number,
+                    semester: studentInfo.semester,
+                    description: studentInfo.description,
+                    email: studentInfo.email
+                });
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
     };
 
     const handleDownload = async () => {
@@ -80,24 +138,22 @@ const FormLegalizationComponent = () => {
             <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Información del estudiante</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="max-w-xs">
-                    <h3 className='text-black truncate '>Nombre(s)</h3>
-                    <InputComponent type="readOnly" variant="form-input" />
+                    <h3 className='text-black truncate'>Nombre(s)</h3>
+                    <InputComponent type="readOnly" variant="form-input" value={studentData.name} />
                     <h3 className='text-black truncate'>Semestre</h3>
-                    <InputComponent type="readOnly" variant="form-input" />
+                    <InputComponent type="readOnly" variant="form-input" value={studentData.semester} />
                     <h3 className='text-black truncate'>Promedio acumulado</h3>
                     <InputComponent type="readOnly" variant="form-input" />
                 </div>
 
                 <div className="max-w-[400px]">
                     <h3 className="text-black truncate ">Apellidos</h3>
-                    <InputComponent type="readOnly" variant="form-input" />
+                    <InputComponent type="readOnly" variant="form-input" value={studentData.lastName} />
                     <h3 className="text-black truncate ">Fecha de ingreso</h3>
                     <InputComponent type="readOnly" variant="form-input" />
                     <h3 className="text-black truncate ">Cant. perdida de calidad académica</h3>
                     <InputComponent type="readOnly" variant="form-input" />
                 </div>
-
-
 
                 <div>
                     <h3 className='text-black truncate'>Jornada</h3>
@@ -106,7 +162,6 @@ const FormLegalizationComponent = () => {
                     <InputComponent type="readOnly" variant="form-input" />
                     <h3 className='text-black truncate'>Programa académico</h3>
                     <InputComponent type="readOnly" variant="form-input" />
-
                 </div>
 
                 <div className="grid justify-center items-center">
@@ -120,10 +175,7 @@ const FormLegalizationComponent = () => {
                             Subir carta <LuUpload className="ml-2 h-7 w-7" />
                         </Button>
                     </div>
-
                 </div>
-
-
 
                 <div className="col-span-4">
                     <ModalReEnrollmentComponent
@@ -174,12 +226,8 @@ const FormLegalizationComponent = () => {
                             </div>
                         </React.Fragment>
                     ))}
-
                 </div>
-
-
             </div>
-
         </div>
     );
 };
