@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalIncapacityComponent from "./ModalIncapacityComponent";
 import { IoIosArrowBack, IoMdCheckmarkCircle } from "react-icons/io";
 import { CiSquarePlus } from "react-icons/ci";
@@ -9,17 +9,29 @@ import InputComponent from "./InputComponent";
 import { Button, Input } from "antd";
 import ModalComponent from "./ModalComponent";
 const { TextArea } = Input;
-const carrer = sessionStorage.getItem('Carrera');
+
 const user = sessionStorage.getItem('user');
 var info;
 const FormAddition_CancelComponent = ({type}) => {
 
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
 
+  useEffect(() => {
+    fetchInfo();
+  }, []);
 
   const fetchInfo = async () => {
+    const url = window.location.href;
+
+    // Crear un objeto URL
+    const urlObj = new URL(url);
+
+    // Crear un objeto URLSearchParams para obtener los parámetros
+    const params = new URLSearchParams(urlObj.search);
+    const carrer = params.get('carrera');
+    if (carrer) {
     try {
-        const response = await fetch(`http://127.0.0.1:3030/api/user/getInformationStudentOverview?username=${user}&career=${carrer}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${carrer}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,6 +58,9 @@ const FormAddition_CancelComponent = ({type}) => {
     } catch (error) {
         console.error("Error al obtener los programas:", error);
     }
+  }else {
+    console.error("El parámetro 'carrera' no está presente en la URL");
+  }
 };
 
   const handleOpenModalCheck = () => {
@@ -55,9 +70,6 @@ const FormAddition_CancelComponent = ({type}) => {
   const handleCloseModalCheck = () => {
     setModalVisibleCheck(false);
   };
-
-
-  fetchInfo();
 
 
   return (
