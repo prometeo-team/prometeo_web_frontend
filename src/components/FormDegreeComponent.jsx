@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalDegreeComponent from './ModalDegreeComponent';
 import InputComponent from './InputComponent';
 import './FormDegreeComponent.css';
@@ -11,11 +11,59 @@ import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
 import { IoAlertCircleSharp } from "react-icons/io5";
-
+const user = sessionStorage.getItem('user');
+var info;
 const FormLegalizationComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
+
+    useEffect(() => {
+        fetchInfo();
+      }, []);
+
+      const fetchInfo = async () => {
+        const url = window.location.href;
+    
+        // Crear un objeto URL
+        const urlObj = new URL(url);
+    
+        // Crear un objeto URLSearchParams para obtener los parámetros
+        const params = new URLSearchParams(urlObj.search);
+        const carrer = params.get('carrera');
+        if (carrer) {
+        try {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${carrer}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (result.status === "200 OK") {
+                const programOptions = JSON.stringify(result.data);
+                info = JSON.parse(programOptions);
+                document.getElementById('document_type').setAttribute('placeholder',info[0].document_type);
+                document.getElementById('Last_name').setAttribute('placeholder',info[0].last_name);
+                document.getElementById('carrer_input').setAttribute('placeholder',carrer);
+                document.getElementById('num_documet').setAttribute('placeholder',info[0].document_number);
+                document.getElementById('phone_input').setAttribute('placeholder',info[0].phone);
+                document.getElementById('semester_input').setAttribute('placeholder',info[0].semester);
+                document.getElementById('name_input').setAttribute('placeholder',info[0].name);
+                document.getElementById('email_input').setAttribute('placeholder',info[0].email);
+                document.getElementById('address_input').setAttribute('placeholder',info[0].address);
+                console.log('Programas obtenidos:', info[0]);
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+      }else {
+        console.error("El parámetro 'carrera' no está presente en la URL");
+      }
+    };
 
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -56,39 +104,28 @@ const FormLegalizationComponent = () => {
             </h2>
             <div className="studentInfo_container ml-2 grid grid-cols-3 gap-4">
                 <div className="First Row">
-                    <h3 className="text-black">Tipo de documento</h3>
-                    <InputComponent type="readOnly" placeholder="Cédula de Ciudadanía" />
-                    <h3 className="text-black">Apellidos</h3>
-                    <InputComponent type="readOnly" placeholder="Perez" />
-                    <h3 className="text-black">Carrera</h3>
-                    <InputComponent
-                        type="box"
-                        placeholder="Carrera"
-                        variant="form-input"
-                        options={[
-                        { value: "BI", label: "Bioingeniería" },
-                        { value: "IA", label: "Ingeniería Ambiental" },
-                        { value: "IS", label: "Ingeniería de Sistemas" },
-                        { value: "IE", label: "Ingeniería Electrónica" },
-                        { value: "II", label: "Ingeniería Industrial" },
-                        ]}
-                    />
+                <h3 className="text-black">Tipo de documento</h3>
+                <InputComponent id="document_type" type="readOnly" placeholder="Cédula de Ciudadanía" />
+                <h3 className="text-black">Apellidos</h3>
+                <InputComponent id="Last_name" type="readOnly" placeholder="Perez" />
+                <h3 className="text-black">Carrera</h3>
+                <InputComponent id="carrer_input" type="readOnly"  placeholder="Carrera"/>
                 </div>
                 <div className="Second Row">
-                    <h3 className="text-black">No. de documento</h3>
-                    <InputComponent type="readOnly" placeholder="Cédula de Ciudadanía" />
-                    <h3 className="text-black">Teléfono</h3>
-                    <InputComponent type="readOnly" placeholder="Perez" />
-                    <h3 className="text-black">Semestre</h3>
-                    <InputComponent type="readOnly" placeholder="Octavo" />
+                <h3 className="text-black">No. de documento</h3>
+                <InputComponent id="num_documet" type="readOnly" placeholder="Cédula de Ciudadanía" />
+                <h3 className="text-black">Teléfono</h3>
+                <InputComponent id="phone_input" type="readOnly" placeholder="Perez" />
+                <h3 className="text-black">Semestre</h3>
+                <InputComponent id="semester_input" type="readOnly" placeholder="Octavo" />
                 </div>
                 <div className="Third Row">
-                    <h3 className="text-black">Pepito</h3>
-                    <InputComponent type="readOnly" placeholder="Pepito" />
-                    <h3 className="text-black">Correo Electrónico</h3>
-                    <InputComponent type="readOnly" placeholder="Perez" />
-                    <h3 className="text-black">Carrera</h3>
-                    <InputComponent type="readOnly" placeholder="Calle 134 #35-45" />
+                <h3 className="text-black">Pepito</h3>
+                <InputComponent id="name_input" type="readOnly" placeholder="Pepito" />
+                <h3 className="text-black">Correo Electrónico</h3>
+                <InputComponent id="email_input" type="readOnly" placeholder="Perez" />
+                <h3 className="text-black">Carrera</h3>
+                <InputComponent id="address_input" type="readOnly" placeholder="Calle 134 #35-45" />
                 </div>
             </div>
             <div>
