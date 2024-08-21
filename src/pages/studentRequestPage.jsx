@@ -16,7 +16,7 @@ const StudentRequestPage = () => {
     console.log('userInfo:', userInfo);
     const obtenerDatos = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/request/getRequestsByStudent?page=1&username=${userInfo.sub}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestsByStudent?page=1&username=${userInfo.sub}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

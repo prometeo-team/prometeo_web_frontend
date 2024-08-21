@@ -16,7 +16,7 @@ const ModalList = () => {
 
     const fetchDates = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/processDate/getAllProcessDates`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const ModalList = () => {
 
   const deleteDate = async (processType, date) => {
     try {
-      const response = await fetch(`http://127.0.0.1:3030/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}&userAdmin=${userInfo.sub}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}&userAdmin=${userInfo.sub}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const ModalList = () => {
                     <ul className="list-disc list-inside">
                       {comiteDates.map((date, index) => (
                         <li key={index} className="flex items-center justify-center">
-                          {date}
+                          <span className="text-2xl mr-2">•</span>{date}
                           <Button
                             type="text"
                             icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}
@@ -145,7 +145,7 @@ const ModalList = () => {
                     <ul className="list-disc list-inside">
                       {consejoDates.map((date, index) => (
                         <li key={index} className="flex items-center justify-center">
-                          {date}
+                          <span className="text-2xl mr-2">•</span>{date}
                           <Button
                             type="text"
                             icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}
@@ -163,7 +163,7 @@ const ModalList = () => {
                     <ul className="list-disc list-inside">
                       {consejoDates.map((date, index) => (
                         <li key={index} className="flex items-center">
-                          {date}
+                          <span className="text-2xl mr-2">•</span>{date}
                           <Button
                             type="text"
                             icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}

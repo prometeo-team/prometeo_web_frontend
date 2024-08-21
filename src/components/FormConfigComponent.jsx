@@ -51,7 +51,7 @@ const FormConfigComponent = ({ type }) => {
 
       const saveDateProcess = async () => {
         try {
-          const response = await fetch(`http://127.0.0.1:3030/api/processDate/saveDateProcess?process_type=${processType}&date=${selectedDate}&userAdmin=${userInfo.sub}`, {
+          const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/saveDateProcess?process_type=${processType}&date=${selectedDate}&userAdmin=${userInfo.sub}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
