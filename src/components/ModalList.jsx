@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Modal, Button } from 'antd';
-import { RiCloseFill } from 'react-icons/ri';
 import { getInfoToken } from '../utils/utils';
 
 const ModalList = () => {
@@ -15,7 +14,7 @@ const ModalList = () => {
 
     const fetchDates = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/processDate/getAllProcessDates`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +68,7 @@ const ModalList = () => {
 
   const fetchDates = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:3030/api/processDate/getAllProcessDates`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -106,37 +105,6 @@ const ModalList = () => {
     fetchDates();
   }, []);
 
-  const deleteDate = async (processType, date) => {
-    try {
-      const response = await fetch(`http://localhost:3030/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-  
-      const responseData = await response.json();
-      console.log('Respuesta del servidor:', responseData);
-  
-      if (!response.ok) {
-        throw new Error(`Error al eliminar la fecha: ${response.status} - ${responseData.message || 'Sin mensaje'}`);
-      }
-  
-      if (processType === 'Comité de Procesos') {
-        setComiteDates(prevDates => prevDates.filter(d => d !== date));
-      } else if (processType === 'Consejo de Facultad') {
-        setConsejoDates(prevDates => prevDates.filter(d => d !== date));
-      }
-
-      await fetchDates();
-  
-      console.log(`Fecha ${date} eliminada con éxito del ${processType}`);
-    } catch (error) {
-      console.error("Error al eliminar la fecha:", error);
-    }
-  };
-
   return (
     <div>
       <Button
@@ -169,48 +137,31 @@ const ModalList = () => {
                 <tr className="block md:table-row">
                   <td className="w-full md:w-auto px-4 py-2 align-top">
                     <span className="block md:hidden font-bold text-xl text-black">Fechas de Comité</span>
-                    <ul className="list-disc list-inside">
+                    <ul className="list-disc list-inside ml-4">
                       {comiteDates.map((date, index) => (
-                        <li key={index} className="flex items-center justify-center">
+                        <li key={index} className="py-1">
                           {date}
-                          <Button
-                            type="text"
-                            icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}
-                            className="ml-2"
-                            onClick={() => deleteDate('Comité de Procesos', date)}
-                          />
                         </li>
                       ))}
                     </ul>
                   </td>
                   <td className="w-full md:w-auto px-4 py-2 align-top hidden md:table-cell">
-                    <ul className="list-disc list-inside">
+                    <ul className="list-disc list-inside ml-4">
                       {consejoDates.map((date, index) => (
-                        <li key={index} className="flex items-center justify-center">
+                        <li key={index} className="py-1">
                           {date}
-                          <Button
-                            type="text"
-                            icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}
-                            className="mr-2"
-                            onClick={() => deleteDate('Consejo de Facultad', date)}
-                          />
                         </li>
                       ))}
                     </ul>
                   </td>
                 </tr>
                 <tr className="block md:table-row">
-                  <td className="block md:table-cell px-4 py-2 align-top md:hidden">
-                    <span className="block md:hidden font-bold text-xl text-black">Fechas de Consejo</span>
-                    <ul className="list-disc list-inside">
+                  <td className="block md:hidden px-4 py-2 align-top">
+                    <span className="block font-bold text-xl text-black">Fechas de Consejo</span>
+                    <ul className="list-disc list-inside ml-4">
                       {consejoDates.map((date, index) => (
-                        <li key={index} className="flex items-center">
+                        <li key={index} className="py-1">
                           {date}
-                          <Button
-                            type="text"
-                            icon={<RiCloseFill className="w-7 h-7 text-[#43737E]" />}
-                            onClick={() => deleteDate('Consejo de Facultad', date)}
-                          />
                         </li>
                       ))}
                     </ul>

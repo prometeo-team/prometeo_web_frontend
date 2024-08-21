@@ -11,7 +11,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/user/getInformationForCouncil?idRequest=60`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationForCouncil?idRequest=60`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const ComponentInfoSR = () => {
 
     const fetchStatuses = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3030/api/request/getManageStatusByRequest?idRequest=62`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=62`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
