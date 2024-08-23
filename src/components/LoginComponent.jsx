@@ -88,7 +88,7 @@ const LoginComponent = () => {
                     {
                         required: true,
                         message: 'Por favor, ingrese su nombre de usuario!',
-                        validateStatus: 'error', // Agrega este atributo para controlar el color del mensaje
+                        validateStatus: 'error', 
                     },
                     {
                         pattern: /^[a-zA-Z0-9._%+-]/,

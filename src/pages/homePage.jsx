@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from "../components/homePageNavbar";
 import imgBackground from '../assets/engineer-home-page.jpg';
 import logo from '../assets/Logo_de_la_Universidad_El_Bosque.png';
@@ -26,7 +26,7 @@ const HomePage = () => {
                     <Loader />
                 </div>
             )}
-            
+
             <div className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
                 <Navbar />
                 <div className="relative bg-[#43737E]">

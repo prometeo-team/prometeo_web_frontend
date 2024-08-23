@@ -13,58 +13,73 @@
   margin-bottom: 10px;
 }
 
-.badge-warning {
-  background-color: #faad14;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.badge-success {
-  background-color: #52c41a;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.badge-error {
-  background-color: #f5222d;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-}
-
 .select {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #97B749;
 }
 
-@media (max-width: 589px) {
+@media (max-width: 850px) {
   .custom-flex-col {
     flex-direction: column;
   }
 }
 
-@media (max-width: 589px) {
+@media (max-width: 850px) {
   .custom-calendar {
-    width: 100% !important; 
+    width: 100% !important;
   }
 }
 
 .custom-calendar .ant-picker-calendar {
-  background-color: #f3f4f6; /* Cambia este color al que prefieras */
+  background-color: #f3f4f6;
 }
 
 .custom-calendar .ant-picker-cell {
-  background-color: #f3f4f6; /* Cambia este color al que prefieras */
+  background-color: #f3f4f6;
 }
 
 .custom-calendar .ant-picker-cell-in-view {
-  background-color: #f3f4f6; /* Cambia este color al que prefieras */
+  background-color: #f3f4f6;
 }
 
 .custom-calendar .ant-picker-cell-selected .ant-picker-cell-inner {
-  background-color: #f3f4f6; /* Cambia este color al que prefieras */
-  color: #000000; /* Cambia el color del texto si es necesario */
+  background-color: #f3f4f6;
+  color: #000000;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.events li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.bullet-dueDate {
+  background-color: #b73838;
+}
+
+.bullet-consejo {
+  background-color: #e3b745;
+}
+
+.bullet-comite {
+  background-color: #5c6fce;
+}
+
+.bullet-initDate {
+  background-color: #62c567;
 }
