@@ -1,82 +1,186 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './CalendarComponent.css';
-import { Badge, Calendar, Select } from 'antd';
+import { Calendar, Select } from 'antd';
 
 const { Option } = Select;
 
-const getListData = (value) => {
+const getListData = (value, comiteDates, consejoDates, requestTypes = []) => {
   const day = value.getDate();
   const month = value.getMonth();
   const year = value.getFullYear();
+  const formattedDate = `${year.toString().padStart(4, '0')}-${(month + 1)
+    .toString()
+    .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
   let listData = [];
 
-  switch (true) {
-    // Evento para el 15 de cada mes
-    case (day === 15):
-      listData = [
-        {
-          type: 'error',
-          content: 'Este es un evento regular del día 15 del mes.',
-        },
-      ];
-      break;
-    // Eventos específicos para ciertas fechas
-    case (month === 0 && day === 1): // 1 de enero
-      listData = [
-        {
-          type: 'special',
-          content: 'Feliz Año Nuevo! Evento especial para el 1 de enero.',
-        },
-      ];
-      break;
-    case (month === 4 && day === 5): // 5 de mayo
-      listData = [
-        {
-          type: 'celebration',
-          content: '¡Celebra el Día de la Batalla de Puebla!',
-        },
-      ];
-      break;
-    case (month === 6 && day === 14): // 14 de julio
-      listData = [
-        {
-          type: 'festival',
-          content: '¡Feliz Día de la Bastilla!',
-        },
-      ];
-      break;
-    case (month === 11 && day === 25): // 25 de diciembre
-      listData = [
-        {
-          type: 'holiday',
-          content: '¡Feliz Navidad!',
-        },
-      ];
-      break;
-      case (month === 7 && day === 16 && year === 2024):
-        listData = [
-            {
-                type: 'special',
-                content: 'Evento especial para el 16 de agosto de 2024.',
-            },
-        ];
-        break;
-    default:
-      listData = [];
+  if (comiteDates.includes(formattedDate)) {
+    listData.push({
+      type: 'comite',
+      content: 'Comité de Procesos',
+    });
   }
-  return listData || [];
+
+  if (consejoDates.includes(formattedDate)) {
+    listData.push({
+      type: 'consejo',
+      content: 'Consejo de Facultad',
+    });
+  }
+
+  if (Array.isArray(requestTypes)) {
+    requestTypes.forEach((request) => {
+      if (request.dueDate === formattedDate) {
+        listData.push({
+          type: 'dueDate',
+          content: `${request.nameType} - Fecha límite`,
+        });
+      }
+      if (request.initDate === formattedDate) {
+        listData.push({
+          type: 'initDate',
+          content: `${request.nameType} - Inicio`,
+        });
+      }
+    });
+  }
+
+  return listData;
+};
+
+
+
+const fetchDates = async (setComiteDates, setConsejoDates) => {
+  try {
+    const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`, //tocara quitarlo
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    const data = result.data;
+
+    const comiteMatch = data.match(/Comité de Procesos, Dates: ([^}]*)/);
+    const consejoMatch = data.match(/Consejo de Facultad, Dates: ([^}]*)/);
+
+    if (comiteMatch) {
+      const comiteDatesArray = comiteMatch[1].split(',');
+      setComiteDates(comiteDatesArray);
+    }
+
+    if (consejoMatch) {
+      const consejoDatesArray = consejoMatch[1].split(',');
+      setConsejoDates(consejoDatesArray);
+    }
+  } catch (error) {
+    console.error("Error al obtener las fechas:", error);
+  }
+};
+
+const fetchRequestTypes = async (setRequestTypes) => {
+  try {
+    const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestType/getAllRequestTypes`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`, //tocara quitarlo
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    setRequestTypes(result.data);
+  } catch (error) {
+    console.error("Error al obtener los tipos de solicitudes:", error);
+  }
 };
 
 const getMonthData = (value) => {
   if (value.getMonth() === 8) {
     return 1394;
   }
+  return null;
+};
+
+const getActivitiesForMonth = (selectedMonth, comiteDates, consejoDates, requestTypes = []) => {
+  const activities = [];
+
+  const year = selectedMonth.getFullYear();
+  const month = selectedMonth.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const formattedDate = `${year.toString().padStart(4, '0')}-${(month + 1)
+      .toString()
+      .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+    const events = [];
+
+    if (comiteDates.includes(formattedDate)) {
+      events.push({
+        type: 'error',
+        content: 'Comité de Procesos',
+      });
+    }
+
+    if (consejoDates.includes(formattedDate)) {
+      events.push({
+        type: 'consejo',
+        content: 'Consejo de Facultad',
+      });
+    }
+
+    if (Array.isArray(requestTypes)) {
+      requestTypes.forEach((request) => {
+        if (request.dueDate === formattedDate) {
+          events.push({
+            type: 'dueDate',
+            content: `${request.nameType} - Fecha límite`,
+          });
+        }
+        if (request.initDate === formattedDate) {
+          events.push({
+            type: 'initDate',
+            content: `${request.nameType} - Inicio`,
+          });
+        }
+      });
+    }
+
+    if (events.length > 0) {
+      activities.push({
+        date: formattedDate,
+        events,
+      });
+    }
+  }
+
+  return activities;
 };
 
 const App = () => {
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;
   const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [comiteDates, setComiteDates] = useState([]);
+  const [consejoDates, setConsejoDates] = useState([]);
+  const [requestTypes, setRequestTypes] = useState([]);
+
+  useEffect(() => {
+    fetchDates(setComiteDates, setConsejoDates);
+    fetchRequestTypes(setRequestTypes);
+  }, []);
 
   const monthCellRender = (value) => {
     const num = getMonthData(value);
@@ -89,12 +193,13 @@ const App = () => {
   };
 
   const dateCellRender = (value) => {
-    const listData = getListData(value);
+    const listData = getListData(value, comiteDates, consejoDates, requestTypes);
     return (
       <ul className="events">
         {listData.map((item) => (
           <li key={item.content}>
-            <Badge status={item.type} text={item.content} />
+            <span className={`bullet bullet-${item.type}`}></span>
+            <span>{item.content}</span>
           </li>
         ))}
       </ul>
@@ -112,7 +217,6 @@ const App = () => {
     const selectedMonthEnd = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
     return current < selectedMonthStart || current > selectedMonthEnd;
   };
-
   const headerRender = ({ value, onChange }) => {
     const start = currentYear;
     const end = nextYear;
@@ -130,7 +234,7 @@ const App = () => {
     const selectedMonth = value.month();
 
     return (
-      <div className=" flex justify-between">
+      <div className="flex justify-between">
         <Select
           value={selectedYear}
           onChange={(newYear) => {
@@ -160,27 +264,10 @@ const App = () => {
           ))}
         </Select>
       </div>
-      
     );
   };
 
-  const getActivitiesForMonth = (month) => {
-    const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-    const activities = [];
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(month.getFullYear(), month.getMonth(), day);
-      const listData = getListData(date);
-      if (listData.length) {
-        activities.push({
-          date: date.toISOString().split('T')[0],
-          events: listData,
-        });
-      }
-    }
-    return activities;
-  };
-
-  const activities = getActivitiesForMonth(selectedMonth);
+  const activities = getActivitiesForMonth(selectedMonth, comiteDates, consejoDates, requestTypes);
 
   return (
     <div className="flex custom-flex-col">
@@ -193,7 +280,7 @@ const App = () => {
         />
       </div>
       <div className="ml-3 pl-4 pt-4 pb-4 pr-4 bg-[#97B749] rounded-lg shadow-md">
-        <div className='bg-gray-100  rounded-lg p-5 '>
+        <div className='bg-gray-100 rounded-lg p-5'>
           <h2 className="font-bold text-black mb-4">
             Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}
           </h2>
@@ -202,8 +289,9 @@ const App = () => {
               <h3 className="text-black pt-2">{activity.date}</h3>
               <ul>
                 {activity.events.map((event, index) => (
-                  <li key={index}>
-                    <Badge status={event.type} text={event.content} />
+                  <li key={index} className="flex items-center mb-2">
+                    <span className={`bullet bullet-${event.type}`}></span>
+                    <span className="ml-2">{event.content}</span>
                   </li>
                 ))}
               </ul>
@@ -211,11 +299,8 @@ const App = () => {
           ))}
         </div>
       </div>
-      
     </div>
   );
-
-
 };
 
 export default App;
