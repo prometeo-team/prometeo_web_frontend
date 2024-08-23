@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './LoginComponent.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 
 const { Text } = Typography;
@@ -12,6 +13,7 @@ const error = () => {
 
 const LoginComponent = () => {
     const [form] = Form.useForm(); // Obtiene la instancia del formulario
+    const [loading, setLoading] = useState(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const testCredentials = {
@@ -29,6 +31,8 @@ const LoginComponent = () => {
         const userCredentials = { username, password };
         console.log('User credentials:', userCredentials);
 
+        setLoading(true);
+
         try {
             // Realiza la solicitud al servidor
             const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/auth/login', {
@@ -45,10 +49,13 @@ const LoginComponent = () => {
                 sessionStorage.setItem('token', token);
                 sessionStorage.setItem('user', username);
                
-                window.location.href = '/student/crear-solicitud';
+                setTimeout(() => {
+                    window.location.href = '/student/crear-solicitud';
+                }, 1000);
             } else {
                 // Maneja el caso en el que las credenciales son incorrectas
                 message.error('Credenciales incorrectas');
+                setLoading(false); 
             }
         } catch (error) {
             console.error('Error:', error);
@@ -56,7 +63,13 @@ const LoginComponent = () => {
         }
     };
 
-
+    if (loading) {
+        return (
+            <div className="loader-container">
+                <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </div>
+        );
+    }
 
     return (
         <Form
