@@ -67,6 +67,7 @@ const InputComponent = ({ type,id, placeholder, options, variant, value, onChang
       case 'box':
         return (
           <Select
+            id={id}
             value={value}
             onChange={onChange}
             className={`w-full h-10 rounded-md ${variant} select-box`}
