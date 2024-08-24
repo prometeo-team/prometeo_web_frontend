@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import ModalIncapacityComponent from "./ModalIncapacityComponent";
 import { IoIosArrowBack, IoMdCheckmarkCircle } from "react-icons/io";
-import { CiSquarePlus } from "react-icons/ci";
+import { CiSquarePlus, CiSquareMinus  } from "react-icons/ci";
 import { LuUpload } from "react-icons/lu";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import InputComponent from "./InputComponent";
 import { Button, Input } from "antd";
 import ModalComponent from "./ModalComponent";
+
 const { TextArea } = Input;
 
 const user = sessionStorage.getItem('user');
 var info;
-const FormAddition_CancelComponent = ({type}) => {
 
+const materias = [
+  { value: "LM", label: "Logica Matemática" },
+  { value: "EP", label: "Estructuración del Pensamiento" },
+  { value: "IN", label: "Inglés" },
+  { value: "FI", label: "Física 1" },
+  { value: "MB", label: "Matemáticas Básicas" },
+];
+
+const FormAddition_CancelComponent = ({type}) => {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+  const [subjects, setSubjects] = useState([{ id: "subject0" }]); // Estado inicial para las materias
 
   useEffect(() => {
     fetchInfo();
@@ -22,46 +32,43 @@ const FormAddition_CancelComponent = ({type}) => {
 
   const fetchInfo = async () => {
     const url = window.location.href;
-
-    // Crear un objeto URL
     const urlObj = new URL(url);
-
-    // Crear un objeto URLSearchParams para obtener los parámetros
     const params = new URLSearchParams(urlObj.search);
     const carrer = params.get('carrera');
+
     if (carrer) {
-    try {
+      try {
         const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${carrer}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-            },
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
         });
         const result = await response.json();
         if (result.status === "200 OK") {
-            const programOptions = JSON.stringify(result.data);
-            info = JSON.parse(programOptions);
-            document.getElementById('document_type').setAttribute('placeholder',info[0].document_type);
-            document.getElementById('Last_name').setAttribute('placeholder',info[0].last_name);
-            document.getElementById('carrer_input').setAttribute('placeholder',carrer);
-            document.getElementById('num_documet').setAttribute('placeholder',info[0].document_number);
-            document.getElementById('phone_input').setAttribute('placeholder',info[0].phone);
-            document.getElementById('semester_input').setAttribute('placeholder',info[0].semester);
-            document.getElementById('name_input').setAttribute('placeholder',info[0].name);
-            document.getElementById('email_input').setAttribute('placeholder',info[0].email);
-            document.getElementById('address_input').setAttribute('placeholder',info[0].address);
-            console.log('Programas obtenidos:', info[0]);
+          const programOptions = JSON.stringify(result.data);
+          info = JSON.parse(programOptions);
+          document.getElementById('document_type').setAttribute('placeholder',info[0].document_type);
+          document.getElementById('Last_name').setAttribute('placeholder',info[0].last_name);
+          document.getElementById('carrer_input').setAttribute('placeholder',carrer);
+          document.getElementById('num_documet').setAttribute('placeholder',info[0].document_number);
+          document.getElementById('phone_input').setAttribute('placeholder',info[0].phone);
+          document.getElementById('semester_input').setAttribute('placeholder',info[0].semester);
+          document.getElementById('name_input').setAttribute('placeholder',info[0].name);
+          document.getElementById('email_input').setAttribute('placeholder',info[0].email);
+          document.getElementById('address_input').setAttribute('placeholder',info[0].address);
+          console.log('Programas obtenidos:', info[0]);
         } else {
-            console.error("Error en la respuesta:", result.message);
+          console.error("Error en la respuesta:", result.message);
         }
-    } catch (error) {
+      } catch (error) {
         console.error("Error al obtener los programas:", error);
+      }
+    } else {
+      console.error("El parámetro 'carrera' no está presente en la URL");
     }
-  }else {
-    console.error("El parámetro 'carrera' no está presente en la URL");
-  }
-};
+  };
 
   const handleOpenModalCheck = () => {
     setModalVisibleCheck(true);
@@ -71,18 +78,27 @@ const FormAddition_CancelComponent = ({type}) => {
     setModalVisibleCheck(false);
   };
 
+  const handlePlusButton = () => {
+    const newId = `subject${subjects.length}`; // Genera un ID único para cada nuevo componente
+    setSubjects([...subjects, { id: newId }]); // Añade una nueva entrada al estado
+  };
+
+  const handleMinusButton = () => {
+    if (subjects.length > 1) {
+      setSubjects(subjects.slice(0, -1)); // Elimina el último elemento del array
+    }
+  };
 
   return (
-    
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
       <Link to="/student/crear-solicitud">
-        <button className="w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color">
-          <IoIosArrowBack className=" h-7 w-7" />
+        <button className="w-40 h-5 font-bold text-lg flex items-center mb-5 font-color">
+          <IoIosArrowBack className="h-7 w-7" />
           <span className="ml-2">Volver</span>
         </button>
       </Link>
       {/* Información del estudiante */}
-      <h2 className="text-xl font-bold text-black ml-2 mt-5 mb-5">
+      <h2 className="text-xl font-bold text-pretty text-black ml-2 mt-5 mb-5">
         Información del estudiante
       </h2>
       <div className="studentInfo_container ml-2 grid grid-cols-3 gap-4">
@@ -92,7 +108,7 @@ const FormAddition_CancelComponent = ({type}) => {
           <h3 className="text-black">Apellidos</h3>
           <InputComponent id="Last_name" type="readOnly" placeholder="Perez" />
           <h3 className="text-black">Carrera</h3>
-          <InputComponent id="carrer_input" type="readOnly"  placeholder="Carrera"/>
+          <InputComponent id="carrer_input" type="readOnly" placeholder="Carrera" />
         </div>
         <div className="Second Row">
           <h3 className="text-black">No. de documento</h3>
@@ -103,16 +119,16 @@ const FormAddition_CancelComponent = ({type}) => {
           <InputComponent id="semester_input" type="readOnly" placeholder="Octavo" />
         </div>
         <div className="Third Row">
-          <h3 className="text-black">Pepito</h3>
+          <h3 className="text-black">Nombre</h3>
           <InputComponent id="name_input" type="readOnly" placeholder="Pepito" />
           <h3 className="text-black">Correo Electrónico</h3>
           <InputComponent id="email_input" type="readOnly" placeholder="Perez" />
-          <h3 className="text-black">Carrera</h3>
+          <h3 className="text-black text-pretty">Carrera</h3>
           <InputComponent id="address_input" type="readOnly" placeholder="Calle 134 #35-45" />
         </div>
       </div>
       <div>
-        <div className="w-full border-t border-black "></div>
+        <div className="w-full border-t border-black"></div>
       </div>
       {/* Actividades */}
       <div className="activity_box ml-2 mb-6">
@@ -122,25 +138,29 @@ const FormAddition_CancelComponent = ({type}) => {
           </h2>
         </div>
         <div className="flex w-full flex-col">
-          <div className="w-1/3 flex flex-col">
+          <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">
             <h4 className="text-md font-bold text-[#9ca3af]">Materia</h4>
-            <InputComponent 
-              type="box"
-              placeholder="Materia"
-              variant="form-input"
-              options={[
-                { value: "LM", label: "Logica Matemática" },
-                { value: "EP", label: "Estructuración del Pensamiento" },
-                { value: "IN", label: "Ingles" },
-                { value: "FI", label: "Física 1" },
-                { value: "MB", label: "Matemáticas Básicas" },
-              ]}
-            />
-            <CiSquarePlus className="w-8 h-8 text-[#374151]"  />
+            {subjects.map((subject) => (
+              <InputComponent
+                key={subject.id} // Asegura que cada InputComponent tenga una key única
+                id={subject.id}
+                type="box"
+                placeholder="Materia"
+                variant="form-input"
+                options={[ ...materias]}
+              />
+            ))}
+            <div className="flex flex-row">
+            <CiSquarePlus className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handlePlusButton} />
+            {subjects.length > 1 && ( // Mostrar el botón de eliminar solo si hay más de un componente
+                <CiSquareMinus className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handleMinusButton} />
+              )}
+              </div>
+              <br />
           </div>
           <div className="flex justify-end">
             <button
-              className="w-52 h-12  text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+              className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
               onClick={handleOpenModalCheck}
             >
               <span>Generar Solicitud</span>
