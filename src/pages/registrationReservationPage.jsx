@@ -1,6 +1,6 @@
 
 import Title from '../components/TitleComponent';
-import FormSlotActivationComponent from '../components/FormSlotActivationComponent'
+import FormReservationComponent from '../components/FormReservationComponent'
 import UserCardComponent from '../components/UserCardComponet';
 
 const registrationReservationPage = () => {
@@ -12,7 +12,7 @@ const registrationReservationPage = () => {
             <UserCardComponent  number={2} />
             <Title title="Reserva" />
             <div>
-                <FormSlotActivationComponent />
+                <FormReservationComponent />
             </div>
 
         </div>
