@@ -56,7 +56,6 @@ const fetchDates = async (setComiteDates, setConsejoDates) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`, //tocara quitarlo
       },
     });
 
@@ -90,7 +89,6 @@ const fetchRequestTypes = async (setRequestTypes) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`, //tocara quitarlo
       },
     });
 

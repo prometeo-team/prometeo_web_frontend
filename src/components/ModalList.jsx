@@ -18,7 +18,6 @@ const ModalList = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         });
 
@@ -72,7 +71,6 @@ const ModalList = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
 
