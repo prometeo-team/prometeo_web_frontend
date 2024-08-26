@@ -6,7 +6,7 @@ import '../App.css';
 const configDatePage = () => {
 
     return (
-        <div className="w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col">
+        <div className="w-full flex mr-10 ml-5 max-md:mr-0 h-screen scroll-container flex-col">
                 <div className='w-full'>
                     <UserCArdComponent number={2}></UserCArdComponent>
                 </div>
