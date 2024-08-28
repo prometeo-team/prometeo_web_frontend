@@ -106,7 +106,7 @@ const FormConfigComponent = () => {
   
         notification.success({
           message: 'Actualización exitosa',
-          description: `LAs fechas de ${nameType} han sido actualizadas correctamente.`,
+          description: `Las fechas de ${nameType} han sido actualizadas correctamente.`,
         });
   
         setTimeout(() => {

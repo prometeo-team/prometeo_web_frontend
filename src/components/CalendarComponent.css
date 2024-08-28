@@ -14,7 +14,7 @@
 }
 
 .select {
-  padding: 5px;
+
   border-radius: 5px;
   border: 1px solid #97B749;
 }
@@ -61,13 +61,12 @@
 }
 
 .bullet {
-  width: 10px;
-  height: 10px;
+  width: 10px !important;
+  height: 10px !important;
   border-radius: 50%;
   display: inline-block;
   margin-right: 8px;
 }
-
 .bullet-dueDate {
   background-color: #b73838;
 }
