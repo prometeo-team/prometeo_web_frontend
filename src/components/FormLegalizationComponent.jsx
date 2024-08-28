@@ -14,27 +14,6 @@ import { Tooltip, notification } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IoAlertCircleSharp } from "react-icons/io5";
 
-const studentDataMock = {
-    nombre: 'Juan',
-    tipoDocumento: 'CC',
-    carrera: 'Ingeniería de Sistemas',
-    direccion: 'Calle 123',
-    nombreAcudiente: 'María',
-    etnia: 'NING',
-    apellidos: 'Pérez',
-    especificarTipoDocumento: '',
-    semestreIngreso: '2',
-    localidad: 'SUBA',
-    celularEmergencia: '123456789',
-    tipoFinanciacion: 'Ser Pilo Paga',
-    celular: '987654321',
-    numeroDocumento: '1234567890',
-    correoElectronico: 'juan@example.com',
-    especificarLocalidad: '',
-    jornada: 'Diurna',
-    especificarFinanciacion: ''
-};
-
 const FormLegalizationComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
@@ -168,7 +147,7 @@ const FormLegalizationComponent = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="max-w-xs">
                     <h3 className='text-black truncate'>Nombre(s)</h3>
-                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input" value={formData.nombre}  onChange={handleInputChange}/>
+                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input"  onChange={handleInputChange}/>
                     <h3 className='text-black truncate'>Tipo de documento</h3>
                     <InputComponent
                         type="box"

@@ -127,7 +127,7 @@ const getActivitiesForMonth = (selectedMonth, comiteDates, consejoDates, request
 
     if (comiteDates.includes(formattedDate)) {
       events.push({
-        type: 'error',
+        type: 'comite',
         content: 'Comité de Procesos',
       });
     }
@@ -232,37 +232,39 @@ const App = () => {
     const selectedMonth = value.month();
 
     return (
-      <div className="flex justify-between">
-        <Select
-          value={selectedYear}
-          onChange={(newYear) => {
-            const newValue = value.clone().year(newYear);
-            onChange(newValue);
-            setSelectedMonth(newValue.toDate());
-          }}
-        >
-          {years.map((year) => (
-            <Option key={year} value={year}>
-              {year}
-            </Option>
-          ))}
-        </Select>
-        <Select
-          value={selectedMonth}
-          onChange={(newMonth) => {
-            const newValue = value.clone().month(newMonth);
-            onChange(newValue);
-            setSelectedMonth(newValue.toDate());
-          }}
-        >
-          {months.map((month) => (
-            <Option key={month} value={month}>
-              {new Date(0, month).toLocaleString('default', { month: 'long' })}
-            </Option>
-          ))}
-        </Select>
+      <div className="mb-2"> 
+        <div className="flex justify-between">
+          <Select
+            value={selectedYear}
+            onChange={(newYear) => {
+              const newValue = value.clone().year(newYear);
+              onChange(newValue);
+              setSelectedMonth(newValue.toDate());
+            }}
+          >
+            {years.map((year) => (
+              <Option key={year} value={year}>
+                {year}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            value={selectedMonth}
+            onChange={(newMonth) => {
+              const newValue = value.clone().month(newMonth);
+              onChange(newValue);
+              setSelectedMonth(newValue.toDate());
+            }}
+          >
+            {months.map((month) => (
+              <Option key={month} value={month}>
+                {new Date(0, month).toLocaleString('default', { month: 'long' })}
+              </Option>
+            ))}
+          </Select>
+        </div>
       </div>
-    );
+    );    
   };
 
   const activities = getActivitiesForMonth(selectedMonth, comiteDates, consejoDates, requestTypes);
@@ -277,7 +279,7 @@ const App = () => {
           onPanelChange={(date) => setSelectedMonth(date.toDate())}
         />
       </div>
-      <div className="ml-3 pl-4 pt-4 pb-4 pr-4 bg-[#97B749] rounded-lg shadow-md">
+      <div className="ml-3 pl-4 pt-4 pb-4 pr-4 bg-[#97B749] rounded-lg shadow-md max-h-[770px] overflow-y-auto">
         <div className='bg-gray-100 rounded-lg p-5'>
           <h2 className="font-bold text-black mb-4">
             Actividades de {selectedMonth.toLocaleString('default', { month: 'long' })} {selectedMonth.getFullYear()}
@@ -299,6 +301,7 @@ const App = () => {
       </div>
     </div>
   );
+  
 };
 
 export default App;
