@@ -18,87 +18,46 @@ const FormLegalizationComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
-    const [formData, setFormData] = useState({
-        nombre: '',
-        tipoDocumento: '',
-        carrera: '',
-        direccion: '',
-        nombreAcudiente: '',
-        etnia: '',
-        apellidos: '',
-        especificarTipoDocumento: '',
-        semestreIngreso: '',
-        localidad: '',
-        celularEmergencia: '',
-        tipoFinanciacion: '',
-        celular: '',
-        numeroDocumento: '',
-        correoElectronico: '',
-        especificarLocalidad: '',
-        jornada: '',
-        especificarFinanciacion: ''
-    });
+    const [formData, setFormData] = useState({});
+
+    const user = sessionStorage.getItem('user');
+    const url = window.location.href;
+    const urlObj = new URL(url);
+    const params = new URLSearchParams(urlObj.search);
+    const career = params.get('carrera');
 
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch('file:///C:/Users/User/Documents/pruebaL.json');
-            if (!response.ok) {
-              throw new Error('Error al obtener los datos');
+        fetchLegalizationInfo();
+    }, []);
+
+    const fetchLegalizationInfo = async () => {
+        if (user && career) {
+            try {
+                const response = await fetch(`http://localhost:3030/api/user/getLegalizationInfoStudent?username=${user}&career=${career}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                    },
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    setFormData(result.data[0]); // Establece los datos iniciales
+                } else {
+                    console.error("Error en la respuesta:", result.message);
+                }
+            } catch (error) {
+                console.error("Error al obtener la información de legalización:", error);
             }
-            const studentData = await response.json(); // Suponiendo que los datos son JSON
-            if (studentData.semestreIngreso === '1') {
-              setFormData({
-                ...formData,
-                nombre: '',
-                tipoDocumento: '',
-                carrera: '',
-                direccion: '',
-                nombreAcudiente: '',
-                etnia: '',
-                apellidos: '',
-                especificarTipoDocumento: '',
-                semestreIngreso: '',
-                localidad: '',
-                celularEmergencia: '',
-                tipoFinanciacion: '',
-                celular: '',
-                numeroDocumento: '',
-                correoElectronico: '',
-                especificarLocalidad: '',
-                jornada: '',
-                especificarFinanciacion: ''
-              });
-            } else {
-              setFormData({
-                ...formData,
-                nombre: studentData.nombre || '',
-                tipoDocumento: studentData.tipoDocumento || '',
-                carrera: studentData.carrera || '',
-                direccion: studentData.direccion || '',
-                nombreAcudiente: studentData.nombreAcudiente || '',
-                etnia: studentData.etnia || '',
-                apellidos: studentData.apellidos || '',
-                especificarTipoDocumento: studentData.especificarTipoDocumento || '',
-                semestreIngreso: studentData.semestreIngreso || '',
-                localidad: studentData.localidad || '',
-                celularEmergencia: studentData.celularEmergencia || '',
-                tipoFinanciacion: studentData.tipoFinanciacion || '',
-                celular: studentData.celular || '',
-                numeroDocumento: studentData.numeroDocumento || '',
-                correoElectronico: studentData.correoElectronico || '',
-                especificarLocalidad: studentData.especificarLocalidad || '',
-                jornada: studentData.jornada || '',
-                especificarFinanciacion: studentData.especificarFinanciacion || ''
-              });
-            }
-          } catch (error) {
-            console.error('Error al obtener datos:', error);
-          }
-        };
-    
-        fetchData();
-      }, []);
+        } else {
+            console.error("Los parámetros 'user' o 'career' no están presentes");
+        }
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
 
     const handleOpenModal = () => {
@@ -115,15 +74,6 @@ const FormLegalizationComponent = () => {
         });
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-    
-
     const handleOpenModalCheck = () => {
         setModalVisibleCheck(true);
     };
@@ -138,7 +88,7 @@ const FormLegalizationComponent = () => {
         <div className='legalization-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
             <Link to='/student/crear-solicitud'>
                 <button className='w-auto h-auto font-bold text-lg flex items-center mb-5 font-color'>
-                    <IoIosArrowBack className=" h-7 w-7" />
+                    <IoIosArrowBack className="h-7 w-7" />
                     <span className="ml-2">Volver</span>
                 </button>
             </Link>
@@ -147,172 +97,265 @@ const FormLegalizationComponent = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="max-w-xs">
                     <h3 className='text-black truncate'>Nombre(s)</h3>
-                    <InputComponent type="string" placeholder="Ingrese su nombre" variant="form-input"  onChange={handleInputChange}/>
+                    <InputComponent
+                        type="string"
+                        name="name"
+                        placeholder="Ingrese su nombre"
+                        variant="form-input"
+                        value={formData.name || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className='text-black truncate'>Tipo de documento</h3>
                     <InputComponent
                         type="box"
-                        placeholder="Tipo de documento"
+                        name="document_type"
+                        placeholder="Seleccione una opción"
                         variant="form-input"
                         options={[
-                            { value: 'SELECT', label: 'Seleccione una opción' },
-                            { value: 'CC', label: 'Cédula de Ciudadanía' },
-                            { value: 'CE', label: 'Cédula de Extranjería' },
-                            { value: 'TI', label: 'Tarjeta de Identidad' },
-                            { value: 'PS', label: 'Pasaporte' },
-                            { value: 'RC', label: 'Registro Civil' },
-                            { value: 'OTRA', label: 'Otra' },
+                            { value: 'Cédula de Ciudadanía', label: 'Cédula de Ciudadanía' },
+                            { value: 'Cédula de Extranjería', label: 'Cédula de Extranjería' },
+                            { value: 'Tarjeta de Identidad', label: 'Tarjeta de Identidad' },
+                            { value: 'Pasaporte', label: 'Pasaporte' },
+                            { value: 'Registro Civil', label: 'Registro Civil' },
+                            { value: 'Otro', label: 'Otro' },
                         ]}
-                        value={formData.tipoDocumento}
+                        value={formData?.document_type || 'SELECT'}
                         onChange={handleInputChange}
                     />
 
                     <h3 className='text-black truncate'>Carrera</h3>
                     <InputComponent
-                        type="box"
+                        type="readOnly"
                         placeholder="Carrera"
                         variant="form-input"
-                        options={[
-                            { value: 'SELECT', label: 'Seleccione una opción' },
-                            { value: 'BI', label: 'Bioingeniería' },
-                            { value: 'IA', label: 'Ingeniería Ambiental' },
-                            { value: 'IS', label: 'Ingeniería de Sistemas' },
-                            { value: 'IE', label: 'Ingeniería Electrónica' },
-                            { value: 'II', label: 'Ingeniería Industrial' },
-                        ]}
-                        value={formData.carrera}
+                        value={'' || career}
                     />
+
                     <h3 className='text-black truncate'>Dirección</h3>
-                    <InputComponent type="string" placeholder="Ingrese su dirección" variant="form-input" value={formData.direccion} />
+                    <InputComponent
+                        type="string"
+                        name="address"
+                        placeholder="Ingrese su dirección"
+                        variant="form-input"
+                        value={formData?.address || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className='text-black truncate'>Nombre acudiente</h3>
-                    <InputComponent type="string" placeholder="Ingrese el nombre de su acudiente" variant="form-input" value={formData.nombreAcudiente} />
+                    <InputComponent
+                        type="string"
+                        name="attendant_name"
+                        placeholder="Ingrese el nombre de su acudiente"
+                        variant="form-input"
+                        value={formData?.attendant_name || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className='text-black truncate'>Etnia</h3>
                     <InputComponent
                         type="box"
-                        label="Etnia"
+                        name="ethnic_group"
                         placeholder="Seleccione su etnia"
+                        variant="form-input"
                         options={[
-                            { value: 'SELECT', label: 'Seleccione una opción' },
-                            { value: "IND", label: "Indígena" },
-                            { value: "AFRO", label: "Negro, Palenquero, Raizal" },
-                            { value: "ROM", label: "Rom o Población Gitana" },
-                            { value: "VICT", label: "Víctima de Conflicto" },
-                            { value: "DESM", label: "Desmovilizado" },
-                            { value: "FRON", label: "Población Habitante de Frontera" },
-                            { value: "DIS", label: "Discapacitado" },
-                            { value: "TAL", label: "Talentos Excepcionales" },
-                            { value: "NING", label: "Ninguno" },
+                            { value: 'Seleccione una opción', label: 'Seleccione una opción' },
+                            { value: "Indígena", label: "Indígena" },
+                            { value: "Negro, Palenquero, Raizal", label: "Negro, Palenquero, Raizal" },
+                            { value: "Rom o Población Gitana", label: "Rom o Población Gitana" },
+                            { value: "Víctima de Conflicto", label: "Víctima de Conflicto" },
+                            { value: "Desmovilizado", label: "Desmovilizado" },
+                            { value: "Población Habitante de Frontera", label: "Población Habitante de Frontera" },
+                            { value: "Discapacitado", label: "Discapacitado" },
+                            { value: "Talentos Excepcionales", label: "Talentos Excepcionales" },
+                            { value: "Ninguno", label: "Ninguno" },
                         ]}
-                        value={formData.etnia}
+                        value={formData?.ethnic_group || ''}
+                        onChange={handleInputChange}
                     />
                 </div>
 
                 <div className="max-w-xs">
                     <h3 className="text-black truncate">Apellidos</h3>
-                    <InputComponent type="string" placeholder="Ingrese sus apellidos" variant="form-input" value={formData.apellidos} />
+                    <InputComponent
+                        type="string"
+                        name="last_name"
+                        placeholder="Ingrese sus apellidos"
+                        variant="form-input"
+                        value={formData?.last_name || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className="text-black truncate">
-                        <Tooltip title="Solo llenar si selecciono 'Otra' en tipo de documento">
+                        <Tooltip title="Solo llenar si selecciono 'Otro' en tipo de documento">
                             <QuestionCircleOutlined className="font-color" />
                         </Tooltip> Especifique tipo de documento
                     </h3>
-                    <InputComponent type="number" placeholder="Especifique tipo de documento" variant="form-input" value={formData.especificarTipoDocumento} />
+                    <InputComponent
+                        type={formData?.document_type === 'Otro' ? 'string' : 'readOnly'}
+                        name="other_document_type"
+                        placeholder="Especifique tipo de documento"
+                        variant="form-input"
+                        value={formData?.other_document_type || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className="text-black truncate">Semestre al que ingresa</h3>
-                    <InputComponent type="string" placeholder="Ingrese su Semestre" variant="form-input" value={formData.semestreIngreso} />
+                    <InputComponent
+                        type="string"
+                        name="period"
+                        placeholder="Ingrese su Semestre"
+                        variant="form-input"
+                        value={formData?.period || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className="text-black truncate">Localidad</h3>
                     <InputComponent
                         type="box"
-                        placeholder="Selecciona una localidad"
+                        name="location"
+                        placeholder="Ingrese su localidad"
                         variant="form-input"
                         options={[
-                            { value: 'SELECT', label: 'Seleccione una opción' },
-                            { value: 'USAQUEN', label: 'Usaquén' },
-                            { value: 'CHAPINERO', label: 'Chapinero' },
-                            { value: 'SANTAFE', label: 'Santa Fé' },
-                            { value: 'SAN_CRISTOBAL', label: 'San Cristóbal' },
-                            { value: 'USME', label: 'Usme' },
-                            { value: 'TUNJUELITO', label: 'Tunjuelito' },
-                            { value: 'BOSA', label: 'Bosa' },
-                            { value: 'KENNEDY', label: 'Kennedy' },
-                            { value: 'FONTIBON', label: 'Fontibón' },
-                            { value: 'ENGATIVA', label: 'Engativá' },
-                            { value: 'SUBA', label: 'Suba' },
-                            { value: 'BARRIOS_UNIDOS', label: 'Barrios Unidos' },
-                            { value: 'TEUSAQUILLO', label: 'Teusaquillo' },
-                            { value: 'MARTIRES', label: 'Los Mártires' },
-                            { value: 'ANTONIO_NARINO', label: 'Antonio Nariño' },
-                            { value: 'PUENTE_ARANDA', label: 'Puente Aranda' },
-                            { value: 'CANDELARIA', label: 'La Candelaria' },
-                            { value: 'RAFAEL_URIBE', label: 'Rafael Uribe Uribe' },
-                            { value: 'CIUDAD_BOLIVAR', label: 'Ciudad Bolívar' },
-                            { value: 'SUMAPAZ', label: 'Sumapaz' },
-                            { value: 'OTRA', label: 'Otra' },
-                        ]}
-                        value={formData.localidad}
+                            { value: 'Seleccione una opción', label: 'Seleccione una opción' },
+                            { value: 'Usaquén', label: 'Usaquén' },
+                            { value: 'Chapinero', label: 'Chapinero' },
+                            { value: 'Santa Fé', label: 'Santa Fé' },
+                            { value: 'San Cristóbal', label: 'San Cristóbal' },
+                            { value: 'Usme', label: 'Usme' },
+                            { value: 'Tunjuelito', label: 'Tunjuelito' },
+                            { value: 'Bosa', label: 'Bosa' },
+                            { value: 'Kennedy', label: 'Kennedy' },
+                            { value: 'Fontibón', label: 'Fontibón' },
+                            { value: 'Engativá', label: 'Engativá' },
+                            { value: 'Suba', label: 'Suba' },
+                            { value: 'Barrios Unidos', label: 'Barrios Unidos' },
+                            { value: 'Teusaquillo', label: 'Teusaquillo' },
+                            { value: 'Los Mártires', label: 'Los Mártires' },
+                            { value: 'Antonio Nariño', label: 'Antonio Nariño' },
+                            { value: 'Puente Aranda', label: 'Puente Aranda' },
+                            { value: 'La Candelaria', label: 'La Candelaria' },
+                            { value: 'Rafael Uribe Uribe', label: 'Rafael Uribe Uribe' },
+                            { value: 'Ciudad Bolívar', label: 'Ciudad Bolívar' },
+                            { value: 'Sumapaz', label: 'Sumapaz' },
+                            { value: 'Otra', label: 'Otra' },
+                        ]}                        
+                        value={formData?.location || ''}
+                        onChange={handleInputChange}
                     />
+
                     <h3 className="text-black truncate">
-                        <Tooltip title="Telefono o celular en caso de emergencia">
-                            <QuestionCircleOutlined className=" font-color" />
+                        <Tooltip title="Teléfono o celular en caso de emergencia">
+                            <QuestionCircleOutlined className="font-color" />
                         </Tooltip> Celular de emergencia
                     </h3>
-                    <InputComponent type="number" placeholder="Ingrese su número de celular" variant="form-input" value={formData.celularEmergencia} />
+                    <InputComponent
+                        type="string"
+                        name="attendant_phone"
+                        placeholder="Ingrese su número de celular"
+                        variant="form-input"
+                        value={formData?.attendant_phone || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className="text-black truncate">Tipo de financiación</h3>
                     <InputComponent
                         type="box"
-                        label="Programa"
-                        placeholder="Seleccione su tipo de financiación"
+                        name="tuition_financing"
+                        placeholder="Ingrese su tipo de financiación"
+                        variant="form-input"
                         options={[
-                            { value: 'SELECT', label: 'Seleccione una opción' },
-                            { value: "SER_PILO_PAGA", label: "Ser Pilo Paga" },
-                            { value: "ICETEX", label: "Icetex" },
-                            { value: "LUMNI", label: "Lumni" },
-                            { value: "JOVENES_A_LA_U", label: "Jóvenes a la U" },
-                            { value: "RETO_A_LA_U", label: "Reto a la U" },
-                            { value: "INMERSION", label: "Inmersión" },
-                            { value: "MOVILIDAD_NACIONAL", label: "Movilidad Nacional" },
-                            { value: "MOVILIDAD_INTERNACIONAL", label: "Movilidad Internacional" },
-                            { value: "RECURSOS_PROPIOS", label: "Ninguna - Recursos Propios" },
-                            { value: "OTRA", label: "Otra" },
-                        ]}
-                        value={formData.tipoFinanciacion}
+                            { value: 'Seleccione una opción', label: 'Seleccione una opción' },
+                            { value: "Ser Pilo Paga", label: "Ser Pilo Paga" },
+                            { value: "Icetex", label: "Icetex" },
+                            { value: "Lumni", label: "Lumni" },
+                            { value: "Jóvenes a la U", label: "Jóvenes a la U" },
+                            { value: "Reto a la U", label: "Reto a la U" },
+                            { value: "Inmersión", label: "Inmersión" },
+                            { value: "Movilidad Nacional", label: "Movilidad Nacional" },
+                            { value: "Movilidad Internacional", label: "Movilidad Internacional" },
+                            { value: "Ninguna - Recursos Propios", label: "Ninguna - Recursos Propios" },
+                            { value: "Otra", label: "Otra" },
+                        ]}                        
+                        value={formData?.tuition_financing || ''}
+                        onChange={handleInputChange}
                     />
                 </div>
 
                 <div className="max-w-xs">
                     <h3 className='text-black truncate'>Celular</h3>
-                    <InputComponent type="number" placeholder="Ingrese su número de celular" variant="form-input"
-                        value={formData.celular} />
+                    <InputComponent
+                        type="string"
+                        name="phone"
+                        placeholder="Ingrese su número de celular"
+                        variant="form-input"
+                        value={formData?.phone || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className="text-black truncate">No. de documento</h3>
-                    <InputComponent type="number" placeholder="Ingrese su número de documento" variant="form-input"
-                        value={formData.numeroDocumento} />
+                    <InputComponent
+                        type="string"
+                        name="document_number"
+                        placeholder="Ingrese su número de documento"
+                        variant="form-input"
+                        value={formData?.document_number || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className='text-black truncate'>Correo electrónico</h3>
-                    <InputComponent type="correo" placeholder="Ingrese su correo electrónico" variant="form-input"
-                        value={formData.correoElectronico} />
+                    <InputComponent
+                        type="readOnly"
+                        placeholder="Ingrese su correo electrónico"
+                        variant="form-input"
+                        value={'' || user + "@unbosque.edu.co"}
+                    />
+
                     <h3 className='text-black truncate'>
                         <Tooltip title="Solo llenar si se seleccionó 'Otra' en el campo localidad">
                             <QuestionCircleOutlined className="font-color" />
                         </Tooltip> Especifique localidad
                     </h3>
-                    <InputComponent type="string" placeholder="Especifique Jornada" variant="form-input"
-                        value={formData.especifiqueLocalidad} />
+                    <InputComponent
+                        type={formData?.location === 'Otra' ? 'string' : 'readOnly'}
+                        name="specific_location"
+                        placeholder="Especifique su localidad"
+                        variant="form-input"
+                        value={formData?.specific_location || ''}
+                        onChange={handleInputChange}
+                    />
+
                     <h3 className='text-black truncate'>Jornada</h3>
                     <InputComponent
                         type="box"
-                        placeholder="Carrera"
+                        name="study_time"
+                        placeholder="Jornada"
                         variant="form-input"
                         options={[
                             { value: 'DI', label: 'Diurna' },
                             { value: 'NO', label: 'Nocturna' },
                         ]}
-                        value={formData.jornada}
+                        value={formData?.study_time || ''}
+                        onChange={handleInputChange}
                     />
+
                     <div className="truncate">
                         <h3 className="text-black">
-                            <Tooltip title="Solo llenar si se seleccionó 'Otra' en el campo tipo de dinanciación">
+                            <Tooltip title="Solo llenar si se seleccionó 'Otra' en el campo tipo de financiación">
                                 <QuestionCircleOutlined className="font-color" />
                             </Tooltip> Especifique tipo de financiación
                         </h3>
+                        <InputComponent
+                        type={formData?.tuition_financing === 'Otra' ? 'string' : 'readOnly'}
+                            name="specific_financing"
+                            placeholder="Especifique tipo de financiación"
+                            variant="form-input"
+                            value={formData?.specific_financing || ''}
+                            onChange={handleInputChange}
+                        />
                     </div>
-                    <InputComponent type="string" placeholder="Especifique Jornada" variant="form-input" />
                 </div>
+
                 <div className="flex items-center justify-center">
                     <Button
                         onClick={handleOpenModal}
@@ -326,7 +369,6 @@ const FormLegalizationComponent = () => {
                         setDocuments={setDocuments}
                     />
                 </div>
-
             </div>
 
             <div>

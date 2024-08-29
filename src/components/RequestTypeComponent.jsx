@@ -6,7 +6,6 @@ import { useState } from 'react';
 import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import ModalAskCarrer from '../components/ModalAskCarrer.jsx';
-import Loader from '../components/LoaderComponent.jsx';
 var where = "";
 function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
@@ -65,7 +64,6 @@ function RequestTypeComponent() {
          case 9:
             setIsModalOpen(true);
             where="/student/legalizacion-matricula";
-            console.log('Legalización, Reembolso, Reserva de cupo, Activación de cupo');
             break;
          case 10:
             setIsModalOpen(true);

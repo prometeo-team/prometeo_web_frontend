@@ -15,7 +15,7 @@ const InfoStudentRequestPage = () => {
     return (
         <div>
 
-            <div className='h-screen scroll-container mr-4 ml-4 mb-4' >
+            <div className='h-screen scroll-container mr-4 ml-4 ' >
                 <UserCardComponent number={2} />
                 <div className=' mt-4 flex justify-between items-center'>
                     <Title title="Solicitud" codigo={'CE000215'} />
@@ -29,7 +29,7 @@ const InfoStudentRequestPage = () => {
                 </div>
                 <div className='mb-4'>
                     <Link to="/mis-solicitudes">
-                        <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mb-4' icon={<ArrowLeftOutlined />}>Volver</Button>
+                        <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 ' icon={<ArrowLeftOutlined />}>Volver</Button>
                     </Link>
                 </div>
             </div>
