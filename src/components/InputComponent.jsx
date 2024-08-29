@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Flex, Select, Input, Form } from 'antd';
 import './InputComponent.css';
 
-const InputComponent = ({ type,id, placeholder, options, variant, value, onChange }) => {
+const InputComponent = ({ type, id, name, placeholder, options, variant, value, onChange }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorBorder, setShowErrorBorder] = useState(false);
@@ -26,7 +26,7 @@ const InputComponent = ({ type,id, placeholder, options, variant, value, onChang
       setShowErrorBorder(false);
     }
 
-    if (onChange) onChange(e);  // Pasar el evento completo
+    if (onChange) onChange(e);  
   };
 
   const isValidEmail = (email) => {
@@ -51,7 +51,15 @@ const InputComponent = ({ type,id, placeholder, options, variant, value, onChang
       case 'readOnly':
         return <Input id={id} placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} readOnly value={value} />;
       case 'string':
-        return <Input placeholder={placeholder} className={`${variant} bg-gray-200 rounded-md p-2`} value={value} onChange={handleInputChange} />;
+        return (
+          <Input
+            name={name}
+            placeholder={placeholder}
+            className={`${variant} bg-gray-200 rounded-md p-2`}
+            value={value}
+            onChange={handleInputChange}
+          />
+        );
       case 'date':
         return <Input type="date" placeholder={placeholder} className="bg-gray-200 rounded-md p-2" value={value} onChange={handleInputChange} />;
       case 'boolean':
@@ -64,21 +72,22 @@ const InputComponent = ({ type,id, placeholder, options, variant, value, onChang
             onChange={(e) => handleInputChange({ target: { value: e.target.checked } })}
           />
         );
-      case 'box':
-        return (
-          <Select
-            id={id}
-            value={value}
-            onChange={onChange}
-            className={`w-full h-10 rounded-md ${variant} select-box`}
-          >
-            {options.map((option) => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-          </Select>
-        );
+        case 'box':
+          return (
+            <Select
+              id={id}
+              name={name} 
+              value={value}
+              onChange={(selectedValue) => onChange({ target: { name, value: selectedValue } })}  
+              className={`w-full h-10 rounded-md ${variant} select-box`}
+            >
+              {options.map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+          );
       case 'correo':
         return (
           <Input
@@ -118,6 +127,8 @@ InputComponent.propTypes = {
   ),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
   onChange: PropTypes.func,
+  id: PropTypes.string,  
+  name: PropTypes.string,
 };
 
 export default InputComponent;
