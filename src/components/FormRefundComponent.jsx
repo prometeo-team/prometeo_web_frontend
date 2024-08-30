@@ -14,8 +14,6 @@ import { Tooltip, notification } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IoAlertCircleSharp } from "react-icons/io5";
 
-
-
 const FormRefundComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
@@ -27,14 +25,12 @@ const FormRefundComponent = () => {
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
     const career = params.get('carrera');
-    
+
     useEffect(() => {
         fetchStudentInfo();
     }, []);
 
     const fetchStudentInfo = async () => {
-
-
         if (career) {
             try {
                 const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
@@ -58,10 +54,8 @@ const FormRefundComponent = () => {
         }
     };
 
-
     const handleOpenModal = () => {
         setModalVisible(true);
-
     };
 
     const handleCloseModal = () => {
@@ -84,28 +78,37 @@ const FormRefundComponent = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch('URL_DEL_ARCHIVO', {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/template/getTemplateDocumentWord?username=${user}&requestType=Reembolso&career=${career}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(new Blob([blob]));
-
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            let fileUrl = data.data;
+            
+            if (fileUrl.startsWith('Document: ')) {
+                fileUrl = fileUrl.substring('Document: '.length).trim();
+            }
+    
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Carte Reintegro';
+            a.href = fileUrl;
+            a.download = 'Formato_Carta.docx'; 
+            a.style.display = 'none'; 
             document.body.appendChild(a);
             a.click();
-            window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error al descargar el archivo:', error);
         }
-    };
-
+    }; 
+    
     return (
         <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
             <Link to='/student/crear-solicitud'>
@@ -116,6 +119,7 @@ const FormRefundComponent = () => {
             </Link>
             <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Información del estudiante</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
                 <div className="w-full max-w-xs">
                     <h3 className='text-black truncate'>Nombre(s)</h3>
                     <InputComponent id="name_input" type="readOnly" variant="form-input" placeholder={studentInfo.name || "Nombre"} value={studentInfo.name || ""} className="w-full" />
@@ -184,7 +188,6 @@ const FormRefundComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* Columna para el botón */}
                             <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
                                 <button
                                     className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"

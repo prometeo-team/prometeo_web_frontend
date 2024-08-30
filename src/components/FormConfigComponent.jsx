@@ -79,7 +79,7 @@ const FormConfigComponent = () => {
     const initDate = dayjs(selectedType.initDate).format('YYYY-MM-DD');
     const dueDate = dayjs(selectedType.dueDate).format('YYYY-MM-DD');
   
-    const url = `http://localhost:3030/api/requestType/updateRequestType`;
+    const url = `https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestType/updateRequestType`;
   
     const bodyData = {
       nameType: nameType,
@@ -140,7 +140,7 @@ const FormConfigComponent = () => {
 
       const saveDateProcess = async () => {
         try {
-          const response = await fetch(`http://localhost:3030/api/processDate/saveDateProcess?process_type=${processType}&date=${selectedDate}&userAdmin=${userInfo.sub}`, {
+          const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/saveDateProcess?process_type=${processType}&date=${selectedDate}&userAdmin=${userInfo.sub}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

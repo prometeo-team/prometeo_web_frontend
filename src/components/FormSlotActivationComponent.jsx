@@ -82,27 +82,36 @@ const FormSlotActivationComponent = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch('URL_DEL_ARCHIVO', {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/template/getTemplateDocumentWord?username=${user}&requestType=Activación de Cupo&career=${career}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(new Blob([blob]));
-
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            let fileUrl = data.data;
+            
+            if (fileUrl.startsWith('Document: ')) {
+                fileUrl = fileUrl.substring('Document: '.length).trim();
+            }
+    
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Carte Reintegro';
+            a.href = fileUrl;
+            a.download = 'Formato_Carta.docx'; 
+            a.style.display = 'none'; 
             document.body.appendChild(a);
             a.click();
-            window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error al descargar el archivo:', error);
         }
-    };
+    }; 
 
     return (
         <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>

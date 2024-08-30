@@ -81,22 +81,31 @@ const FormReservationComponent = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch('URL_DEL_ARCHIVO', {
+            const response = await fetch(`http://localhost:3030/api/template/getTemplateDocumentWord?username=${user}&requestType=Reserva de Cupo&career=${career}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(new Blob([blob]));
-
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            let fileUrl = data.data;
+            
+            if (fileUrl.startsWith('Document: ')) {
+                fileUrl = fileUrl.substring('Document: '.length).trim();
+            }
+    
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Carta Reintegro';
+            a.href = fileUrl;
+            a.download = 'Formato_Carta.docx'; 
+            a.style.display = 'none'; 
             document.body.appendChild(a);
             a.click();
-            window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error al descargar el archivo:', error);

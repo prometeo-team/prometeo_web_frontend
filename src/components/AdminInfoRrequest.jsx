@@ -84,7 +84,7 @@ const ComponentInfoSR = () => {
       try {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         const username = userInfo ? userInfo.sub : '';
-        const response = await fetch(`http://localhost:3030/api/request/updateStatusRequest?idRequest=${idRequest}&status=${selectedStatus}&username=${username}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${idRequest}&status=${selectedStatus}&username=${username}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

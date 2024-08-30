@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './LoginComponent.css';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined,  UserOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
@@ -14,6 +14,11 @@ const error = () => {
 const LoginComponent = () => {
     const [form] = Form.useForm(); // Obtiene la instancia del formulario
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    const toggleVisibility = () => {
+        setVisible(!visible);
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const testCredentials = {
@@ -104,22 +109,35 @@ const LoginComponent = () => {
             <h3 className='labels text-lg  mb-2 text-left'>Contraseña</h3>
             <Form.Item
                 name="password"
-                className="mb-4 "
                 rules={[
                     {
                         required: true,
                         message: 'Por favor, ingrese su contraseña!',
-                        validateStatus: 'error', // Agrega este atributo para controlar el color del mensaje
+                        validateStatus: 'error', // Controla el color del mensaje
                     },
                 ]}
             >
                 <Input
                     className="input-lg"
                     prefix={<LockOutlined className="site-form-item-icon text-xl" />}
-                    type="password"
+                    type={visible ? 'text' : 'password'}
                     placeholder="Ingrese su contraseña"
+                    suffix={
+                        <Button
+                            type="text"
+                            onClick={toggleVisibility}
+                            className="color-[#97B749]  password-visibility-toggle"
+                        >
+                            {visible ? (
+                                <EyeOutlined className="color-[#97B749] password-visibility-icon" />
+                            ) : (
+                                <EyeInvisibleOutlined className="color-[#97B749] password-visibility-icon" />
+                            )}
+                        </Button>
+                    }
                 />
             </Form.Item>
+
             <Form.Item className='buttons mt-12'>
                 <Button type="primary" htmlType="submit" className="login-form-button custom-white-button ">
                     Ingresar
