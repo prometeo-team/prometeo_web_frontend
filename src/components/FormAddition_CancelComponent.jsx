@@ -25,12 +25,14 @@ const materias = [
 const FormAddition_CancelComponent = ({type}) => {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
   const [subjects, setSubjects] = useState([{ id: "subject0" }]); // Estado inicial para las materias
+  const [materias, setMaterias] = useState([]);
 
   useEffect(() => {
-    fetchInfo();
+    fetchInfo(type);
   }, []);
 
-  const fetchInfo = async () => {
+  const fetchInfo = async (proceses) => {
+    console.log(proceses);
     const url = window.location.href;
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
@@ -58,6 +60,20 @@ const FormAddition_CancelComponent = ({type}) => {
           document.getElementById('name_input').setAttribute('placeholder',info[0].name);
           document.getElementById('email_input').setAttribute('placeholder',info[0].email);
           document.getElementById('address_input').setAttribute('placeholder',info[0].address);
+          const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=Ingeniería de Sistemas&userName=${user}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+          const result = await response.json();
+          if (result.status === "200 OK") {
+            //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
+            setMaterias('');
+          } else {
+            console.error("Error en la respuesta:", result.message);
+          }
           console.log('Programas obtenidos:', info[0]);
         } else {
           console.error("Error en la respuesta:", result.message);

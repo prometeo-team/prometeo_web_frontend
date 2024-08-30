@@ -7,13 +7,15 @@ const ModalIncapacityComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf, setPdf] = useState(null);
   const [fileName, setFileName] = useState("Archivo no seleccionado");
+  const [originalfile, setOriginalfile] = useState(null);
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       const documentsWithNames = [
-        pdf && { url: pdf, name: fileName },
+        pdf && { url: pdf, name: fileName, originalfile: originalfile },
       ].filter(doc => doc !== null);
+      console.log(documentsWithNames);
       setDocuments(documentsWithNames);
       onClose();
       setConfirmLoading(false);
@@ -31,8 +33,12 @@ const ModalIncapacityComponent = ({ visible, onClose, setDocuments }) => {
 
 
   const handleFileChange = (file) => {
-    setFileName(file.name);
-    setPdf(URL.createObjectURL(file));
+    console.log(file[0].fileName);
+    console.log(file[0].pdf);
+    console.log(file[0].originalfile);
+    setFileName(file[0].fileName);
+    setPdf(file[0].pdf);
+    setOriginalfile(file[0].originalfile);
   };
 
   const handleDelete = () => {
