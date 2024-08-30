@@ -1,35 +1,23 @@
+import { message, Form, Input } from "antd";
 import { useState } from "react";
-import { Modal, Button, Input, message } from "antd";
-import PropTypes from "prop-types";
+import "./UploadDocumentComponent.css";
 import { AiFillFilePdf } from "react-icons/ai";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
-import "./UploadDocumentComponent.css";
 
-const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [filesArr, setFilesArr] = useState([{ id: "file0", pdf: null, fileName: "Archivo no seleccionado" }]);
+const UploadDocumentComponent = ({
+  onChange,
+  pdf,
+  fileName,
+  onDelete,
+  clickClassName,
+  clickClassNameP,
+  label,
+  detail,
+  requiredValue,
+}) => {
 
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      const documentsWithNames = filesArr
-        .filter((file) => file.pdf)
-        .map((file) => ({ url: file.pdf, name: file.fileName }));
-
-      setDocuments(documentsWithNames);
-      onClose();
-      setConfirmLoading(false);
-    }, 1000);
-  };
-
-  const handleCancel = () => {
-    document.querySelector(".center-modal").classList.add("animate__zoomOut");
-    setTimeout(() => {
-      onClose();
-    }, 500);
-  };
-
-  const handleFileChange = (id, event) => {
+ 
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
@@ -40,37 +28,7 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
         message.error(`Por favor, seleccione un archivo PDF`, 3);
         return;
       }
-      setFilesArr((prevFilesArr) =>
-        prevFilesArr.map((fileObj) =>
-          fileObj.id === id
-            ? { ...fileObj, fileName: file.name, pdf: URL.createObjectURL(file) }
-            : fileObj
-        )
-      );
-    }
-  };
-
-  const handleDelete = (id) => {
-    setFilesArr((prevFilesArr) =>
-      prevFilesArr.map((fileObj) =>
-        fileObj.id === id
-          ? { ...fileObj, fileName: "Archivo no seleccionado", pdf: null }
-          : fileObj
-      )
-    );
-  };
-
-  const handlePlusButton = () => {
-    const newId = `file${filesArr.length}`;
-    setFilesArr((prevFilesArr) => [
-      ...prevFilesArr,
-      { id: newId, pdf: null, fileName: "Archivo no seleccionado" }
-    ]);
-  };
-
-  const handleMinusButton = () => {
-    if (filesArr.length > 1) {
-      setFilesArr((prevFilesArr) => prevFilesArr.slice(0, -1));
+      onChange([{ fileName: file.name, pdf: URL.createObjectURL(file), originalfile: file }]);
     }
   };
 
@@ -90,85 +48,57 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
   };
 
   return (
-    <>
-      {visible && (
-        <div className="modal-backdrop">
-          <Modal
-            open={visible}
-            onOk={handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={handleCancel}
-            footer={null}
-            closable={false}
-            centered
-            wrapClassName="center-modal animate__animated animate__zoomIn"
-          >
-            <div className="text-center mb-4">
-              <h4 className="text-lg font-bold">Documento - Formato .pdf*</h4>
-            </div>
-            <div className="grid">
-              {filesArr.map((fileObj) => (
-                <div key={fileObj.id} className="text-center mb-4">
-                  <div
-                    className="flex justify-center items-center border-dashed border-2 cursor-pointer rounded-md form-color h-20"
-                    onClick={() => document.querySelector(`#${fileObj.id}`).click()}
-                  >
-                    <Input
-                      id={fileObj.id}
-                      type="file"
-                      accept=".pdf"
-                      className="input-field"
-                      hidden
-                      onChange={(event) => handleFileChange(fileObj.id, event)}
-                    />
-                    {fileObj.pdf ? (
-                      <div className="flex items-center">
-                        <AiFillFilePdf color="black" size={48} />
-                        <p>{truncateFileName(fileObj.fileName)}</p>
-                      </div>
-                    ) : (
-                      <MdCloudUpload color="black" size={50} />
-                    )}
-                  </div>
-                  {fileObj.fileName !== "Archivo no seleccionado" && (
-                    <div className="flex items-center mt-2">
-                      Eliminar archivo -
-                      <MdDelete className="delete-icon" onClick={() => handleDelete(fileObj.id)} />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-2">
-              {filesArr.some((file) => file.pdf) ? (
-                <Button onClick={handleOk} className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              ) : (
-                <Button disabled className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              )}
-              <Button onClick={handlePlusButton} className="text-white mx-auto custom-btn">
-                Añadir otro
-              </Button>
-              {filesArr.length > 1 && (
-                <Button onClick={handleMinusButton} className="text-white mx-auto custom-btn">
-                  Eliminar último
-                </Button>
-              )}
-            </div>
-          </Modal>
+    <div className="text-center">
+      <div>
+        <div>
+          <p className="text-sm font-bold mb-1">{label}</p>
+          <p className="text-xs text-gray-600 mb-4">{detail}</p>
         </div>
-      )}
-    </>
+      </div>
+      <Form.Item
+        className="flex justify-center items-center border-dashed border-2  cursor-pointer rounded-md form-color h-20"
+        action=""
+        onClick={() => document.querySelector(clickClassNameP).click()}
+      >
+        <Input
+          type="file"
+          accept=".pdf"
+          className={clickClassName}
+          hidden
+          onChange={(event) => handleFileChange(event)}
+          rules={[
+            {
+              required: { requiredValue },
+              message: "Por favor, ingrese" + { label },
+              validateStatus: "error", // Agrega este atributo para controlar el color del mensaje
+            },
+          ]}
+        />
+
+        {pdf ? (
+          <div className="flex items-center">
+            <AiFillFilePdf color="#black" size={48} />
+            <p>{truncateFileName(fileName)}</p>
+          </div>
+        ) : (
+          <>
+            <MdCloudUpload color="#black" size={50} />
+          </>
+        )}
+      </Form.Item>
+
+      <span className="flex items-center uploaded-row">
+        {fileName === "Archivo no seleccionado" ? (
+          "Archivo no seleccionado"
+        ) : (
+          <>
+            Eliminar archivo -
+            <MdDelete className="delete-icon" onClick={onDelete} />
+          </>
+        )}
+      </span>
+    </div>
   );
 };
 
-ModalOtherRequestComponent.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  setDocuments: PropTypes.func.isRequired,
-};
-
-export default ModalOtherRequestComponent;
+export default UploadDocumentComponent;
