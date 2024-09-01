@@ -1,22 +1,18 @@
 import { message, Form, Input } from "antd";
-import { useState } from "react";
-import "./UploadDocumentComponent.css";
 import { AiFillFilePdf } from "react-icons/ai";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
+import "./UploadDocumentComponent.css";
 
 const UploadDocumentComponent = ({
   onChange,
   pdf,
   fileName,
   onDelete,
-  clickClassName,
-  clickClassNameP,
   label,
   detail,
   requiredValue,
+  id,
 }) => {
-
- 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -28,61 +24,52 @@ const UploadDocumentComponent = ({
         message.error(`Por favor, seleccione un archivo PDF`, 3);
         return;
       }
-      onChange([{ fileName: file.name, pdf: URL.createObjectURL(file), originalfile: file }]);
+      onChange([{ id: id, fileName: file.name, pdf: URL.createObjectURL(file), originalfile: file, label: label, detail: detail }]);
     }
   };
 
   const truncateFileName = (fileName) => {
+    if (!fileName) return ""; // Maneja el caso cuando `fileName` es `undefined`
+
     const MAX_LENGTH = 20;
     if (fileName.length <= MAX_LENGTH) {
       return fileName;
     }
-    const fileExtension = fileName.slice(
-      ((fileName.lastIndexOf(".") - 1) >>> 0) + 2
-    );
-    const truncatedName =
-      fileName.slice(0, MAX_LENGTH - fileExtension.length - 4) +
-      "..." +
-      fileExtension;
+    const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+    const truncatedName = fileName.slice(0, MAX_LENGTH - fileExtension.length - 4) + "..." + fileExtension;
     return truncatedName;
+  };
+
+  const handleClick = () => {
+    document.getElementById(`input-file-${id}`).click(); // Utiliza un ID único para cada input
   };
 
   return (
     <div className="text-center">
       <div>
-        <div>
-          <p className="text-sm font-bold mb-1">{label}</p>
-          <p className="text-xs text-gray-600 mb-4">{detail}</p>
-        </div>
+        <p className="text-sm font-bold mb-1">{label}</p>
+        <p className="text-xs text-gray-600 mb-4">{detail}</p>
       </div>
       <Form.Item
-        className="flex justify-center items-center border-dashed border-2  cursor-pointer rounded-md form-color h-20"
-        action=""
-        onClick={() => document.querySelector(clickClassNameP).click()}
+        className="flex justify-center items-center border-dashed border-2 cursor-pointer rounded-md form-color h-20"
+        onClick={handleClick} // Usamos una función específica para manejar el clic
       >
         <Input
           type="file"
           accept=".pdf"
-          className={clickClassName}
+          id={`input-file-${id}`} // ID único basado en el ID del documento
           hidden
-          onChange={(event) => handleFileChange(event)}
-          rules={[
-            {
-              required: { requiredValue },
-              message: "Por favor, ingrese" + { label },
-              validateStatus: "error", // Agrega este atributo para controlar el color del mensaje
-            },
-          ]}
+          onChange={handleFileChange}
         />
 
         {pdf ? (
           <div className="flex items-center">
-            <AiFillFilePdf color="#black" size={48} />
+            <AiFillFilePdf color="#000" size={48} />
             <p>{truncateFileName(fileName)}</p>
           </div>
         ) : (
           <>
-            <MdCloudUpload color="#black" size={50} />
+            <MdCloudUpload color="#000" size={50} />
           </>
         )}
       </Form.Item>
@@ -92,8 +79,8 @@ const UploadDocumentComponent = ({
           "Archivo no seleccionado"
         ) : (
           <>
-            Eliminar archivo -
-            <MdDelete className="delete-icon" onClick={onDelete} />
+            Eliminar archivo -{" "}
+            <MdDelete className="delete-icon" onClick={() => onDelete(id)} />
           </>
         )}
       </span>

@@ -7,14 +7,14 @@
 
 .custom-btn:hover {
   border-color: #43737e;
-  color: #43737e;
+  color: #FFF !important;
 }
 
 .center-modal .ant-modal-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60%; 
+  width: 70% !important; 
   position: fixed;
   top: 50%;
   left: 50%;

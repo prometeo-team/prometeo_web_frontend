@@ -39,6 +39,7 @@ const InputComponent = ({ type, id, name, placeholder, options, variant, value, 
       case 'number':
         return (
           <Input
+            name={name}
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
