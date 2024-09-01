@@ -14,13 +14,16 @@ import { Tooltip, notification } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IoAlertCircleSharp } from "react-icons/io5";
 import Loader from './LoaderComponent.jsx';
+import { useNavigate } from 'react-router-dom';
 
-const FormLegalizationComponent = () => {
+const FormLegalizationComponent = ({ carrer }) => {
+    const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [formData, setFormData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -44,7 +47,7 @@ const FormLegalizationComponent = () => {
                 });
                 const result = await response.json();
                 if (response.ok) {
-                    setFormData(result.data[0]); 
+                    setFormData(result.data[0]);
                     setIsLoading(false);
                 } else {
                     console.error("Error en la respuesta:", result.message);
@@ -56,6 +59,70 @@ const FormLegalizationComponent = () => {
             console.error("Los parámetros 'user' o 'career' no están presentes");
         }
     };
+
+    const fetchInfo = async () => {
+        if (career) {
+    
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    
+            const formdata = new FormData();
+            
+            const requestData = {
+                userEntity: user,
+                requestTypeEntity: 'Legalización de matrícula',
+                programStudent: career,
+                name: formData.name,
+                lastName: formData.last_name,
+                phone: formData.phone,
+                address: formData.address,
+                ethnicGroup: formData.ethnic_group,
+                tuitionFinancing: formData.tuition_financing,
+                documentNumber: formData.document_number,//
+                otherDocumentType: formData.other_document_type,//
+                location: formData.location,
+                attendantName: formData.attendant_name,
+                attendantPhone: formData.attendant_phone,
+                documentEntity: formData.document_type,
+                period: formData.period,
+                studyTime: formData.study_time,
+            };
+    
+            const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+            formdata.append("request", requestJson);
+    
+            if (documents.length > 0) {
+                documents.forEach((file) => {
+                    formdata.append("files", file.originalfile);  // Adjuntar los archivos
+                });
+            }
+    
+            const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: formdata,
+                redirect: "follow"
+            };
+    
+            try {
+                setIsButtonLoading(true);
+                const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions);
+                const result = await response.json();
+                if (response.ok) {
+                    setModalVisibleCheck(true);
+                } else {
+                    console.error("Error en la respuesta:", result.message);
+                }
+            } catch (error) {
+                console.error("Error al realizar la solicitud:", error);
+            } finally {
+                setIsButtonLoading(false);
+            }
+        } else {
+            console.error("El parámetro 'career' no está presente en la URL");
+        }
+    };
+    
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -75,6 +142,7 @@ const FormLegalizationComponent = () => {
             placement: 'bottomRight',
             icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
         });
+        console.log(documents);
     };
 
     const handleOpenModalCheck = () => {
@@ -82,13 +150,12 @@ const FormLegalizationComponent = () => {
     };
 
     const handleCloseModalCheck = () => {
+        navigate('/student/crear-solicitud');
         setModalVisibleCheck(false);
     };
 
-    console.log(formData);
-
     return (
-        <div className="h-screen scroll-container ml-4">
+        <div>
             {isLoading ? (
                 <Loader />
             ) : (
@@ -128,7 +195,7 @@ const FormLegalizationComponent = () => {
                                         { value: 'Registro Civil', label: 'Registro Civil' },
                                         { value: 'Otro', label: 'Otro' },
                                     ]}
-                                    value={formData?.document_type || 'SELECT'}
+                                    value={formData?.document_type || ''}
                                     onChange={handleInputChange}
                                 />
 
@@ -204,13 +271,13 @@ const FormLegalizationComponent = () => {
                                     name="other_document_type"
                                     placeholder="Especifique tipo de documento"
                                     variant="form-input"
-                                    value={formData?.other_document_type || ''}
+                                    value={formData?.document_type === 'Otro' ? formData?.other_document_type || '' : ''}
                                     onChange={handleInputChange}
                                 />
 
                                 <h3 className="text-black truncate">Semestre al que ingresa</h3>
                                 <InputComponent
-                                    type="string"
+                                    type="number"
                                     name="period"
                                     placeholder="Ingrese su Semestre"
                                     variant="form-input"
@@ -258,7 +325,7 @@ const FormLegalizationComponent = () => {
                                     </Tooltip> Celular de emergencia
                                 </h3>
                                 <InputComponent
-                                    type="string"
+                                    type="number"
                                     name="attendant_phone"
                                     placeholder="Ingrese su número de celular"
                                     variant="form-input"
@@ -293,7 +360,7 @@ const FormLegalizationComponent = () => {
                             <div className="max-w-xs">
                                 <h3 className='text-black truncate'>Celular</h3>
                                 <InputComponent
-                                    type="string"
+                                    type="number"
                                     name="phone"
                                     placeholder="Ingrese su número de celular"
                                     variant="form-input"
@@ -329,7 +396,7 @@ const FormLegalizationComponent = () => {
                                     name="specific_location"
                                     placeholder="Especifique su localidad"
                                     variant="form-input"
-                                    value={formData?.specific_location || ''}
+                                    value={formData?.location === 'Otra' ? formData?.specific_location || '' : ''}
                                     onChange={handleInputChange}
                                 />
 
@@ -358,7 +425,7 @@ const FormLegalizationComponent = () => {
                                         name="specific_financing"
                                         placeholder="Especifique tipo de financiación"
                                         variant="form-input"
-                                        value={formData?.specific_financing || ''}
+                                        value={formData?.tuition_financing === 'Otra' ? formData?.specific_financing || '' : ''}
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -367,7 +434,7 @@ const FormLegalizationComponent = () => {
                             <div className="flex items-center justify-center">
                                 <Button
                                     onClick={handleOpenModal}
-                                    className="warp2 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center md:button-small"
+                                    className="warp2 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-between items-center md:button-small"
                                 >
                                     Subir archivos <LuUpload className="ml-2 h-7 w-7 icon-small" />
                                 </Button>
@@ -396,41 +463,56 @@ const FormLegalizationComponent = () => {
                                             <div className="mb-4">
                                                 <div className="border bg-gray-200 rounded-md p-2 mb-2 overflow-hidden">
                                                     <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                                        {document.name.length > 20 ? `${document.name.slice(0, 20)}...pdf` : document.name}
+                                                        {document?.name && document.name.length > 20 ? `${document.name.slice(0, 20)}...pdf` : document?.name || 'Nombre no disponible'}
                                                     </div>
                                                     <div>
-                                                        <a href={document.url} target="_blank" rel="noopener noreferrer" className='font-color font-bold'>
-                                                            Ver documento
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                {index + 1 < documents.length && (
-                                                    <div className="border bg-gray-200 rounded-md p-2 overflow-hidden">
-                                                        <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                                            {documents[index + 1].name.length > 20 ? `${documents[index + 1].name.slice(0, 20)}...pdf` : documents[index + 1].name}
-                                                        </div>
-                                                        <div>
-                                                            <a href={documents[index + 1].url} target="_blank" rel="noopener noreferrer" className='font-color font-bold'>
+                                                        {document?.url ? (
+                                                            <a href={document.url} target="_blank" rel="noopener noreferrer" className="font-color font-bold">
                                                                 Ver documento
                                                             </a>
+                                                        ) : (
+                                                            <span className="font-color font-bold">URL no disponible</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {index + 1 < documents.length && documents[index + 1] && (
+                                                    <div className="border bg-gray-200 rounded-md p-2 overflow-hidden">
+                                                        <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                                            {documents[index + 1]?.name && documents[index + 1].name.length > 20 ? `${documents[index + 1].name.slice(0, 20)}...pdf` : documents[index + 1]?.name || 'Nombre no disponible'}
+                                                        </div>
+                                                        <div>
+                                                            {documents[index + 1]?.url ? (
+                                                                <a href={documents[index + 1].url} target="_blank" rel="noopener noreferrer" className="font-color font-bold">
+                                                                    Ver documento
+                                                                </a>
+                                                            ) : (
+                                                                <span className="font-color font-bold">URL no disponible</span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 )}
                                             </div>
                                         )}
                                         {index === 4 && (
-                                            <div className='flex items-center justify-center'>
+                                            <div className="flex items-center justify-center">
                                                 <button
-                                                    className="w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center"
-                                                    onClick={handleOpenModalCheck}
+                                                    className="p-4 w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-center items-center"
+                                                    onClick={fetchInfo}
+                                                    disabled={isButtonLoading}
                                                 >
-                                                    <span>Confirmar</span>
-                                                    <FaCheck className="ml-2 h-7 w-7" />
+                                                    {isButtonLoading ? (
+                                                        <Loader />
+                                                    ) : (
+                                                        <>
+                                                            <span>Generar Solicitud</span>
+                                                            <FaCheck className="ml-2 h-7 w-7" />
+                                                        </>
+                                                    )}
                                                 </button>
                                                 <ModalComponent
                                                     visible={modalVisibleCheck}
                                                     onClose={handleCloseModalCheck}
-                                                    content="Legalización realizada correctamente"
+                                                    content="Solicitud de legalización realizada correctamente"
                                                     icon={<IoMdCheckmarkCircle />}
                                                 />
                                             </div>
@@ -439,6 +521,8 @@ const FormLegalizationComponent = () => {
                                 ))}
                             </div>
                         </div>
+
+
 
                     </div>
                 </>

@@ -1,215 +1,145 @@
 import { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal, Button, Form, Input } from "antd";
 import PropTypes from "prop-types";
+import { AiFillFilePdf } from "react-icons/ai";
+import { MdCloudUpload, MdDelete } from "react-icons/md";
 import "./ModalLegalizationComponent.css";
-import UploadDocumentComponent from "./UploadDocumentComponent";
 
 const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [pdf1, setPdf1] = useState(null);
-  const [pdf2, setPdf2] = useState(null);
-  const [pdf3, setPdf3] = useState(null);
-  const [pdf4, setPdf4] = useState(null);
-  const [pdf5, setPdf5] = useState(null);
-  const [pdf6, setPdf6] = useState(null);
-  const [fileName1, setFileName1] = useState("Archivo no seleccionado");
-  const [fileName2, setFileName2] = useState("Archivo no seleccionado");
-  const [fileName3, setFileName3] = useState("Archivo no seleccionado");
-  const [fileName4, setFileName4] = useState("Archivo no seleccionado");
-  const [fileName5, setFileName5] = useState("Archivo no seleccionado");
-  const [fileName6, setFileName6] = useState("Archivo no seleccionado");
+
+  const [doc1, setDoc1] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [doc2, setDoc2] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [doc3, setDoc3] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [doc4, setDoc4] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [doc5, setDoc5] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [doc6, setDoc6] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
-      const documentsWithNames = [
-        pdf1 && { url: pdf1, name: fileName1 },
-        pdf2 && { url: pdf2, name: fileName2 },
-        pdf3 && { url: pdf3, name: fileName3 },
-        pdf4 && { url: pdf4, name: fileName4 },
-        pdf5 && { url: pdf5, name: fileName5 },
-        pdf6 && { url: pdf6, name: fileName6 },
-      ].filter(doc => doc !== null);
+      const documentsWithNames = [doc1, doc2, doc3, doc4, doc5, doc6]
+        .filter((file) => file.pdf && file.pdf !== null)
+        .map((file) => ({
+          url: file.pdf,
+          name: file.fileName,
+          originalfile: file.originalfile,
+        }));
+
       setDocuments(documentsWithNames);
       onClose();
       setConfirmLoading(false);
     }, 1000);
   };
 
-  const allFilesSelected = pdf1 && pdf2 && pdf3 && pdf4 && pdf5 && pdf6;
+  const handleFileChange = (setDoc) => (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setDoc({
+        pdf: URL.createObjectURL(file),
+        fileName: file.name,
+        originalfile: file,
+      });
+    }
+  };
+
+  const handleDelete = (setDoc) => () => {
+    setDoc({
+      pdf: null,
+      fileName: "Archivo no seleccionado",
+      originalfile: null,
+    });
+  };
 
   const handleCancel = () => {
-    document.querySelector(".center-modal").classList.add("animate__zoomOut");
     setTimeout(() => {
       onClose();
     }, 500);
   };
 
-  const handleFileChange1 = (file) => {
-    setFileName1(file.name);
-    setPdf1(URL.createObjectURL(file));
-  };
+  const allFilesSelected = [doc1, doc2, doc3, doc4, doc5, doc6].every((doc) => doc.pdf !== null);
 
-  const handleFileChange2 = (file) => {
-    setFileName2(file.name);
-    setPdf2(URL.createObjectURL(file));
-  };
-
-  const handleFileChange3 = (file) => {
-    setFileName3(file.name);
-    setPdf3(URL.createObjectURL(file));
-  };
-
-  const handleFileChange4 = (file) => {
-    setFileName4(file.name);
-    setPdf4(URL.createObjectURL(file));
-  };
-
-  const handleFileChange5 = (file) => {
-    setFileName5(file.name);
-    setPdf5(URL.createObjectURL(file));
-  };
-
-  const handleFileChange6 = (file) => {
-    setFileName6(file.name);
-    setPdf6(URL.createObjectURL(file));
-  };
-
-  const handleDelete1 = () => {
-    setFileName1("Archivo no seleccionado");
-    setPdf1(null);
-  };
-
-  const handleDelete2 = () => {
-    setFileName2("Archivo no seleccionado");
-    setPdf2(null);
-  };
-
-  const handleDelete3 = () => {
-    setFileName3("Archivo no seleccionado");
-    setPdf3(null);
-  };
-
-  const handleDelete4 = () => {
-    setFileName4("Archivo no seleccionado");
-    setPdf4(null);
-  };
-
-  const handleDelete5 = () => {
-    setFileName5("Archivo no seleccionado");
-    setPdf5(null);
-  };
-
-  const handleDelete6 = () => {
-    setFileName6("Archivo no seleccionado");
-    setPdf6(null);
-  };
+  const renderUploadField = (id, doc, setDoc, label, detail, isRequired) => (
+    <div key={id} className="text-center">
+      <div>
+        <p className="text-sm font-bold mb-1">{label}</p>
+        <p className="text-xs text-gray-600 mb-4">{detail}</p>
+      </div>
+      <Form.Item
+        className="flex justify-center items-center border-dashed border-2 cursor-pointer rounded-md form-color h-20"
+        onClick={() => document.getElementById(`input-file-${id}`).click()}
+      >
+        <Input
+          type="file"
+          accept=".pdf"
+          id={`input-file-${id}`}
+          hidden
+          onChange={handleFileChange(setDoc)}
+        />
+        {doc.pdf ? (
+          <div className="flex items-center">
+            <AiFillFilePdf color="#000" size={48} />
+            <p className="truncate w-64" title={doc.fileName}>{doc.fileName}</p>
+          </div>
+        ) : (
+          <>
+            <MdCloudUpload color="#000" size={50} />
+          </>
+        )}
+      </Form.Item>
+      <span className="flex items-center uploaded-row">
+        {doc.pdf ? (
+          <>
+            Eliminar archivo -{" "}
+            <MdDelete className="delete-icon" onClick={handleDelete(setDoc)} />
+          </>
+        ) : (
+          "Archivo no seleccionado"
+        )}
+      </span>
+    </div>
+  );
 
   return (
-      <>
-        {visible && (
-          <div className="modal-backdrop ">
-            <Modal
-              open={visible}
-              onOk={handleOk}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-              footer={null}
-              closable={false}
-              centered
-              wrapClassName="center-modal animate__animated animate__zoomIn "
-            >
-              <div className="text-center mb-4">
-                <h4 className="text-lg font-bold">Documentos de Legalizacion Matricula - Formato .pdf*</h4>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-                <UploadDocumentComponent
-                  onChange={handleFileChange1}
-                  pdf={pdf1}
-                  fileName={fileName1}
-                  onDelete={handleDelete1}
-                  clickClassNameP=".input-field1"
-                  clickClassName="input-field1"
-                  label="Documento de identidad al 150%"
-                  detail="Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente"
-                  isRequired={true}
-                />
-    
-                <UploadDocumentComponent
-                  onChange={handleFileChange2}
-                  pdf={pdf2}
-                  fileName={fileName2}
-                  onDelete={handleDelete2}
-                  clickClassNameP=".input-field2"
-                  clickClassName="input-field2"
-                  label="Anexo Pregrado o Postgrado"
-                  detail="Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)"
-                  isRequired={false}
-                />
-    
-                <UploadDocumentComponent
-                  onChange={handleFileChange3}
-                  pdf={pdf3}
-                  fileName={fileName3}
-                  onDelete={handleDelete3}
-                  clickClassNameP=".input-field3"
-                  clickClassName="input-field3"
-                  label="Anexo Estudiantes extranjeros"
-                  detail="Visa, PEP, PPT, según corresponda para cada caso"
-                  isRequired={false}
-                />
-    
-                <UploadDocumentComponent
-                  onChange={handleFileChange4}
-                  pdf={pdf4}
-                  fileName={fileName4}
-                  onDelete={handleDelete4}
-                  clickClassNameP=".input-field4"
-                  clickClassName="input-field4"
-                  label="Anexo Comprobante de Pago de Matrícula*"
-                  detail="-"
-                  isRequired={false}
-                />
-    
-                <UploadDocumentComponent
-                  onChange={handleFileChange5}
-                  pdf={pdf5}
-                  fileName={fileName5}
-                  onDelete={handleDelete5}
-                  clickClassNameP=".input-field5"
-                  clickClassName="input-field5"
-                  label="Formato de registro de matricula"
-                  detail="-"
-                  isRequired={false}
-                />
-    
-                <UploadDocumentComponent
-                  onChange={handleFileChange6}
-                  pdf={pdf6}
-                  fileName={fileName6}
-                  onDelete={handleDelete6}
-                  clickClassNameP=".input-field6"
-                  clickClassName="input-field6"
-                  label="Anexo de Afiliación EPS (Sin claves)"
-                  detail="Vigencia NO mayor a 30 días"
-                  isRequired={true}
-                />
-              </div>
-              <div className="text-center mt-2">
-                {allFilesSelected ? (
-                  <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
-                    Cargar documentos
-                  </Button>
-                ) : (
-                  <Button disabled className="text-white mx-auto custom-btn">
-                    Cargar documentos
-                  </Button>
-                )}
-              </div>
-            </Modal>
-          </div>
-        )}
-      </>    
+    <>
+      {visible && (
+        <div className="modal-backdrop">
+          <Modal
+            open={visible}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            footer={null}
+            closable={false}
+            centered
+            wrapClassName="my-5 animate__animated animate__zoomIn"
+          >
+            <div className="text-center mx-4">
+              <h4 className="text-lg font-bold">Documentos de Legalización Matrícula - Formato .pdf*</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+              {renderUploadField(1, doc1, setDoc1, "Documento de identidad al 150%", "Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente", true)}
+              {renderUploadField(2, doc2, setDoc2, "Anexo Pregrado o Postgrado", "Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)", true)}
+              {renderUploadField(3, doc3, setDoc3, "Anexo Estudiantes extranjeros", "Visa, PEP, PPT, según corresponda para cada caso", true)}
+              {renderUploadField(4, doc4, setDoc4, "Anexo Comprobante de Pago de Matrícula*", "-", true)}
+              {renderUploadField(5, doc5, setDoc5, "Formato de registro de matricula", "-", true)}
+              {renderUploadField(6, doc6, setDoc6, "Anexo de Afiliación EPS (Sin claves)", "Vigencia NO mayor a 30 días", true)}
+            </div>
+            <div className="text-center mt-2">
+              {allFilesSelected ? (
+                <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
+                  Cargar documentos
+                </Button>
+              ) : (
+                <Button disabled className="text-white mx-auto custom-btn">
+                  Cargar documentos
+                </Button>
+              )}
+            </div>
+          </Modal>
+        </div>
+      )}
+    </>
   );
 };
 

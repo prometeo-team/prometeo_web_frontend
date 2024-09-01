@@ -15,17 +15,18 @@ const user = sessionStorage.getItem('user');
 var info;
 
 const materias = [
-  { value: "LM", label: "Logica Matemática" },
-  { value: "EP", label: "Estructuración del Pensamiento" },
-  { value: "IN", label: "Inglés" },
-  { value: "FI", label: "Física 1" },
-  { value: "MB", label: "Matemáticas Básicas" },
+  { value: "1", label: "Logica Matemática" },
+  { value: "2", label: "Estructuración del Pensamiento" },
+  { value: "3", label: "Inglés" },
+  { value: "4", label: "Física 1" },
+  { value: "5", label: "Matemáticas Básicas" },
 ];
 
 const FormAddition_CancelComponent = ({type}) => {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
   const [subjects, setSubjects] = useState([{ id: "subject0" }]); // Estado inicial para las materias
-  const [materias, setMaterias] = useState([]);
+  //const [materias, setMaterias] = useState([]);
+  const [studentInfo, setStudentInfo] = useState({});
 
   useEffect(() => {
     fetchInfo(type);
@@ -49,32 +50,33 @@ const FormAddition_CancelComponent = ({type}) => {
         });
         const result = await response.json();
         if (result.status === "200 OK") {
+          setStudentInfo(result.data[0]);
           const programOptions = JSON.stringify(result.data);
           info = JSON.parse(programOptions);
-          document.getElementById('document_type').setAttribute('placeholder',info[0].document_type);
-          document.getElementById('Last_name').setAttribute('placeholder',info[0].last_name);
-          document.getElementById('carrer_input').setAttribute('placeholder',carrer);
-          document.getElementById('num_documet').setAttribute('placeholder',info[0].document_number);
-          document.getElementById('phone_input').setAttribute('placeholder',info[0].phone);
-          document.getElementById('semester_input').setAttribute('placeholder',info[0].semester);
-          document.getElementById('name_input').setAttribute('placeholder',info[0].name);
-          document.getElementById('email_input').setAttribute('placeholder',info[0].email);
-          document.getElementById('address_input').setAttribute('placeholder',info[0].address);
-          const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=Ingeniería de Sistemas&userName=${user}`, {
+          document.getElementById('document_type').setAttribute('value',info[0].document_type);
+          document.getElementById('Last_name').setAttribute('value',info[0].last_name);
+          document.getElementById('carrer_input').setAttribute('value',carrer);
+          document.getElementById('num_documet').setAttribute('value',info[0].document_number);
+          document.getElementById('phone_input').setAttribute('value',info[0].phone);
+          document.getElementById('semester_input').setAttribute('value',info[0].semester);
+          document.getElementById('email_input').setAttribute('value',info[0].email);
+          document.getElementById('address_input').setAttribute('value',info[0].address);
+          /*const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=Ingeniería de Sistemas&userName=${user}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
           });
-          const result = await response.json();
-          if (result.status === "200 OK") {
+          const result2 = await response2.json();
+          if (result2.status === "200 OK") {
             //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
-            setMaterias('');
+            const carearrsubjects = result2.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
+            setMaterias(carearrsubjects);
           } else {
             console.error("Error en la respuesta:", result.message);
           }
-          console.log('Programas obtenidos:', info[0]);
+          console.log('Programas obtenidos:', info[0]);*/
         } else {
           console.error("Error en la respuesta:", result.message);
         }
@@ -92,6 +94,9 @@ const FormAddition_CancelComponent = ({type}) => {
 
   const handleCloseModalCheck = () => {
     setModalVisibleCheck(false);
+  };
+  const handleChange = (value) => {
+    console.log(value)
   };
 
   const handlePlusButton = () => {
@@ -124,7 +129,7 @@ const FormAddition_CancelComponent = ({type}) => {
           <h3 className="text-black">Apellidos</h3>
           <InputComponent id="Last_name" type="readOnly" placeholder="Perez" />
           <h3 className="text-black">Carrera</h3>
-          <InputComponent id="carrer_input" type="readOnly" placeholder="Carrera" />
+          <InputComponent id="carrer_input" name="carrera" type="readOnly" placeholder="Carrera" />
         </div>
         <div className="Second Row">
           <h3 className="text-black">No. de documento</h3>
@@ -135,8 +140,8 @@ const FormAddition_CancelComponent = ({type}) => {
           <InputComponent id="semester_input" type="readOnly" placeholder="Octavo" />
         </div>
         <div className="Third Row">
-          <h3 className="text-black">Nombre</h3>
-          <InputComponent id="name_input" type="readOnly" placeholder="Pepito" />
+        <h3 className='text-black truncate'>Nombre(s)</h3>
+        <InputComponent id="name_input" type="readOnly" variant="form-input" placeholder={studentInfo.name || "Nombre"} value={studentInfo.name || ""} className="w-full" />
           <h3 className="text-black">Correo Electrónico</h3>
           <InputComponent id="email_input" type="readOnly" placeholder="Perez" />
           <h3 className="text-black text-pretty">Carrera</h3>
@@ -160,10 +165,12 @@ const FormAddition_CancelComponent = ({type}) => {
               <InputComponent
                 key={subject.id} // Asegura que cada InputComponent tenga una key única
                 id={subject.id}
+                name="subjects"
                 type="box"
                 placeholder="Materia"
                 variant="form-input"
                 options={[ ...materias]}
+                onChange={handleChange}
               />
             ))}
             <div className="flex flex-row">
