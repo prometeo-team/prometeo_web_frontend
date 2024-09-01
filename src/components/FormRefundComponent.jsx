@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
-import ModalRefundComponent from './ModalRefundComponent';
-import InputComponent from './InputComponent';
-import './FormLegalizationComponent.css';
-import { LuUpload } from "react-icons/lu";
-import { LuDownload } from "react-icons/lu";
+import React, { useState, useEffect } from 'react';
+import { Button, notification, Tooltip } from 'antd';
+import { LuUpload, LuDownload } from "react-icons/lu";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
-import ModalComponent from './ModalComponent';
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { Tooltip, notification } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IoAlertCircleSharp } from "react-icons/io5";
+import ModalUploadComponent from './ModalUploadComponent';
+import InputComponent from '../components/InputComponent';
+import ModalComponent from './ModalComponent';
+import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
 
-const FormRefundComponent = () => {
+const FormRefoundComponent = () => {
+    const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [studentInfo, setStudentInfo] = useState({});
+    const [requestId, setRequestId] = useState(null);
+    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalIcon, setModalIcon] = useState(null);
+
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -54,7 +56,7 @@ const FormRefundComponent = () => {
         }
     };
 
-    const handleOpenModal = () => {
+    const handleOpenModal = async () => {
         setModalVisible(true);
     };
 
@@ -68,14 +70,6 @@ const FormRefundComponent = () => {
         });
     };
 
-    const handleOpenModalCheck2 = () => {
-        setModalVisibleCheck(true);
-    };
-
-    const handleCloseModalCheck2 = () => {
-        setModalVisibleCheck(false);
-    };
-
     const handleDownload = async () => {
         try {
             const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/template/getTemplateDocumentWord?username=${user}&requestType=Reembolso&career=${career}`, {
@@ -85,30 +79,87 @@ const FormRefundComponent = () => {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-    
+
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Error al descargar el archivo');
             }
-    
+
             const data = await response.json();
             let fileUrl = data.data;
-            
+
             if (fileUrl.startsWith('Document: ')) {
                 fileUrl = fileUrl.substring('Document: '.length).trim();
             }
-    
+
             const a = document.createElement('a');
             a.href = fileUrl;
-            a.download = 'Formato_Carta.docx'; 
-            a.style.display = 'none'; 
+            a.download = 'Formato_Carta.docx';
+            a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error al descargar el archivo:', error);
         }
-    }; 
+    };
+
+    const handleOpenModalCheck2 = (content, icon) => {
+        setModalVisibleCheck(true);
+        setModalContent(content);
+        setModalIcon(icon);
+    };
+
+    const handleCloseModalCheck2 = () => {
+        navigate('/student/crear-solicitud');
+        setModalVisibleCheck(false);
+    };
+
+    const handleCreateRequest = async () => {
+        if (!career || !user) {
+            console.error("Faltan parámetros necesarios");
+            return;
+        }
     
+        const requestData = {
+            userEntity: user,
+            requestTypeEntity: 'Reembolso',
+            programStudent: career,
+        };
+    
+        const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+    
+        const formData = new FormData();
+        formData.append("request", requestJson);
+    
+        if (documents.length > 0) {
+            documents.forEach((file) => {
+                formData.append("files", file);
+            });
+        }
+    
+        try {
+            const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequest", {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al crear la solicitud');
+            }
+    
+            const data = await response.json();
+            setRequestId(data.requestId);
+            handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
+        } catch (error) {
+            console.error('Error al crear la solicitud:', error);
+            handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
+        }
+    };
+
     return (
         <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
             <Link to='/student/crear-solicitud'>
@@ -119,7 +170,6 @@ const FormRefundComponent = () => {
             </Link>
             <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Información del estudiante</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            
                 <div className="w-full max-w-xs">
                     <h3 className='text-black truncate'>Nombre(s)</h3>
                     <InputComponent id="name_input" type="readOnly" variant="form-input" placeholder={studentInfo.name || "Nombre"} value={studentInfo.name || ""} className="w-full" />
@@ -157,7 +207,7 @@ const FormRefundComponent = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                    <ModalRefundComponent
+                    <ModalUploadComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
@@ -188,10 +238,12 @@ const FormRefundComponent = () => {
                                     </div>
                                 </div>
                             </div>
+                            {/* Columna para el botón */}
                             <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
                                 <button
                                     className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"
-                                    onClick={handleOpenModalCheck2}
+                                    onClick={handleCreateRequest}
+
                                 >
                                     <span>Confirmar</span>
                                     <FaCheck className="ml-2 h-7 w-7" />
@@ -199,8 +251,8 @@ const FormRefundComponent = () => {
                                 <ModalComponent
                                     visible={modalVisibleCheck}
                                     onClose={handleCloseModalCheck2}
-                                    content="Reintegro realizado correctamente"
-                                    icon={<IoMdCheckmarkCircle />}
+                                    content={modalContent}
+                                    icon={modalIcon}
                                 />
                             </div>
                         </React.Fragment>
@@ -211,4 +263,4 @@ const FormRefundComponent = () => {
     );
 };
 
-export default FormRefundComponent;
+export default FormRefoundComponent;

@@ -1,16 +1,25 @@
 .color-button {
     color: #FFF;
-    
+
 }
 
 .font-color {
     color: #97B749;
 }
+
+.icon-size {
+    height: 1.75rem !important;
+    /* 28px si 1 rem = 16px */
+    width: 1.75rem !important;
+    /* 28px si 1 rem = 16px */
+}
+
 .warp {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
 }
+
 @media (max-width: 757px) {
     .warp2 {
         word-wrap: break-word;
@@ -31,7 +40,6 @@
 
 @media (min-width: 425px) and (max-width: 810px) {
     .margenL {
-      margin-left: 35px !important; 
+        margin-left: 35px !important;
     }
-  }
-  
+}

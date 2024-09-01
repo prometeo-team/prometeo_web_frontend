@@ -1,20 +1,16 @@
-import React from 'react';
-import { Button } from 'antd';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Tooltip, notification } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { LuUpload, LuDownload } from 'react-icons/lu';
+import { IoIosArrowBack, IoMdCheckmarkCircle } from 'react-icons/io';
+import { FaCheck } from 'react-icons/fa6';
+import { IoAlertCircleSharp } from 'react-icons/io5';
 import ModalLegalizationComponent from '../components/ModalLegalizationComponent';
 import InputComponent from '../components/InputComponent';
-import './FormLegalizationComponent.css';
-import { LuUpload } from "react-icons/lu";
-import { IoIosArrowBack } from "react-icons/io";
-import { Link } from 'react-router-dom';
-import { FaCheck } from "react-icons/fa6";
 import ModalComponent from './ModalComponent';
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { Tooltip, notification } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { IoAlertCircleSharp } from "react-icons/io5";
 import Loader from './LoaderComponent.jsx';
-import { useNavigate } from 'react-router-dom';
+import './FormLegalizationComponent.css';
 
 const FormLegalizationComponent = ({ carrer }) => {
     const navigate = useNavigate();
@@ -62,12 +58,12 @@ const FormLegalizationComponent = ({ carrer }) => {
 
     const fetchInfo = async () => {
         if (career) {
-    
+
             const myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
-    
+
             const formdata = new FormData();
-            
+
             const requestData = {
                 userEntity: user,
                 requestTypeEntity: 'Legalización de matrícula',
@@ -87,23 +83,23 @@ const FormLegalizationComponent = ({ carrer }) => {
                 period: formData.period,
                 studyTime: formData.study_time,
             };
-    
+
             const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
             formdata.append("request", requestJson);
-    
+
             if (documents.length > 0) {
                 documents.forEach((file) => {
                     formdata.append("files", file.originalfile);  // Adjuntar los archivos
                 });
             }
-    
+
             const requestOptions = {
                 method: "POST",
                 headers: myHeaders,
                 body: formdata,
                 redirect: "follow"
             };
-    
+
             try {
                 setIsButtonLoading(true);
                 const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions);
@@ -122,7 +118,7 @@ const FormLegalizationComponent = ({ carrer }) => {
             console.error("El parámetro 'career' no está presente en la URL");
         }
     };
-    
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -431,12 +427,19 @@ const FormLegalizationComponent = ({ carrer }) => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-center">
+                            <div className="flex flex-col items-center justify-center w-full">
+                                <Button
+                                    onClick={handleOpenModal}
+                                    className="warp warp2 mb-4 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-between items-center md:button-small"
+                                >
+                                    Formato de Matrícula <LuDownload className="ml-2 w-11 h-11" />
+                                </Button>
+
                                 <Button
                                     onClick={handleOpenModal}
                                     className="warp2 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-between items-center md:button-small"
                                 >
-                                    Subir archivos <LuUpload className="ml-2 h-7 w-7 icon-small" />
+                                    Subir archivos <LuUpload className="ml-2 w-8 h-8" />
                                 </Button>
                                 <ModalLegalizationComponent
                                     visible={modalVisible}
