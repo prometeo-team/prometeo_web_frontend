@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'antd';
-import ModalReEnrollmentComponent from '../components/ModalReEnrollmentComponent';
-import InputComponent from '../components/InputComponent';
-import './FormLegalizationComponent.css';
-import { LuUpload } from "react-icons/lu";
-import { LuDownload } from "react-icons/lu";
+import { Button, notification, Tooltip } from 'antd';
+import { LuUpload, LuDownload } from "react-icons/lu";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
-import ModalComponent from './ModalComponent';
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { Tooltip, notification } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IoAlertCircleSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+import ModalUploadComponent from './ModalUploadComponent';
+import InputComponent from '../components/InputComponent';
+import ModalComponent from './ModalComponent';
+import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
-const FormLegalizationComponent = () => {
+const FormReEnrollmentComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [studentInfo, setStudentInfo] = useState({});
+    const [requestId, setRequestId] = useState(null);
+    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalIcon, setModalIcon] = useState(null);
+
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -31,8 +32,6 @@ const FormLegalizationComponent = () => {
     }, []);
 
     const fetchStudentInfo = async () => {
-
-
         if (career) {
             try {
                 const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
@@ -56,9 +55,8 @@ const FormLegalizationComponent = () => {
         }
     };
 
-    const handleOpenModal = () => {
+    const handleOpenModal = async () => {
         setModalVisible(true);
-
     };
 
     const handleCloseModal = () => {
@@ -71,14 +69,6 @@ const FormLegalizationComponent = () => {
         });
     };
 
-    const handleOpenModalCheck2 = () => {
-        setModalVisibleCheck(true);
-    };
-
-    const handleCloseModalCheck2 = () => {
-        setModalVisibleCheck(false);
-    };
-
     const handleDownload = async () => {
         try {
             const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/template/getTemplateDocumentWord?username=${user}&requestType=Reintegro&career=${career}`, {
@@ -88,27 +78,83 @@ const FormLegalizationComponent = () => {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-    
+
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Error al descargar el archivo');
             }
-    
+
             const data = await response.json();
             let fileUrl = data.data;
-            
+
             if (fileUrl.startsWith('Document: ')) {
                 fileUrl = fileUrl.substring('Document: '.length).trim();
             }
-    
+
             const a = document.createElement('a');
             a.href = fileUrl;
-            a.download = 'Formato_Carta.docx'; 
-            a.style.display = 'none'; 
+            a.download = 'Formato_Carta.docx';
+            a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error al descargar el archivo:', error);
+        }
+    };
+
+    const handleOpenModalCheck2 = (content, icon) => {
+        setModalVisibleCheck(true);
+        setModalContent(content);
+        setModalIcon(icon);
+    };
+
+    const handleCloseModalCheck2 = () => {
+        setModalVisibleCheck(false);
+    };
+
+    const handleCreateRequest = async () => {
+        if (!career || !user) {
+            console.error("Faltan parámetros necesarios");
+            return;
+        }
+    
+        const requestData = {
+            userEntity: user,
+            requestTypeEntity: 'Reintegro',
+            programStudent: career,
+        };
+    
+        const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+    
+        const formData = new FormData();
+        formData.append("request", requestJson);
+    
+        if (documents.length > 0) {
+            documents.forEach((file) => {
+                formData.append("files", file);
+            });
+        }
+    
+        try {
+            const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequest", {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+                body: formData,
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al crear la solicitud');
+            }
+    
+            const data = await response.json();
+            setRequestId(data.requestId);
+            handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
+        } catch (error) {
+            console.error('Error al crear la solicitud:', error);
+            handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
         }
     };
 
@@ -159,7 +205,7 @@ const FormLegalizationComponent = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                    <ModalReEnrollmentComponent
+                    <ModalUploadComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
@@ -194,7 +240,8 @@ const FormLegalizationComponent = () => {
                             <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
                                 <button
                                     className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"
-                                    onClick={handleOpenModalCheck2}
+                                    onClick={handleCreateRequest}
+
                                 >
                                     <span>Confirmar</span>
                                     <FaCheck className="ml-2 h-7 w-7" />
@@ -202,8 +249,8 @@ const FormLegalizationComponent = () => {
                                 <ModalComponent
                                     visible={modalVisibleCheck}
                                     onClose={handleCloseModalCheck2}
-                                    content="Reintegro realizado correctamente"
-                                    icon={<IoMdCheckmarkCircle />}
+                                    content={modalContent}
+                                    icon={modalIcon}
                                 />
                             </div>
                         </React.Fragment>
@@ -214,4 +261,4 @@ const FormLegalizationComponent = () => {
     );
 };
 
-export default FormLegalizationComponent;
+export default FormReEnrollmentComponent;
