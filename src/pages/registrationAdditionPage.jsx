@@ -6,16 +6,12 @@ import '../App.css';
 const registrationAdditionPage = () => {
 
     return (
-        <div className=" h-screen w-full scroll-container">
-                <div className='w-full mt-4'>
-                    <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
-                </div>
-                <div>
-                    <TitleComponent title="Solicitud Adición" />
-                </div>
-                <div>
-                    <FormAddition_CancelComponent type="Adición de creditos" />
-                </div>
+        <div className=" h-screen scroll-container ml-4">
+            <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
+            <TitleComponent title="Solicitud Adición" />
+            <div>
+                <FormAddition_CancelComponent type="Adición de creditos" />
+            </div>
         </div>
 
     )
