@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Flex, Select, Input, Form } from 'antd';
 import './InputComponent.css';
 
-const InputComponent = ({ type, id, name, placeholder, options, variant, value, onChange }) => {
+const InputComponent = ({ type, id, name, placeholder, options, variant, value, onChange, disabled }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorBorder, setShowErrorBorder] = useState(false);
@@ -16,17 +16,33 @@ const InputComponent = ({ type, id, name, placeholder, options, variant, value, 
       setError(true);
       setErrorMessage('Por favor, ingrese un correo electrónico válido.');
       setShowErrorBorder(true);
+      if (onChange) onChange(e); 
     } else if (type === 'number' && isNaN(inputValue)) {
       setError(true);
       setErrorMessage('Por favor, ingrese un número válido.');
       setShowErrorBorder(true);
+      if (onChange) onChange(e); 
+    } else if (type === 'box2') {
+      // Encuentra la opción seleccionada usando el valor del select
+      const selectedOption = options.find(option => option.value === e);
+  
+      if (selectedOption) {
+        const { key, value, label } = selectedOption;
+  
+        // Enviar la información correcta a onChange
+        onChange({
+          target: { name, id },
+          selectedOption: { key, value, label },
+        });
+      }
     } else {
       setError(false);
       setErrorMessage('');
       setShowErrorBorder(false);
+      if (onChange) onChange(e); 
     }
 
-    if (onChange) onChange(e);  
+    // 
   };
 
   const isValidEmail = (email) => {
@@ -79,11 +95,28 @@ const InputComponent = ({ type, id, name, placeholder, options, variant, value, 
               id={id}
               name={name} 
               value={value}
-              onChange={(selectedValue) => onChange({ target: { name, value: selectedValue } })}  
+              onChange={(selectedValue) => onChange({target: {name, value:selectedValue}})} 
               className={`w-full h-10 rounded-md ${variant} select-box`}
             >
               {options.map((option) => (
                 <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+          );
+          case 'box2':
+          return (
+            <Select
+              id={id}
+              name={name} 
+              value={value}
+              onChange={(selectedValue) => handleInputChange(selectedValue)}  
+              className={`w-full h-10 rounded-md ${variant} select-box`}
+              disabled={disabled}
+            >
+              {options.map((option) => (
+                <Option key={option.value} value={option.value} disabled={option.disabled}>
                   {option.label}
                 </Option>
               ))}
