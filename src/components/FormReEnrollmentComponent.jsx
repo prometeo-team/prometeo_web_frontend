@@ -20,7 +20,6 @@ const FormReEnrollmentComponent = () => {
     const [modalContent, setModalContent] = useState('');
     const [modalIcon, setModalIcon] = useState(null);
 
-
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -136,7 +135,7 @@ const FormReEnrollmentComponent = () => {
         }
     
         try {
-            const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequest", {
+            const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,

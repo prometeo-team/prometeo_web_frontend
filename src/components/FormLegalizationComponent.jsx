@@ -3,23 +3,25 @@ import { Button, Tooltip, notification } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { LuUpload, LuDownload } from 'react-icons/lu';
-import { IoIosArrowBack, IoMdCheckmarkCircle } from 'react-icons/io';
 import { FaCheck } from 'react-icons/fa6';
 import { IoAlertCircleSharp } from 'react-icons/io5';
 import ModalLegalizationComponent from '../components/ModalLegalizationComponent';
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import Loader from './LoaderComponent.jsx';
+import { IoIosArrowBack, IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import './FormLegalizationComponent.css';
 
 const FormLegalizationComponent = ({ carrer }) => {
     const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [formData, setFormData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalIcon, setModalIcon] = useState(null);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -56,6 +58,37 @@ const FormLegalizationComponent = ({ carrer }) => {
         }
     };
 
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+
+    const handleOpenModal = () => {
+        setModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        notification.info({
+            message: 'Importante',
+            description: 'Recuerda que para poder modificar o eliminar uno o varios archivos documentos, haz clic en el botón "Subir archivos".',
+            placement: 'bottomRight',
+            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+        });
+        handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
+    };
+
+    const handleOpenModalCheck2 = (content, icon) => {
+        setModalVisibleCheck(true);
+        setModalContent(content);
+        setModalIcon(icon);
+    };
+
+    const handleCloseModalCheck2 = () => {
+        setModalVisibleCheck(false);
+    };
+
     const fetchInfo = async () => {
         if (career) {
 
@@ -74,8 +107,8 @@ const FormLegalizationComponent = ({ carrer }) => {
                 address: formData.address,
                 ethnicGroup: formData.ethnic_group,
                 tuitionFinancing: formData.tuition_financing,
-                documentNumber: formData.document_number,//
-                otherDocumentType: formData.other_document_type,//
+                documentNumber: formData.document_number,
+                otherDocumentType: formData.other_document_type,
                 location: formData.location,
                 attendantName: formData.attendant_name,
                 attendantPhone: formData.attendant_phone,
@@ -102,15 +135,17 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             try {
                 setIsButtonLoading(true);
-                const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions);
+                const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequestt", requestOptions);
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);
+                    handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
                 } else {
                     console.error("Error en la respuesta:", result.message);
                 }
             } catch (error) {
-                console.error("Error al realizar la solicitud:", error);
+                console.error('Error al crear la solicitud:', error);
+                handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
             } finally {
                 setIsButtonLoading(false);
             }
@@ -120,35 +155,7 @@ const FormLegalizationComponent = ({ carrer }) => {
     };
 
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
-    };
 
-
-    const handleOpenModal = () => {
-        setModalVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        notification.info({
-            message: 'Importante',
-            description: 'Recuerda que para poder modificar o eliminar uno o varios archivos documentos, haz clic en el botón "Subir archivos".',
-            placement: 'bottomRight',
-            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
-        });
-        console.log(documents);
-    };
-
-    const handleOpenModalCheck = () => {
-        setModalVisibleCheck(true);
-    };
-
-    const handleCloseModalCheck = () => {
-        navigate('/student/crear-solicitud');
-        setModalVisibleCheck(false);
-    };
 
     return (
         <div>
@@ -514,9 +521,9 @@ const FormLegalizationComponent = ({ carrer }) => {
                                                 </button>
                                                 <ModalComponent
                                                     visible={modalVisibleCheck}
-                                                    onClose={handleCloseModalCheck}
-                                                    content="Solicitud de legalización realizada correctamente"
-                                                    icon={<IoMdCheckmarkCircle />}
+                                                    onClose={handleCloseModalCheck2}
+                                                    content={modalContent}
+                                                    icon={modalIcon}
                                                 />
                                             </div>
                                         )}

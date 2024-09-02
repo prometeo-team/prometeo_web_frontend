@@ -3,7 +3,7 @@ import { Modal, Button } from 'antd';
 import PropTypes from 'prop-types';
 import './ModalComponent.css';
 
-const ModalComponent = ({ content, icon, visible, onClose }) => {
+const ModalComponent = ({ content, icon, visible, onClose, iconColorClass }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const handleOk = () => {
@@ -15,7 +15,6 @@ const ModalComponent = ({ content, icon, visible, onClose }) => {
   };
 
   const handleCancel = () => {
-
     document.querySelector('.center-modal').classList.add('animate__zoomOut');
     setTimeout(() => {
       onClose();
@@ -36,11 +35,11 @@ const ModalComponent = ({ content, icon, visible, onClose }) => {
             centered
             wrapClassName="center-modal animate__animated animate__zoomIn" 
           >
-            <div className="items-centerf ">
+            <div className="items-centerf">
               <div className="flex justify-center">
-                {icon && React.cloneElement(icon, { className: "icon-large mb-1 icon-color" })}
+                {icon && React.cloneElement(icon, { className: `icon-large mb-1 ${iconColorClass || 'icon-color'}` })}
               </div>
-              <div className="flex items-center justify-center mb-10 font-bold text-xl ">
+              <div className="flex items-center justify-center mb-10 font-bold text-xl">
                 <p>{content}</p>
               </div>
               <div className="flex items-center justify-center">
@@ -61,6 +60,7 @@ ModalComponent.propTypes = {
   icon: PropTypes.element,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  iconColorClass: PropTypes.string, 
 };
 
 export default ModalComponent;

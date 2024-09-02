@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { Table, Space, Input } from "antd";
+import { Table, Space, Input, Button } from "antd";
 import { FaEye } from "react-icons/fa";
 import { HiSearchCircle } from "react-icons/hi";
-import "./TableComponent.css";
-import { Button } from "antd";
 import PropTypes from 'prop-types';
-
+import "./TableComponent.css";
 
 function TableComponent({ dataSource, columns, parameterAction }) {
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
-    key: index,
+    key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
   }));
 
   const [page, setPage] = useState(1);
@@ -26,7 +24,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
 
   useEffect(() => {
     addActionColumn();
-  }, []);
+  }, [columns]);
 
   const addActionColumn = () => {
     setColumnsadd([
@@ -37,9 +35,11 @@ function TableComponent({ dataSource, columns, parameterAction }) {
         render: (_, record) => (
           <Space size="middle">
             <a
-              className="text-3xl"
-              href="#"
-              onClick={(e) => parameterAction(e, record)}
+              className="text-3xl cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+                parameterAction(e, record);
+              }}
             >
               <FaEye />
             </a>
@@ -66,7 +66,6 @@ function TableComponent({ dataSource, columns, parameterAction }) {
             prefix={<HiSearchCircle className="w-8 h-8" />}
           />
           <Button
-            to="/homePage"
             type="primary"
             className="color-button text-sm md:text-base lg:text-lg h-auto ml-2"
           >
@@ -87,7 +86,6 @@ function TableComponent({ dataSource, columns, parameterAction }) {
               onShowSizeChange: handlePageChange,
               pageSizeOptions: ["5", "10"],
             }}
-
           />
         </div>
       </div>
@@ -106,6 +104,5 @@ TableComponent.propTypes = {
   ).isRequired,
   parameterAction: PropTypes.func,
 };
-
 
 export default TableComponent;
