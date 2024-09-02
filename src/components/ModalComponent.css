@@ -14,6 +14,10 @@
     color: #97B749;
 }
 
+.icon-custom-color {
+    color: #43737E;
+}
+
 .center-modal .ant-modal-content {
     display: flex;
     justify-content: center;

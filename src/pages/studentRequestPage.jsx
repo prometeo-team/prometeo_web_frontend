@@ -5,14 +5,18 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import UserCardComponent from '../components/UserCardComponet';
 import { getInfoToken } from '../utils/utils';
 import Loader from '../components/LoaderComponent.jsx';
+import { useNavigate  } from 'react-router-dom';
 import './studentRequestPage.css';
 
 const StudentRequestPage = () => {
+  const navigate = useNavigate();
   const [filas, setFilas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
     const userInfo = getInfoToken();
+    console.log(userInfo.sub)
     console.log('userInfo:', userInfo);
     const obtenerDatos = async () => {
       try {
@@ -25,7 +29,6 @@ const StudentRequestPage = () => {
         });
         const result = await response.json();
         setFilas(result.data);
-        console.log('Datos obtenidos:', result.data);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
       } finally {
@@ -34,6 +37,7 @@ const StudentRequestPage = () => {
     };
     obtenerDatos();
   }, []);
+  
 
   const columns = [
     {
@@ -86,14 +90,16 @@ const StudentRequestPage = () => {
 
   const handleView = (e, record) => {
     e.preventDefault();
-    // Aquí se puede agregar la lógica para ver el registro
-    console.log('Ver registro:', record.id_solicitud);
-  };
+    const requestId = record.request_id; // o el campo adecuado que estás usando
+    navigate(`/student/mi-solicitud?id=${requestId}`);
+  };  
 
   return (
-    <div className="h-screen scroll-container ml-4">
+    <div className="relative h-screen scroll-container ml-4">
       {isLoading ? (
-        <Loader />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Loader className="h-12 w-12" /> 
+        </div>
       ) : (
         <>
           <UserCardComponent number={2} />
@@ -110,6 +116,8 @@ const StudentRequestPage = () => {
       )}
     </div>
   );
+  
+  
 };
 
 export default StudentRequestPage;
