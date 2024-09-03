@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import ModalActa from '../components/ModalActaInsert';
 import { notification } from 'antd';
-import { IoAlertCircleSharp } from "react-icons/io5";
+import { LuDownload } from 'react-icons/lu';
 
 function councilTablePage() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,7 +22,7 @@ function councilTablePage() {
             message: 'Importante',
             description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir Acta".',
             placement: 'bottomRight',
-            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+            icon: <LuDownload className="font-color w-8 h-8 text-[#97B749]" />,
         });
     };
 
@@ -38,11 +38,6 @@ function councilTablePage() {
             dataIndex: "fecha",
             key: "fecha",
             sorter: (a, b) => new Date(a.fecha) - new Date(b.fecha),
-        },
-        {
-            title: "URL Acceso",
-            dataIndex: "URL",
-            key: "URL",
         },
         {
             title: "Nombre",
@@ -73,37 +68,37 @@ function councilTablePage() {
         {
             id_documento: "C231231",
             fecha: "2023-03-15",
-            URL: "www.dasdada.com",
+            
             nombre: "Acta de consejo 1",
         },
         {
             id_documento: "C231232",
             fecha: "2023-04-10",
-            URL: "www.example1.com",
+            
             nombre: "Acta de consejo 2"
         },
         {
             id_documento: "C231233",
             fecha: "2023-05-20",
-            URL: "www.example2.com",
+            
             nombre: "Acta de consejo 3"
         },
         {
             id_documento: "C231234",
             fecha: "2023-06-15",
-            URL: "www.example3.com",
+            
             nombre: "Acta de consejo 4"
         },
         {
             id_documento: "C231235",
             fecha: "2023-07-05",
-            URL: "www.example4.com",
+            
             nombre: "Acta de consejo 5"
         },
         {
             id_documento: "C231236",
             fecha: "2023-08-25",
-            URL: "www.example5.com",
+            
             nombre: "Acta de consejo 6"
         }
 
@@ -147,7 +142,7 @@ function councilTablePage() {
                 <Button
                     onClick={handleOpenModal}
                     type="primary"
-                    className="color-button text-sm md:text-base lg:text-lg h-auto"
+                    className="color-button text-sm md:text-base lg:text-lg h-aut mr-5"
                 >
                     Insertar Acta
                 </Button>

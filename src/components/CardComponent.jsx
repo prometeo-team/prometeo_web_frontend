@@ -16,25 +16,25 @@ function CardComponent({ title, icon, onCardClick  }) {
     const index = icon; 
     const size = 120;
     if (icon == 1) {
-        icon = <TiDocumentAdd size={size} />;
+        icon = <TiDocumentAdd size={size} className='text-[#97B749]'/>;
     } if (icon == 2) {
-        icon = <MdOutlineCancel size={size} />;
+        icon = <MdOutlineCancel size={size} className='text-[#97B749]' />;
     } if (icon == 3) {
-        icon = <RiHeartsFill size={size} />;
+        icon = <RiHeartsFill size={size} className='text-[#97B749]'/>;
     } if (icon == 4) {
-        icon = <HiOutlineDocumentSearch size={size} />;
+        icon = <HiOutlineDocumentSearch size={size} className='text-[#97B749]'/>;
     } if (icon == 5) {
-        icon = <MdAssignmentReturn size={size} />;
+        icon = <MdAssignmentReturn size={size} className='text-[#97B749]'/>;
     } if (icon == 6) {
-        icon = <FaMoneyBillTransfer size={size} />;
+        icon = <FaMoneyBillTransfer size={size}className='text-[#97B749]'/>;
     } if (icon == 7) {
-        icon = <RiUserSharedFill size={size} />;
+        icon = <RiUserSharedFill size={size}className='text-[#97B749]'/>;
     } if (icon == 8) {
-        icon = <GrDocumentUser size={size} />;
+        icon = <GrDocumentUser size={size}className='text-[#97B749]'/>;
     } if (icon == 9) {
-        icon = <BsFillPersonPlusFill size={size} />;
+        icon = <BsFillPersonPlusFill size={size} className='text-[#97B749]'/>;
     } if (icon == 10) {
-        icon = <MdOutlineSchool  size={size} />;
+        icon = <MdOutlineSchool  size={size} className='text-[#97B749]'/>;
     }
 
     return (

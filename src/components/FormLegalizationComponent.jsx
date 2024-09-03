@@ -120,7 +120,7 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             if (documents.length > 0) {
                 documents.forEach((file) => {
-                    formdata.append("files", file.originalfile);  // Adjuntar los archivos
+                    formdata.append("files", file.originalfile);  
                 });
             }
 
@@ -133,7 +133,7 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             try {
                 setIsButtonLoading(true);
-                const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions);
+                const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions);
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);
