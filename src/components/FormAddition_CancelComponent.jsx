@@ -20,6 +20,7 @@ const FormAddition_CancelComponent = ({type}) => {
   const [studentInfo, setStudentInfo] = useState({});
   const [newCredits, setNewCredits] = useState([]);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const [isButtonVisible2, setIsButtonVisible2] = useState(false);
 
   if(type=="Adición de creditos"){
     text =`*la cantidad maxima que puede tener de creditos es 20 para mas comuniquese con la secretaria de su programa`;
@@ -62,6 +63,20 @@ const FormAddition_CancelComponent = ({type}) => {
     }
   };
 
+  const fetchRequest = async (request) => {
+    try {
+      const response = await  fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", request)
+      const result = await response.json();
+          if (result.status === "200 OK") {
+            setModalVisibleCheck(true);
+          } else {
+            console.error("Error en la respuesta:", result.message);
+          }
+      } catch (error) {
+          console.error("Error al obtener los programas:", error);
+      }
+  }
+
   const adicion = () =>{
     try{
       /*const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=${career}&userName=${user}`, {
@@ -91,7 +106,29 @@ const FormAddition_CancelComponent = ({type}) => {
     }
   }
   const handleOpenModalCheck = () => {
-    setModalVisibleCheck(true);
+    if(type=="Adición de creditos"){
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+      const formdata = new FormData();
+      const subjectList = newCredits.map(credit => ({
+        id_subject: credit.id_subject,
+        subject_name: credit.subject_name
+      }));
+      const requestJson = new Blob([JSON.stringify({
+        userEntity: user,
+        requestTypeEntity: 'Adición de Créditos',
+        programStudent: career,
+        subjectList: subjectList
+      })], { type: 'application/json' });
+      formdata.append("request", requestJson);
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow"
+      };
+      fetchRequest(requestOptions);
+    }
   };
 
   const handleCloseModalCheck = () => {
@@ -99,12 +136,13 @@ const FormAddition_CancelComponent = ({type}) => {
   };
   const handleChange = (option) => {
     if (type === "Adición de creditos") {
-
+      setIsButtonVisible2(true);
       if (option && option.selectedOption) {
-
+        console.log(option);
         const selectedCredits = parseInt(option.selectedOption.key, 10);
         const id = option.target.id;
         const id_subject = option.selectedOption.value;
+        const label = option.selectedOption.label;
         if(credits+selectedCredits<=20){
           const index = newCredits.findIndex(credit => credit.id === id);
           console.log(index);
@@ -114,7 +152,7 @@ const FormAddition_CancelComponent = ({type}) => {
             setNewCredits((prevCredits) =>
               prevCredits.map((subject) =>
                 subject.id === id
-                ?{...subject, credits: selectedCredits, id_subject: id_subject}
+                ?{...subject, credits: selectedCredits, id_subject: id_subject, subject_name: label}
                 :subject
               )
             );
@@ -122,7 +160,7 @@ const FormAddition_CancelComponent = ({type}) => {
           }else{
             credits=credits+selectedCredits;
             console.log("no existe");
-            setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject}]);
+            setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject, subject_name: label}]);
           }
             setIsButtonVisible(credits<20);
           
@@ -274,9 +312,8 @@ const FormAddition_CancelComponent = ({type}) => {
           <h2 className="text-xl font-bold text-black mt-5 mb-5">
             {type}
           </h2>
-          {text}
-          <br/>
-          {txtcredits}
+          <h3 className="text-base font-semibold text-black truncate">{txtcredits}</h3>
+          <h3 className="text-base font-semibold text-red-500 truncate">{text}</h3>
         </div>
         <div className="flex w-full flex-col">
           <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">
@@ -305,13 +342,15 @@ const FormAddition_CancelComponent = ({type}) => {
               <br />
           </div>
           <div className="flex justify-end">
-            <button
-              className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
-              onClick={handleOpenModalCheck}
-            >
+          {isButtonVisible2 && (
+              <button
+                className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+                onClick={handleOpenModalCheck}
+              >
               <span>Generar Solicitud</span>
               <BsPersonFillCheck className="ml-2 h-5 w-6" />
             </button>
+            )}
           </div>
           
           <ModalComponent
