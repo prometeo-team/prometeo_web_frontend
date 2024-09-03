@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoIosArrowBack, IoMdCheckmarkCircle } from "react-icons/io";
 import { CiSquarePlus, CiSquareMinus  } from "react-icons/ci";
 import { BsPersonFillCheck } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputComponent from "./InputComponent";
 import ModalComponent from "./ModalComponent";
 import './FormLegalizationComponent.css';
@@ -21,11 +21,15 @@ const FormAddition_CancelComponent = ({type}) => {
   const [newCredits, setNewCredits] = useState([]);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isButtonVisible2, setIsButtonVisible2] = useState(false);
+  const navigate = useNavigate();
 
   if(type=="Adición de creditos"){
     text =`*la cantidad maxima que puede tener de creditos es 20 para mas comuniquese con la secretaria de su programa`;
-    txtcredits = `cantidad de cretitos : ${credits}`
-   }
+    txtcredits = `cantidad de cretitos : ${credits}`;
+  }else if(type == "Cancelación de creditos"){
+    text ='';
+    txtcredits = '';
+  }
   useEffect(() => {
     fetchInfo(type);
   }, []);
@@ -47,9 +51,9 @@ const FormAddition_CancelComponent = ({type}) => {
         const result = await response.json();
         if (result.status === "200 OK") {
           setStudentInfo(result.data[0]);
-          if(proceses==="Adición de creditos"){
+          if(proceses=="Adición de creditos"){
             adicion();
-          }else if(proceses=="Cancelación de créditos"){
+          }else if(proceses=="Cancelación de creditos"){
             cancelacion();
           }
         }else {
@@ -100,11 +104,40 @@ const FormAddition_CancelComponent = ({type}) => {
         { key:"1", value: "2", label: "Estructuración del Pensamiento", disabled: false },
         { key:"3", value: "3", label: "Inglés", disabled: false },
         { key:"3", value: "4", label: "Física 1", disabled: false },
-        { key:"3", value: "5", label: "Matemáticas Básicas", disabled: false }])
+        { key:"3", value: "5", label: "Matemáticas Básicas", disabled: false }]);
     }catch(error){
       console.error("Error al obtener los programas:", error);
     }
   }
+
+  const cancelacion = () =>{
+    try{
+      /*const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result2 = await response2.json();
+      if (result2.status === "200 OK") {
+        //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
+        const carearrsubjects = result2.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
+        setMaterias(carearrsubjects);
+      }else {
+        console.error("Error en la respuesta:", result.message);
+      }*/
+      setIsButtonVisible(false);
+      setMaterias([{ value: "1", label: "Logica Matemática", disabled: false },
+        { value: "2", label: "Estructuración del Pensamiento", disabled: false },
+        { value: "3", label: "Inglés", disabled: false },
+        { value: "4", label: "Física 1", disabled: false },
+        { value: "5", label: "Matemáticas Básicas", disabled: false }]);
+    }catch(error){
+      console.error("Error al obtener los programas:", error);
+    }
+  }
+
   const handleOpenModalCheck = () => {
     if(type=="Adición de creditos"){
       const myHeaders = new Headers();
@@ -128,14 +161,38 @@ const FormAddition_CancelComponent = ({type}) => {
         redirect: "follow"
       };
       fetchRequest(requestOptions);
+    } else if(type=="Cancelación de creditos"){
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+      const formdata = new FormData();
+      const subjectList = newCredits.map(credit => ({
+        id_subject: credit.id_subject,
+        subject_name: credit.subject_name
+      }));
+      const requestJson = new Blob([JSON.stringify({
+        userEntity: user,
+        requestTypeEntity: 'Retiro de Créditos',
+        programStudent: career,
+        subjectList: subjectList
+      })], { type: 'application/json' });
+      formdata.append("request", requestJson);
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow"
+      };
+      fetchRequest(requestOptions);
     }
   };
 
   const handleCloseModalCheck = () => {
     setModalVisibleCheck(false);
+    navigate("/student/mis-solicitudes");
   };
+
   const handleChange = (option) => {
-    if (type === "Adición de creditos") {
+    if (type == "Adición de creditos") {
       setIsButtonVisible2(true);
       if (option && option.selectedOption) {
         console.log(option);
@@ -163,14 +220,36 @@ const FormAddition_CancelComponent = ({type}) => {
             setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject, subject_name: label}]);
           }
             setIsButtonVisible(credits<20);
-          
         }
         
       } else {
         console.warn('selectedOption is undefined:', option);
       }
-    } else {
-      console.log(option);
+    } else if (type == "Cancelación de creditos") {
+      setIsButtonVisible2(true);
+      setIsButtonVisible(true);
+      if (option && option.selectedOption) {
+        console.log(option);
+        const id = option.target.id;
+        const id_subject = option.selectedOption.value;
+        const label = option.selectedOption.label;
+        const index = newCredits.findIndex(credit => credit.id === id);
+          console.log(index);
+          if (index!=-1) {
+            console.log("existe");
+            credits= credits-newCredits[index].credits;
+            setNewCredits((prevCredits) =>
+              prevCredits.map((subject) =>
+                subject.id === id
+                ?{...subject, id_subject: id_subject, subject_name: label}
+                :subject
+              )
+            );
+          }else{
+            console.log("no existe");
+            setNewCredits([...newCredits, {id: id, id_subject: id_subject, subject_name: label}]);
+          }
+      }
     }
   };
 
@@ -203,10 +282,24 @@ const FormAddition_CancelComponent = ({type}) => {
           )
         );
         setIsButtonVisible(false);
-      }
-    } 
+      }else if(type=="Cancelación de creditos"){
+        const id = `subject${subjects.length-1}`;
+        console.log("id adicion "+id);
+        setSubjects((prevSub) =>
+          prevSub.map((subject) =>
+            subject.id === id
+            ?{...subject, disabled: true}
+            :subject
+          )
+        );
+        const indexC = newCredits.findIndex(credit => credit.id === id);
+        const BMateria =newCredits[indexC].id_subject;
+        const indexM = materias.findIndex(subject => subject.value === BMateria);
+        materias[indexM].disabled=true;
+      } 
+    }
   };
-  //console.log('tamaño: '+subjects.length);
+
   const handleMinusButton = () => {
     if (subjects.length > 1) {
       if(type=="Adición de creditos"){
@@ -262,10 +355,39 @@ const FormAddition_CancelComponent = ({type}) => {
             );
           });
           setIsButtonVisible(true);
+      }else if(type=="Cancelación de creditos"){
+        const id = `subject${subjects.length-1}`;
+        const index = newCredits.findIndex(credit => credit.id === id);
+          console.log(index);
+          if (index!=-1) {
+              newCredits.splice(index,1);  
+          }
+          const id2 = `subject${subjects.length-2}`;
+          const index2 = newCredits.findIndex(credit => credit.id === id2);
+          const BMateria = newCredits[index2].id_subject;
+          const indexM = materias.findIndex(subject => subject.value === BMateria);
+          materias[indexM].disabled=false;
+
+          setSubjects(prevSubjects => {
+            // Deshabilita las materias actuales menos el último
+            const updatedSubjects = prevSubjects.map((subject, index) =>
+              index === prevSubjects.length - 1
+                ? { ...subject, disabled: false }
+                : subject
+            );
+            // Habilita la materia que estaba deshabilitada antes
+            const prevId = `subject${subjects.length - 2}`;
+            return updatedSubjects.slice(0, -1).map(subject =>
+              subject.id === prevId
+                ? { ...subject, disabled: false }
+                : subject
+            );
+          });
       }
       console.log(subjects); // Elimina el último elemento del array
     }
   };
+
   console.log(newCredits);
   return (
     <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
