@@ -41,7 +41,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
                 parameterAction(e, record);
               }}
             >
-              <FaEye />
+              <FaEye  className='text-[#97B749]'/>
             </a>
           </Space>
         ),
