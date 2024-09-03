@@ -29,6 +29,7 @@ const FormLegalizationComponent = ({ carrer }) => {
     const params = new URLSearchParams(urlObj.search);
     const career = params.get('carrera');
 
+    // Cargar información de legalización solo cuando se carga el componente
     useEffect(() => {
         fetchLegalizationInfo();
     }, []);
@@ -63,7 +64,6 @@ const FormLegalizationComponent = ({ carrer }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-
     const handleOpenModal = () => {
         setModalVisible(true);
     };
@@ -76,7 +76,6 @@ const FormLegalizationComponent = ({ carrer }) => {
             placement: 'bottomRight',
             icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
         });
-        handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
     };
 
     const handleOpenModalCheck2 = (content, icon) => {
@@ -91,7 +90,6 @@ const FormLegalizationComponent = ({ carrer }) => {
 
     const fetchInfo = async () => {
         if (career) {
-
             const myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
 
@@ -135,7 +133,7 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             try {
                 setIsButtonLoading(true);
-                const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequestt", requestOptions);
+                const response = await fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions);
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);
@@ -153,7 +151,6 @@ const FormLegalizationComponent = ({ carrer }) => {
             console.error("El parámetro 'career' no está presente en la URL");
         }
     };
-
 
 
 
@@ -437,13 +434,6 @@ const FormLegalizationComponent = ({ carrer }) => {
                             <div className="flex flex-col items-center justify-center w-full">
                                 <Button
                                     onClick={handleOpenModal}
-                                    className="warp warp2 mb-4 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-between items-center md:button-small"
-                                >
-                                    Formato de Matrícula <LuDownload className="ml-2 w-11 h-11" />
-                                </Button>
-
-                                <Button
-                                    onClick={handleOpenModal}
                                     className="warp2 button w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-between items-center md:button-small"
                                 >
                                     Subir archivos <LuUpload className="ml-2 w-8 h-8" />
@@ -466,47 +456,26 @@ const FormLegalizationComponent = ({ carrer }) => {
                                     <QuestionCircleOutlined className="font-color ml-2" />
                                 </Tooltip>
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {documents.slice(0, 6).map((document, index) => (
+                            <div className="grid grid-cols-4 gap-4">
+                                {documents.slice(0, 1).map((document, index) => (
                                     <React.Fragment key={index}>
-                                        {index % 2 === 0 && (
-                                            <div className="mb-4">
-                                                <div className="border bg-gray-200 rounded-md p-2 mb-2 overflow-hidden">
-                                                    <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                                        {document?.name && document.name.length > 20 ? `${document.name.slice(0, 20)}...pdf` : document?.name || 'Nombre no disponible'}
-                                                    </div>
-                                                    <div>
-                                                        {document?.url ? (
-                                                            <a href={document.url} target="_blank" rel="noopener noreferrer" className="font-color font-bold">
-                                                                Ver documento
-                                                            </a>
-                                                        ) : (
-                                                            <span className="font-color font-bold">URL no disponible</span>
-                                                        )}
-                                                    </div>
+                                        <div className="col-span-4 md:col-span-3 mb-4">
+                                            <div className="border bg-gray-200 rounded-md p-2 mb-2 overflow-hidden">
+                                                <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                                    {document.name.length > 20 ? `${document.name.slice(0, 20)}...pdf` : document.name}
                                                 </div>
-                                                {index + 1 < documents.length && documents[index + 1] && (
-                                                    <div className="border bg-gray-200 rounded-md p-2 overflow-hidden">
-                                                        <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                                            {documents[index + 1]?.name && documents[index + 1].name.length > 20 ? `${documents[index + 1].name.slice(0, 20)}...pdf` : documents[index + 1]?.name || 'Nombre no disponible'}
-                                                        </div>
-                                                        <div>
-                                                            {documents[index + 1]?.url ? (
-                                                                <a href={documents[index + 1].url} target="_blank" rel="noopener noreferrer" className="font-color font-bold">
-                                                                    Ver documento
-                                                                </a>
-                                                            ) : (
-                                                                <span className="font-color font-bold">URL no disponible</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                <div>
+                                                    <a href={document.url} target="_blank" rel="noopener noreferrer" className='font-color font-bold'>
+                                                        Ver documento
+                                                    </a>
+                                                </div>
                                             </div>
-                                        )}
-                                        {index === 4 && (
-                                            <div className="flex items-center justify-center">
+                                        </div>
+                                        {/* Columna para el botón */}
+                                        {index === 0 && (
+                                            <div className="col-span-4 md:col-span-1 flex items-center justify-center">
                                                 <button
-                                                    className="p-4 w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-center items-center"
+                                                    className="p-4 w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-base flex justify-center items-center mb-5"
                                                     onClick={fetchInfo}
                                                     disabled={isButtonLoading}
                                                 >
@@ -522,14 +491,17 @@ const FormLegalizationComponent = ({ carrer }) => {
                                                 <ModalComponent
                                                     visible={modalVisibleCheck}
                                                     onClose={handleCloseModalCheck2}
+                                                    title="Mensaje del sistema"
                                                     content={modalContent}
                                                     icon={modalIcon}
+                                                    showButton
                                                 />
                                             </div>
                                         )}
                                     </React.Fragment>
                                 ))}
                             </div>
+
                         </div>
 
 

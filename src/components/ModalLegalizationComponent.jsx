@@ -57,7 +57,7 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
     }, 500);
   };
 
-  const allFilesSelected = [doc1, doc2, doc3, doc4, doc5, doc6].every((doc) => doc.pdf !== null);
+  const allFilesSelected = [ doc6].every((doc) => doc.pdf !== null);
 
   const renderUploadField = (id, doc, setDoc, label, detail, isRequired) => (
     <div key={id} className="text-center">
@@ -117,12 +117,7 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
             <div className="text-center mx-4">
               <h4 className="text-lg font-bold">Documentos de Legalización Matrícula - Formato .pdf*</h4>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-              {renderUploadField(1, doc1, setDoc1, "Documento de identidad al 150%", "Para estudiantes Extranjeros Cédula de Extranjería o Pasaporte Vigente", true)}
-              {renderUploadField(2, doc2, setDoc2, "Anexo Pregrado o Postgrado", "Saber 11 (Pregrado), acta de grado o diploma (Pregrado o Postgrado)", true)}
-              {renderUploadField(3, doc3, setDoc3, "Anexo Estudiantes extranjeros", "Visa, PEP, PPT, según corresponda para cada caso", true)}
-              {renderUploadField(4, doc4, setDoc4, "Anexo Comprobante de Pago de Matrícula*", "-", true)}
-              {renderUploadField(5, doc5, setDoc5, "Formato de registro de matricula", "-", true)}
+            <div className="flex items-center justify-center">
               {renderUploadField(6, doc6, setDoc6, "Anexo de Afiliación EPS (Sin claves)", "Vigencia NO mayor a 30 días", true)}
             </div>
             <div className="text-center mt-2">
