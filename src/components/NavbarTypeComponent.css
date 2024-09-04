@@ -4,8 +4,17 @@
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
+    margin-bottom: -8px;
+    border-radius: 0px 0px 8px 8px;
 }
 
+.active {
+    background-color: #4e727c !important;
+  }
+  
+  .inactive {
+    background-color: #9db659;
+  }
 .v-line{
     border-right: thick solid #ffffff;
     border-right-width: 2px;
@@ -26,8 +35,30 @@
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
+    
 }
 
 .scroll-container2::-webkit-scrollbar {
-    display: none; /* Oculta la barra de desplazamiento en navegadores WebKit */
+    width: 12px; /* Ajusta el ancho de la barra de desplazamiento */
+    height: 12px;
+    margin-bottom: -100px;
 }
+
+/* Estilo para la pista de la barra de desplazamiento */
+.scroll-container2::-webkit-scrollbar-track {
+    margin-bottom: -50px;
+    background: #f2f2f3; /* Haz la pista transparente o del color que desees */
+    margin-bottom: 2px; /* Ajusta el margen inferior */
+    border-radius: 10px; /* Aplica un borde redondeado a la pista */
+  }
+
+  .scroll-container2::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Color y transparencia del "thumb" */
+    border-radius: 10px; /* Borde redondeado del "thumb" */
+    border: 2px solid transparent; /* Espacio alrededor del "thumb" */
+    background-clip: padding-box; /* Hace que el fondo se recorte para el borde */
+  }
+
+  .scroll-container2::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Cambia el color al pasar el mouse sobre el "thumb" */
+  }

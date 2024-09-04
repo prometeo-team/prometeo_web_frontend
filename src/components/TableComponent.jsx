@@ -10,7 +10,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     ...fila,
     key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
   }));
-
+  console.log(dataSource);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
@@ -48,7 +48,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
       },
     ]);
   };
-
+  //modificar para poder buscar bien
   const filteredData = filasConKey.filter((item) =>
     Object.values(item).some((value) =>
       value.toString().toLowerCase().includes(searchText.toLowerCase())
