@@ -1,8 +1,31 @@
 import { useEffect, useState } from 'react';
-import { Steps } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
 import './ComponentInfoStudentRequest.css';
+
+function CustomSteps({ steps }) {
+  // Encuentra el índice del primer paso con estado 'finish'
+  const firstFinishedIndex = steps.findIndex(step => step.status === 'finish');
+
+  return (
+    <div className="custom-steps flex">
+      {steps.map((step, index) => (
+        <div key={index} className="flex flex-col items-center mr-8">
+          <div 
+            className={`step-indicator ${index < firstFinishedIndex ? 'bg-[#43737E]' : (step.status === 'finish' ? 'bg-[#97B749]' : 'bg-gray-400')} rounded-full w-8 h-8 flex items-center justify-center text-white`}
+          >
+            {index + 1}
+          </div>
+          <div className="mt-2 text-center">
+            <div className={`step-title ${step.status === 'finish' ? 'text-[#97B749]' : 'text-gray-600'} font-bold`}>
+              {step.title}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function ComponentInfoSR() {
   const [requestData, setRequestData] = useState(null);
@@ -18,7 +41,7 @@ function ComponentInfoSR() {
     const fetchRequestData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3030/api/request/getRequestById?id=${id}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestById?id=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -34,7 +57,6 @@ function ComponentInfoSR() {
 
         if (result && result.data) {
           setRequestData(result.data);
-          console.log(result.data.requestTypeEntity.id);
         } else {
           console.error("Error: Datos de la solicitud no encontrados.");
         }
@@ -49,12 +71,11 @@ function ComponentInfoSR() {
     fetchRequestData();
   }, [id]);
 
-
   useEffect(() => {
     if (requestData) {
       const fetchStatusData = async () => {
         try {
-          const response = await fetch(`http://localhost:3030/api/requestDetail/getStatusRecord?id_requestDetail=${id}&id_road=${requestData.requestTypeEntity.id}`, {
+          const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getStatusRecord?id_requestDetail=${id}&id_road=${requestData.requestTypeEntity.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -91,15 +112,12 @@ function ComponentInfoSR() {
   // Insertar "Finalizado" siempre
   stepsData.push("Finalizado");
 
-  // Generar los datos de los pasos para el componente Steps
-  const steps = stepsData.map(key => ({
+  // Generar los datos de los pasos
+  const steps = stepsData.map((key) => ({
     title: key,
     status: statusData[key] ? 'finish' : 'wait',
+    description: statusData[key] ? 'Completo' : 'En espera',
   }));
-
-  // Dividir los pasos en dos grupos: los primeros 4 y el resto
-  const firstRowSteps = steps.slice(0, 4);
-  const secondRowSteps = steps.slice(4);
 
   const jsonData = {
     items: [
@@ -139,32 +157,12 @@ function ComponentInfoSR() {
           Información General
         </span>
       </div>
-      <div className='flex flex-col items-center w-full md:flex-col'>
-        <br />
-        <br />
-        {/* Renderizar los primeros 4 steps */}
-        <Steps
-          labelPlacement="horizontal"
-          direction="horizontal" // Horizontal por defecto
-          className="md:direction-vertical lg:direction-horizontal" // Vertical en pantallas medianas, horizontal en grandes
-          items={firstRowSteps}
-        />
-        {/* Si hay más de 4 steps, renderizar el resto en una nueva fila */}
-        {secondRowSteps.length > 0 && (
-          <>
-            <br />
-            <br />
-            <Steps
-              labelPlacement="horizontal"
-              direction="horizontal" // Horizontal por defecto
-              className="md:direction-vertical lg:direction-horizontal" // Vertical en pantallas medianas, horizontal en grandes
-              items={secondRowSteps}
-            />
-          </>
-        )}
-        <br />
-        <br />
-        {/* Información del estudiante en la parte inferior para md o menos */}
+      <div className="flex flex-col w-full">
+        {/* Sección de pasos personalizada en horizontal */}
+        <div className="w-full p-4 overflow-x-auto">
+          <CustomSteps steps={steps} />
+        </div>
+        {/* Sección de información de la solicitud en horizontal */}
         <div className='flex flex-col w-full justify-center md:flex-row md:flex-wrap lg:flex-nowrap md:text-sm'>
           {jsonData.items.map(item => (
             <div className='p-4 md:w-1/2 lg:w-auto' key={item.key}>
@@ -176,8 +174,6 @@ function ComponentInfoSR() {
       </div>
     </>
   );
-  
-  
 }
 
 export default ComponentInfoSR;
