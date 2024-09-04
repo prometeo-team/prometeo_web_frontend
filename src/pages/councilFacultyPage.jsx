@@ -2,26 +2,13 @@ import { TitleComponent } from "../components/";
 import { LuDownload } from "react-icons/lu";
 import { BsChatLeftTextFill } from "react-icons/bs";
 import { Button } from 'antd';
-import ModalCouncilFacultyComponent from '../components/ModalCouncilFacultyComponent';
-import { useState } from 'react';
-import { LuUpload } from "react-icons/lu";
 import { Tag } from "antd";
+import { useNavigate } from 'react-router-dom';
 import { TableComponent } from "../components/";
 import UserCardComponent from '../components/UserCardComponet';
 
 const CouncilFacultyPage = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-
-
-    const handleOpenModal = () => {
-        setModalVisible(true);
-
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-
-    };
+    const navigate = useNavigate();
 
     const handleDownload = async () => {
         try {
@@ -88,8 +75,7 @@ const CouncilFacultyPage = () => {
 
     const handleView = (e, record) => {
         e.preventDefault();
-        // Aquí se puede agregar la lógica para ver el registro
-        console.log("Ver registro:", record.id_solicitud);
+        navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
     };
 
     const dataSource = [
@@ -151,7 +137,7 @@ const CouncilFacultyPage = () => {
     return (
         <div className='h-screen scroll-container'>
             <div className="max-w-titleComponent">
-            <UserCardComponent  number={2} />
+                <UserCardComponent number={2} />
                 <TitleComponent title="Inicio de Acta" />
             </div>
             <div className="m-5">
@@ -195,13 +181,7 @@ const CouncilFacultyPage = () => {
                             </div>
                         </div>
                         <div className="flex justify-center items-center mt-4">
-                            <Button onClick={handleOpenModal} className="w-48 h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-between items-center">
-                                Subir acta <LuUpload className="ml-2 h-7 w-7" />
-                            </Button>
-                            <ModalCouncilFacultyComponent
-                                visible={modalVisible}
-                                onClose={handleCloseModal}
-                            />
+
                         </div>
                     </div>
                 </div>

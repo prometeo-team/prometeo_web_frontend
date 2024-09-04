@@ -91,7 +91,7 @@ const StudentRequestPage = () => {
   const handleView = (e, record) => {
     e.preventDefault();
     const requestId = record.request_id; // o el campo adecuado que estás usando
-    navigate(`/student/mi-solicitud?id=${requestId}`);
+    navigate(`/student/mi-solicitud?id=${requestId}&tipo=${record.requestTypeEntity.nameType}`);
   };  
 
   return (

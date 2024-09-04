@@ -78,8 +78,10 @@ function ComponentInfoSR() {
   }
 
   const stepsData = Object.keys(statusData).filter(key => 
-    key !== "No Aprobado" && key !== "Finalizado" && (
-    key !== "Pendiente Firma 100%" || statusData["Pendiente Firma 100%"] === true) &&
+    key !== "No Aprobado" && 
+    key !== "Finalizado" && 
+    key !== "No valida" && // Filtra pasos que tengan "No valida"
+    (key !== "Pendiente Firma 100%" || statusData["Pendiente Firma 100%"] === true) &&
     (key !== "Pendiente Firma 85%" || statusData["Pendiente Firma 85%"] === true) &&
     (key !== "Pendiente Firma 50%" || statusData["Pendiente Firma 50%"] === true)
   );

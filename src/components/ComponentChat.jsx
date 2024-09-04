@@ -8,7 +8,6 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
-  // Este useEffect se encarga de obtener los comentarios del endpoint
   useEffect(() => {
     const obtenerComentarios = async () => {
       try {
@@ -22,7 +21,7 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
         const result = await response.json();
         if (result.status === '200 OK') {
           const comentarios = result.data.map((comentario, index) => ({
-            id: index + 1, // Generar un ID único para cada comentario
+            id: index + 1, 
             text: comentario.body,
             sender: comentario.name_user,
             timestamp: comentario.published_at,
