@@ -10,7 +10,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     ...fila,
     key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
   }));
-  console.log(dataSource);
+  //console.log(dataSource);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchText, setSearchText] = useState("");

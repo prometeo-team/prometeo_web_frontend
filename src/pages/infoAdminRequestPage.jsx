@@ -1,23 +1,27 @@
-import  { useState, useEffect } from 'react';
+import  { useState, useEffect, useRef  } from 'react';
 import UserCArdComponent from '../components/UserCardComponet';
 import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent';
 import CardGraficsComponent from '../components/CardGraficsComponent';
 import { Tag } from 'antd';
-import { useNavigate  } from 'react-router-dom';
 import '../App.css';
 
 const InfoAdminRequestPage = () => {
-  const navigate = useNavigate();
+
   const [filas, setFilas] = useState([]);
   const [Pendiente, setPendiente] = useState([]);
   const [proceso, setProceso] = useState([]);
   const [Fin, setFin] = useState([]);
-  var totalPendiente=0;
-  var totalProceso=0;
-  var totalFin=0;
+
+  const chart1Ref = useRef(null);
+  const chart2Ref = useRef(null);
+  const chart3Ref = useRef(null);
+
+  var totalPendiente;
+  var totalProceso;
+  var totalFin;
   useEffect(() => {
-    //fetchGrafics('');
+    fetchGrafics('');
     obtenerDatos('');
   }, []);
 
@@ -32,31 +36,24 @@ const InfoAdminRequestPage = () => {
       });
       const result = await response.json();
       if (result.status === "200 OK") {
-        setPendiente(result.data.pendingRequests.map(info => ({
-          date: info.date,
-          count: info.count
-        })));
-        setProceso(result.data.inProcessRequests.map(info => ({
-          date: info.date,
-          count: info.count
-        })));
-        setFin(result.data.finishedRequests.map(info => ({
-          date: info.date,
-          count: info.count
-        })));
-        totalProceso = proceso.reduce((accumulator, currentValue) => {
+        setPendiente(result.data.pendingRequests);
+        setProceso(result.data.inProcessRequests);
+        setFin(result.data.finishedRequests);
+        totalPendiente = proceso.reduce((acc, currentValue) => acc + parseInt(currentValue.count, 10), 0);
+
+        
+        totalPendiente = Pendiente.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.count;
         }, 0);
-        totalFin = Pendiente.reduce((accumulator, currentValue) => {
+        
+        totalFin = Fin.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.count;
-        }, 0);
-         totalFin = Fin.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.count;
-        }, 0);
-      }else {
+        }, 10);
+
+      } else {
         console.error("Error en la respuesta:", result.message);
       }
-    }catch(error){
+    } catch(error) {
       console.error("Error al obtener los datos:", error);
     }
   }
@@ -128,7 +125,6 @@ const InfoAdminRequestPage = () => {
         tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
         
       }));
-      console.log('fetch '+extractedData)
       setFilas(extractedData);
     } catch (error) {
       console.error("Error al obtener los datos:", error);
@@ -137,29 +133,40 @@ const InfoAdminRequestPage = () => {
 
   const handleView = (e, record) => {
     e.preventDefault();
-    navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
+    // Aquí se puede agregar la lógica para ver el registro
+    console.log('Ver registro:', record.id_solicitud);
   };
   
-
-
   const handleClickType = (option) => {
+    // Destruir los gráficos actuales
+    if (chart1Ref.current) chart1Ref.current.destroy();
+    if (chart2Ref.current) chart2Ref.current.destroy();
+    if (chart3Ref.current) chart3Ref.current.destroy();
+
     // Elimina la clase 'active' de todos los elementos
     const elements = document.querySelectorAll('[name="process"]');
     elements.forEach(element => {
       element.classList.remove('active');
       element.classList.add('inactive');
     });
-  
+
     // Añade la clase 'active' al elemento seleccionado
     const selectedElement = document.getElementById(option);
     if (selectedElement) {
       selectedElement.classList.add('active');
       selectedElement.classList.remove('inactive');
     }
-  
+
     // Realiza la solicitud fetch
-    // fetchGrafics('?requestType=' + option);
+    if(option=='all'){
+      fetchGrafics('');
+      obtenerDatos('');
+    }else{
+    fetchGrafics('?requestType=' + option);
+    obtenerDatos('?nameType=' + option);
+    }
   };
+
 
   return (
     <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>
@@ -171,9 +178,9 @@ const InfoAdminRequestPage = () => {
         </div>
         <div className='w-full mt-16'>
           <div className='ml-8 max-md:ml-2 w-11/12 flex flex-row'>
-            <CardGraficsComponent type="1" number={totalPendiente} grafico="grafico1" data={Pendiente} />
-            <CardGraficsComponent type="2" number={totalProceso} grafico="grafico2" data={proceso} />
-            <CardGraficsComponent type="3" number={totalFin} grafico="grafico3" data={Fin} />
+            <CardGraficsComponent type="1" number={Pendiente.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico1" data={Pendiente} chartRef={chart1Ref} />
+            <CardGraficsComponent type="2" number={proceso.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico2" data={proceso} chartRef={chart2Ref} />
+            <CardGraficsComponent type="3" number={Fin.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico3" data={Fin} chartRef={chart3Ref} />
           </div>
         </div>
         <div className='w-full mt-16'>
