@@ -3,30 +3,6 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
 import './ComponentInfoStudentRequest.css';
 
-function CustomSteps({ steps }) {
-  // Encuentra el índice del primer paso con estado 'finish'
-  const firstFinishedIndex = steps.findIndex(step => step.status === 'finish');
-
-  return (
-    <div className="custom-steps flex">
-      {steps.map((step, index) => (
-        <div key={index} className="flex flex-col items-center mr-8">
-          <div 
-            className={`step-indicator ${index < firstFinishedIndex ? 'bg-[#43737E]' : (step.status === 'finish' ? 'bg-[#97B749]' : 'bg-gray-400')} rounded-full w-8 h-8 flex items-center justify-center text-white`}
-          >
-            {index + 1}
-          </div>
-          <div className="mt-2 text-center">
-            <div className={`step-title ${step.status === 'finish' ? 'text-[#97B749]' : 'text-gray-600'} font-bold`}>
-              {step.title}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function ComponentInfoSR() {
   const [requestData, setRequestData] = useState(null);
   const [statusData, setStatusData] = useState(null);
@@ -101,18 +77,19 @@ function ComponentInfoSR() {
     return <div>No se encontró la información de la solicitud o los estados.</div>;
   }
 
-  // Crear los pasos con el orden adecuado
-  const stepsData = Object.keys(statusData).filter(key => key !== "No Aprobado" && key !== "Finalizado");
+  const stepsData = Object.keys(statusData).filter(key => 
+    key !== "No Aprobado" && key !== "Finalizado" && (
+    key !== "Pendiente Firma 100%" || statusData["Pendiente Firma 100%"] === true) &&
+    (key !== "Pendiente Firma 85%" || statusData["Pendiente Firma 85%"] === true) &&
+    (key !== "Pendiente Firma 50%" || statusData["Pendiente Firma 50%"] === true)
+  );
 
-  // Insertar "No Aprobado" si está en true
   if (statusData["No Aprobado"]) {
     stepsData.push("No Aprobado");
   }
 
-  // Insertar "Finalizado" siempre
   stepsData.push("Finalizado");
 
-  // Generar los datos de los pasos
   const steps = stepsData.map((key) => ({
     title: key,
     status: statusData[key] ? 'finish' : 'wait',
@@ -158,11 +135,24 @@ function ComponentInfoSR() {
         </span>
       </div>
       <div className="flex flex-col w-full">
-        {/* Sección de pasos personalizada en horizontal */}
         <div className="w-full p-4 overflow-x-auto">
-          <CustomSteps steps={steps} />
+          <div className="custom-steps flex">
+            {steps.map((step, index) => (
+              <div key={index} className="flex flex-col items-center mr-8">
+                <div 
+                  className={`step-indicator ${index < steps.findIndex(s => s.status === 'finish') ? 'bg-[#43737E]' : (step.status === 'finish' ? 'bg-[#97B749]' : 'bg-gray-400')} rounded-full w-8 h-8 flex items-center justify-center text-white`}
+                >
+                  {index + 1}
+                </div>
+                <div className="mt-2 text-center">
+                  <div className={`step-title ${step.status === 'finish' ? 'text-[#97B749]' : 'text-gray-600'} font-bold`}>
+                    {step.title}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        {/* Sección de información de la solicitud en horizontal */}
         <div className='flex flex-col w-full justify-center md:flex-row md:flex-wrap lg:flex-nowrap md:text-sm'>
           {jsonData.items.map(item => (
             <div className='p-4 md:w-1/2 lg:w-auto' key={item.key}>
