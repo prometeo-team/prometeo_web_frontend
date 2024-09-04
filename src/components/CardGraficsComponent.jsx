@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import './CardGraficsComponent.css';
 import { FaFile } from "react-icons/fa6";
@@ -6,22 +6,36 @@ import { CiUser } from "react-icons/ci";
 import { MdCheckCircleOutline } from "react-icons/md";
 import Chart from 'chart.js/auto';
 
-function CardGraficsComponent({ type, number,grafico , data }) {
+function CardGraficsComponent({ type, number, grafico, data, chartRef }) {
+    const [datagrafics, setDatagrafics] = useState([]);
+
     useEffect(() => {
+        setDatagrafics(data);
+    }, [data]);
+
+    useEffect(() => {
+        if (datagrafics.length > 0) {
+            if (chartRef.current) {
+                chartRef.current.destroy(); // Destruye el gráfico anterior si existe
+            }
+            grafics();
+        }
+    }, [datagrafics]);
+
+    const grafics = () => {
         const ctx = document.getElementById(grafico).getContext('2d');
-        const dataset = data
-        new Chart(ctx, {
+        chartRef.current = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: dataset.map(row => row.year),
+                labels: datagrafics.map(row => row.date),
                 datasets: [{
-                    label: 'Acquisitions by year',
-                    data: dataset.map(row => row.count),
+                    label: 'Acquisitions by date',
+                    data: datagrafics.map(row => row.count),
                     fill: true,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1,
-                    tension: 0.3
+                    tension: 0
                 }]
             },
             options: {
@@ -40,7 +54,7 @@ function CardGraficsComponent({ type, number,grafico , data }) {
                 }
             }
         });
-    }, []); // El array vacío como segundo argumento asegura que el efecto solo se ejecute una vez, similar a componentDidMount
+    };
 
     let card = null;
 
