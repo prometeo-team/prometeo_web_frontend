@@ -16,6 +16,7 @@ const InfoStudentRequestPage = () => {
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
     const id = params.get('id');
+    const tipo = params.get('tipo');
 
     useEffect(() => {
         const obtenerDocumentos = async () => {
@@ -58,7 +59,7 @@ const InfoStudentRequestPage = () => {
             </div>
             <div className='h-screen scroll-container mr-4 ml-4'>
                 <div className='flex justify-between items-center max-md:flex-col'>
-                    <Title title="Solicitud" codigo={id} />
+                    <Title title="Solicitud" codigo={id} tipo={tipo} />
                     <Button
                         type="primary"
                         className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto'

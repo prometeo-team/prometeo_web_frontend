@@ -5,11 +5,12 @@ import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
 import { Button, Modal, List } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserCardComponent from '../components/UserCardComponet';
 
 
 const InfoStudentRequestPage = () => {
+    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [documents, setDocuments] = useState([]); // Inicializar con un array vacío
     const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ const InfoStudentRequestPage = () => {
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
     const id = params.get('id');
+    const tipo = params.get('tipo');
 
     useEffect(() => {
         const obtenerDocumentos = async () => {
@@ -53,6 +55,9 @@ const InfoStudentRequestPage = () => {
         setIsModalOpen(false);
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    };
 
     return (
         <div>
@@ -60,24 +65,29 @@ const InfoStudentRequestPage = () => {
             <div className='h-screen scroll-container mr-4 ml-4 ' >
                 <UserCardComponent number={2} />
                 <div className=' mt-4 flex justify-between items-center'>
-                    <Title title="Solicitud" codigo={'CE000215'} />
+                    <Title title="Solicitud" codigo={id} tipo={tipo}/>
                     <Button
-                        type="primary" 
-                        className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto' 
+                        type="primary"
+                        className='shadow-lg color-button text-sm md:text-base lg:text-lg h-auto'
                         icon={<FileTextFilled />}
                         onClick={showModal}
-                        >Documentos adjuntos</Button>
+                    >Documentos adjuntos</Button>
                 </div>
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
                     <InfoSRComponent />
                 </div>
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">
-                    <ChatSR />
+                    <ChatSR id={id} />
                 </div>
                 <div className='mb-4'>
-                    <Link to="/mis-solicitudes">
-                        <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 ' icon={<ArrowLeftOutlined />}>Volver</Button>
-                    </Link>
+                    <Button
+                        type="primary"
+                        className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12'
+                        icon={<ArrowLeftOutlined />}
+                        onClick={handleBack}
+                    >
+                        Volver
+                    </Button>
                 </div>
             </div>
             <Modal

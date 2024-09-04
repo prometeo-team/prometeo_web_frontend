@@ -4,10 +4,11 @@ import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent';
 import CardGraficsComponent from '../components/CardGraficsComponent';
 import { Tag } from 'antd';
+import { useNavigate  } from 'react-router-dom';
 import '../App.css';
 
 const InfoAdminRequestPage = () => {
-
+  const navigate = useNavigate();
   const [filas, setFilas] = useState([]);
   const [Pendiente, setPendiente] = useState([]);
   const [proceso, setProceso] = useState([]);
@@ -136,9 +137,11 @@ const InfoAdminRequestPage = () => {
 
   const handleView = (e, record) => {
     e.preventDefault();
-    // Aquí se puede agregar la lógica para ver el registro
-    console.log('Ver registro:', record.id_solicitud);
+    navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
   };
+  
+
+
   const handleClickType = (option) => {
     // Elimina la clase 'active' de todos los elementos
     const elements = document.querySelectorAll('[name="process"]');

@@ -12,12 +12,18 @@ const ComponentInfoSR = () => {
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
-  const [idRequest, setIdRequest] = useState(65); // Cambia el ID aquí si es necesario
+
+
+  const url = window.location.href;
+  const urlObj = new URL(url);
+  const params = new URLSearchParams(urlObj.search);
+  const id = params.get('id');
+  const tipo = params.get('tipo');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationForCouncil?idRequest=60`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationForCouncil?idRequest=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,39 +58,45 @@ const ComponentInfoSR = () => {
       }
     };
 
-    const fetchStatuses = async () => {
-      try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=65`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
-        const result = await response.json();
-        const { data: statusData } = result.data;
-        setStatuses(statusData);
-        if (statusData.length > 0) {
-          const initial = statusData[0];
-          setInitialStatus(initial);
-          setInitialStatusValue(initial);
-          setSelectedStatus(initial);
-        }
-      } catch (error) {
-        console.error("Error al obtener los estados:", error);
-      }
-    };
 
     fetchData();
+
+  }, []);
+
+  const fetchStatuses = async () => {
+    try {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      const { data: statusData } = result.data;
+      setStatuses(statusData);
+      if (statusData.length > 0) {
+        const initial = statusData[0];
+        setInitialStatus(initial);
+        setInitialStatusValue(initial);
+        setSelectedStatus(initial);
+      }
+    } catch (error) {
+      console.error("Error al obtener los estados:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchStatuses();
-  }, [idRequest]);
+  }, [id]);
+
 
   const handleOk = async () => {
     if (selectedStatus !== initialStatus) {
       try {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         const username = userInfo ? userInfo.sub : '';
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${idRequest}&status=${selectedStatus}&username=${username}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -98,6 +110,7 @@ const ComponentInfoSR = () => {
           });
           setInitialStatus(selectedStatus);
           setInitialStatusValue(selectedStatus);
+          fetchStatuses();
         } else {
           notification.error({
             message: 'Error al actualizar el estado',
