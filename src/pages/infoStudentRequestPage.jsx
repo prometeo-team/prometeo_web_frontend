@@ -21,7 +21,7 @@ const InfoStudentRequestPage = () => {
         const obtenerDocumentos = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:3030/api/documents/getByIdRequest?id_request=${id}`, {
+                const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/documents/getByIdRequest?id_request=${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

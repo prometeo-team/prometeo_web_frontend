@@ -4,39 +4,44 @@ import { PiUserCircleBold } from "react-icons/pi";
 import { RiMessage3Fill } from "react-icons/ri";
 import { IoSend } from "react-icons/io5";
 
-// Componente de chat
-const ChatComponent = () => {
+const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
-
-  {/*useEffect(() => {
-    const fetchUserData = async () => {
+  // Este useEffect se encarga de obtener los comentarios del endpoint
+  useEffect(() => {
+    const obtenerComentarios = async () => {
       try {
-        const response = await fetch('http://tu-servidor-backend.com/api/user', { //cambiar
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getRequestComments?id_request=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Asumiendo que necesitas autenticación
           },
         });
-        const userData = await response.json();
-        setCurrentUser(userData);
+        const result = await response.json();
+        if (result.status === '200 OK') {
+          const comentarios = result.data.map((comentario, index) => ({
+            id: index + 1, // Generar un ID único para cada comentario
+            text: comentario.body,
+            sender: comentario.name_user,
+            timestamp: comentario.published_at,
+          }));
+          setMessages(comentarios);
+        }
       } catch (error) {
-        console.error('Error al obtener información del usuario:', error);
+        console.error("Error al obtener los comentarios:", error);
       }
     };
 
-    // Llama a la función para obtener la información del usuario al cargar el componente
-    fetchUserData();
-  }, []);*/}
+    obtenerComentarios();
+  }, [id]); // Dependencia de 'id' para obtener los comentarios cuando 'id' cambie
 
   const currentUser = 'User1';
-
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
   };
-
 
   const sendMessage = () => {
     if (inputMessage.trim() !== '') {
@@ -51,10 +56,7 @@ const ChatComponent = () => {
     }
   };
 
-
-
   useEffect(() => {
-    // Función para enviar los mensajes al backend (ajusta la URL según tu configuración)
     const sendMessagesToBackend = async () => {
       try {
         const response = await fetch('http://tu-servidor-backend.com/api/messages', {
@@ -71,11 +73,11 @@ const ChatComponent = () => {
       }
     };
 
-    // Llama a la función de envío al backend cuando cambie el estado de messages
     sendMessagesToBackend();
   }, [messages]);
+
   return (
-    <div className="chat-container ">
+    <div className="chat-container">
       <div className="mb-4">
         <span className="text-lg md:text-xl lg:text-3xl font-bold">
           <div className="flex items-center">
@@ -101,8 +103,6 @@ const ChatComponent = () => {
                 <span className="message-text">{message.text}</span>
               </div>
             </div>
-            
-            
           </div>
         ))}
       </div>
@@ -112,14 +112,11 @@ const ChatComponent = () => {
           placeholder="Escribe tu mensaje..."
           value={inputMessage}
           onChange={handleInputChange}
-          className="flex-1 px-4 py-2  rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
-          
+          className="flex-1 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500 hover:border-green-500 border-2"
         />
-
         <button
           onClick={sendMessage}
           className="ml-2 bg-transparent hover:bg-green-100 text-green-500 px-3 py-2 rounded-md"
-          
         >
           <IoSend className="send-icon color-icons" />
         </button>

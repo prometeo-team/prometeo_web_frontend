@@ -44,7 +44,7 @@ function NavbarComponent({ menuItems }) {
                                 icon = <IoSchoolOutline className='ml-1 text-2xl' />;
                             }
                             const isLastItem = index === menuItems.length - 1 && item.name === "Ayuda"; // Verifica si es el último elemento
-                            const liClass = isLastItem ? 'md:mt-52 2xl:mt-96' : '';
+                            const liClass = isLastItem ? ' ' : '';
                             const isManagement = index === 0 && item.name === "Gestión Solicitudes";
                             const liOption = isManagement ? 'mt-6' : '';
                             const history = useNavigate();
