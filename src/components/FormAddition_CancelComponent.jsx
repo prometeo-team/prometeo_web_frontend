@@ -454,14 +454,14 @@ const FormAddition_CancelComponent = ({type}) => {
               />
             ))}
             <div className="flex flex-row">
-            {isButtonVisible && (
-            <CiSquarePlus id="pulsbutton" className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handlePlusButton} />
-            )}
-            {subjects.length > 1 && ( // Mostrar el botón de eliminar solo si hay más de un componente
+              {isButtonVisible && (
+              <CiSquarePlus id="pulsbutton" className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handlePlusButton} />
+              )}
+              {subjects.length > 1 && ( // Mostrar el botón de eliminar solo si hay más de un componente
                 <CiSquareMinus className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handleMinusButton} />
               )}
-              </div>
-              <br />
+            </div>
+            <br />
           </div>
           <div className="flex justify-end">
           {isButtonVisible2 && (
