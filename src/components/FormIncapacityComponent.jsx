@@ -6,12 +6,12 @@ import { LuUpload } from "react-icons/lu";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import InputComponent from "../components/InputComponent";
-import { Button, Input } from "antd";
+import { Button, Input, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import ModalComponent from "./ModalComponent";
 
 const user = sessionStorage.getItem('user');
 let career;
-var info;
 const { TextArea } = Input;
 
 const FormIncapacityComponent = () => {
@@ -24,8 +24,8 @@ const FormIncapacityComponent = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isButtonVisible2, setIsButtonVisible2] = useState(false);
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [setValue] = useState("");
 
   useEffect(() => {
     fetchInfo();
@@ -58,35 +58,30 @@ const FormIncapacityComponent = () => {
   }else {
     console.error("El parámetro 'carrera' no está presente en la URL");
   }
-};
+  };
 
-const Program = () =>{
-  try{
-    /*const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
-    const result = await response.json();
-    if (result.status === "200 OK") {
-      //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
-      const carearrsubjects = result.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
-      setMaterias(carearrsubjects);
-    }else {
-      console.error("Error en la respuesta:", result.message);
-    }*/
-    setIsButtonVisible(false);
-    setMaterias([{  value: "1", label: "Logica Matemática", disabled: false },
-      { value: "2", label: "Estructuración del Pensamiento", disabled: false },
-      { value: "3", label: "Inglés", disabled: false },
-      { value: "4", label: "Física 1", disabled: false },
-      { value: "5", label: "Matemáticas Básicas", disabled: false }]);
-  }catch(error){
-    console.error("Error al obtener los programas:", error);
+  const Program = async () =>{
+    try{
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      if (response.status===200 ) {
+        const carearrsubjects = result.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
+        console.log(carearrsubjects);
+        setMaterias(carearrsubjects);
+      }else {
+        console.error("Error en la respuesta:", result.message);
+      }
+      setIsButtonVisible(false);
+    }catch(error){
+      console.error("Error al obtener los programas:", error);
+    }
   }
-}
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -97,6 +92,8 @@ const Program = () =>{
   };
 
   const handleOpenModalCheck = () => {
+    setIsButtonVisible2(false);
+    setLoading(true);
     fetchSave();
   };
 
@@ -397,6 +394,11 @@ const Program = () =>{
                     <span>Generar Solicitud</span>
                     <BsPersonFillCheck className="ml-2 h-5 w-6" />
                   </button>
+                  )}
+                  {loading  && (
+                    <div className="loader-container">
+                      <Spin indicator={<LoadingOutlined spin />} size="large" />
+                    </div>
                   )}
                   <ModalComponent
                     visible={modalVisibleCheck}
