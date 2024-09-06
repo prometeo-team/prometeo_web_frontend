@@ -3,6 +3,8 @@ import { IoIosArrowBack, IoMdCheckmarkCircle } from "react-icons/io";
 import { CiSquarePlus, CiSquareMinus  } from "react-icons/ci";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
+import { LoadingOutlined } from '@ant-design/icons';
+import {Spin}  from "antd";
 import InputComponent from "./InputComponent";
 import ModalComponent from "./ModalComponent";
 import './FormLegalizationComponent.css';
@@ -21,6 +23,7 @@ const FormAddition_CancelComponent = ({type}) => {
   const [newCredits, setNewCredits] = useState([]);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isButtonVisible2, setIsButtonVisible2] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   if(type=="Adición de creditos"){
@@ -110,35 +113,32 @@ const FormAddition_CancelComponent = ({type}) => {
     }
   }
 
-  const cancelacion = () =>{
+  const cancelacion = async () =>{
     try{
-      /*const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-      const result2 = await response2.json();
-      if (result2.status === "200 OK") {
-        //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
-        const carearrsubjects = result2.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
+      const result = await response.json();
+      if (response.status===200 ) {
+        const carearrsubjects = result.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
+        console.log(carearrsubjects);
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
-      }*/
+      }
       setIsButtonVisible(false);
-      setMaterias([{ value: "1", label: "Logica Matemática", disabled: false },
-        { value: "2", label: "Estructuración del Pensamiento", disabled: false },
-        { value: "3", label: "Inglés", disabled: false },
-        { value: "4", label: "Física 1", disabled: false },
-        { value: "5", label: "Matemáticas Básicas", disabled: false }]);
     }catch(error){
       console.error("Error al obtener los programas:", error);
     }
   }
 
   const handleOpenModalCheck = () => {
+    setIsButtonVisible2(false);
+    setLoading(true);
     if(type=="Adición de creditos"){
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
@@ -388,7 +388,6 @@ const FormAddition_CancelComponent = ({type}) => {
     }
   };
 
-  console.log(newCredits);
   return (
     <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
       <Link to="/student/crear-solicitud">
@@ -472,6 +471,11 @@ const FormAddition_CancelComponent = ({type}) => {
               <span>Generar Solicitud</span>
               <BsPersonFillCheck className="ml-2 h-5 w-6" />
             </button>
+            )}
+            {loading  && (
+              <div className="loader-container">
+                <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </div>
             )}
           </div>
           
