@@ -11,38 +11,35 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
   const [pdf3, setPdf3] = useState(null);
   const [pdf4, setPdf4] = useState(null);
   const [pdf5, setPdf5] = useState(null);
-  const [pdf6, setPdf6] = useState(null);
-  const [pdf7, setPdf7] = useState(null);
-  const [pdf8, setPdf8] = useState(null);
   const [fileName1, setFileName1] = useState("Archivo no seleccionado");
   const [fileName2, setFileName2] = useState("Archivo no seleccionado");
   const [fileName3, setFileName3] = useState("Archivo no seleccionado");
   const [fileName4, setFileName4] = useState("Archivo no seleccionado");
   const [fileName5, setFileName5] = useState("Archivo no seleccionado");
-  const [fileName6, setFileName6] = useState("Archivo no seleccionado");
-  const [fileName7, setFileName7] = useState("Archivo no seleccionado");
-  const [fileName8, setFileName8] = useState("Archivo no seleccionado");
+  const [originalfile1, setOriginalfile1] = useState(null);
+  const [originalfile2, setOriginalfile2] = useState(null);
+  const [originalfile3, setOriginalfile3] = useState(null);
+  const [originalfile4, setOriginalfile4] = useState(null);
+  const [originalfile5, setOriginalfile5] = useState(null);
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       const documentsWithNames = [
-        pdf1 && { url: pdf1, name: fileName1 },
-        pdf2 && { url: pdf2, name: fileName2 },
-        pdf3 && { url: pdf3, name: fileName3 },
-        pdf4 && { url: pdf4, name: fileName4 },
-        pdf5 && { url: pdf5, name: fileName5 },
-        pdf6 && { url: pdf6, name: fileName6 },
-        pdf7 && { url: pdf7, name: fileName7 },
-        pdf8 && { url: pdf8, name: fileName8 },
+        pdf1 && { url: pdf1, name: fileName1, originalfile: originalfile1 },
+        pdf2 && { url: pdf2, name: fileName2, originalfile: originalfile2 },
+        pdf3 && { url: pdf3, name: fileName3, originalfile: originalfile3 },
+        pdf4 && { url: pdf4, name: fileName4, originalfile: originalfile4 },
+        pdf5 && { url: pdf5, name: fileName5, originalfile: originalfile5 },
       ].filter(doc => doc !== null);
+      console.log(documentsWithNames);
       setDocuments(documentsWithNames);
       onClose();
       setConfirmLoading(false);
     }, 1000);
   };
 
-  const allFilesSelected = pdf1 && pdf2 && pdf3 && pdf4 && pdf5 && pdf6 && pdf7 ;
+  const allFilesSelected = pdf1 && pdf2 && pdf3 && pdf5 ;
 
   const handleCancel = () => {
     document.querySelector(".center-modal").classList.add("animate__zoomOut");
@@ -52,83 +49,66 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
   };
 
   const handleFileChange1 = (file) => {
-    setFileName1(file.name);
-    setPdf1(URL.createObjectURL(file));
+    console.log("file1");
+    console.log(file[0].fileName);
+    setFileName1(file[0].fileName);
+    setPdf1(file[0].pdf);
+    setOriginalfile1(file[0].originalfile);
   };
 
   const handleFileChange2 = (file) => {
-    setFileName2(file.name);
-    setPdf2(URL.createObjectURL(file));
+    setFileName2(file[0].fileName);
+    setPdf2(file[0].pdf);
+    setOriginalfile2(file[0].originalfile);
   };
 
   const handleFileChange3 = (file) => {
-    setFileName3(file.name);
-    setPdf3(URL.createObjectURL(file));
+    setFileName3(file[0].fileName);
+    setPdf3(file[0].pdf);
+    setOriginalfile3(file[0].originalfile);
   };
 
   const handleFileChange4 = (file) => {
-    setFileName4(file.name);
-    setPdf4(URL.createObjectURL(file));
+    setFileName4(file[0].fileName);
+    setPdf4(file[0].pdf);
+    setOriginalfile4(file[0].originalfile);
   };
 
   const handleFileChange5 = (file) => {
-    setFileName5(file.name);
-    setPdf5(URL.createObjectURL(file));
+    setFileName5(file[0].fileName);
+    setPdf5(file[0].pdf);
+    setOriginalfile5(file[0].originalfile);
   };
 
-  const handleFileChange6 = (file) => {
-    setFileName6(file.name);
-    setPdf6(URL.createObjectURL(file));
-  };
-
-  const handleFileChange7 = (file) => {
-    setFileName7(file.name);
-    setPdf7(URL.createObjectURL(file));
-  };
-
-  const handleFileChange8 = (file) => {
-    setFileName8(file.name);
-    setPdf8(URL.createObjectURL(file));
-  };
 
   const handleDelete1 = () => {
     setFileName1("Archivo no seleccionado");
     setPdf1(null);
+    setOriginalfile1(null);
   };
 
   const handleDelete2 = () => {
     setFileName2("Archivo no seleccionado");
     setPdf2(null);
+    setOriginalfile2(null);
   };
 
   const handleDelete3 = () => {
     setFileName3("Archivo no seleccionado");
     setPdf3(null);
+    setOriginalfile3(null);
   };
 
   const handleDelete4 = () => {
     setFileName4("Archivo no seleccionado");
     setPdf4(null);
+    setOriginalfile4(null);
   };
 
   const handleDelete5 = () => {
     setFileName5("Archivo no seleccionado");
     setPdf5(null);
-  };
-
-  const handleDelete6 = () => {
-    setFileName6("Archivo no seleccionado");
-    setPdf6(null);
-  };
-
-  const handleDelete7 = () => {
-    setFileName7("Archivo no seleccionado");
-    setPdf7(null);
-  };
-
-  const handleDelete8 = () => {
-    setFileName8("Archivo no seleccionado");
-    setPdf8(null);
+    setOriginalfile5(null);
   };
 
   return (
@@ -152,6 +132,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                 <div className="flex flex-row max-md:flex-col justify-around items-end">
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
+                      id="1"
                       onChange={handleFileChange1}
                       pdf={pdf1}
                       fileName={fileName1}
@@ -165,6 +146,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                   </div>
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
+                      id="2"
                       onChange={handleFileChange2}
                       pdf={pdf2}
                       fileName={fileName2}
@@ -180,6 +162,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
+                      id="3"
                       onChange={handleFileChange3}
                       pdf={pdf3}
                       fileName={fileName3}
@@ -193,14 +176,15 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                   </div>
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
+                      id="4"
                       onChange={handleFileChange4}
                       pdf={pdf4}
                       fileName={fileName4}
                       onDelete={handleDelete4}
                       clickClassNameP=".input-field4"
                       clickClassName="input-field4"
-                      label="Certificado De Suficiencia Ingles"
-                      detail="Expedido por el centro de lenguas"
+                      label="Fotocopia de VISA vigente"
+                      detail="Unicamente para estudiantes Extranjeros"
                       isRequired={false}
                     />
                   </div>
@@ -208,58 +192,19 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
+                      id="5"
                       onChange={handleFileChange5}
                       pdf={pdf5}
                       fileName={fileName5}
                       onDelete={handleDelete5}
                       clickClassNameP=".input-field5"
                       clickClassName="input-field5"
-                      label="Pago Derechos de Grado"
+                      label="Formato solicitud de grado"
                       detail=""
                       isRequired={true}
                     />
                   </div>
-                  <div className="w-5/12 max-md:w-full">
-                    <UploadDocumentComponent
-                      onChange={handleFileChange6}
-                      pdf={pdf6}
-                      fileName={fileName6}
-                      onDelete={handleDelete6}
-                      clickClassNameP=".input-field6"
-                      clickClassName="input-field6"
-                      label="Paz y Salvo emitido por el area finaciera"
-                      detail=""
-                      isRequired={true}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-row justify-around items-end max-md:flex-col">
-                  <div className="w-5/12 max-md:w-full">
-                    <UploadDocumentComponent
-                      onChange={handleFileChange7}
-                      pdf={pdf7}
-                      fileName={fileName7}
-                      onDelete={handleDelete7}
-                      clickClassNameP=".input-field7"
-                      clickClassName="input-field7"
-                      label="Evidencia del Tebajo de Grado"
-                      detail="En el Repocitorio de la Biblioteca de la UEB"
-                      isRequired={true}
-                    />
-                  </div>
-                  <div className="w-5/12 max-md:w-full">
-                    <UploadDocumentComponent
-                      onChange={handleFileChange8}
-                      pdf={pdf8}
-                      fileName={fileName8}
-                      onDelete={handleDelete8}
-                      clickClassNameP=".input-field8"
-                      clickClassName="input-field8"
-                      label="Fotocopia de VISA vigente"
-                      detail="Unicamente para estudiantes Extrangeros"
-                      isRequired={false}
-                    />
-                  </div>
+                  
                 </div>
               </div>
               <div className="text-center mt-2">
