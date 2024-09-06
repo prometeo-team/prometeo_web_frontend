@@ -84,30 +84,25 @@ const FormAddition_CancelComponent = ({type}) => {
       }
   }
 
-  const adicion = () =>{
+  const adicion = async () =>{
     try{
-      /*const response2 = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/pendingSubjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-      const result2 = await response2.json();
-      if (result2.status === "200 OK") {
-        //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
-        const carearrsubjects = result2.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
+      const result = await response.json();
+      if (response.status===200 ) {
+        credits = parseInt(result.creditsTotal);
+        const carearrsubjects = result.subjects.map(program => ({ key: program.credits, value: program.id, label: program.name }));
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
-      }*/
+      }
       setIsButtonVisible(false);
-      credits = 16;
-      setMaterias([{ key:"3", value: "1", label: "Logica Matemática", disabled: false },
-        { key:"1", value: "2", label: "Estructuración del Pensamiento", disabled: false },
-        { key:"3", value: "3", label: "Inglés", disabled: false },
-        { key:"3", value: "4", label: "Física 1", disabled: false },
-        { key:"3", value: "5", label: "Matemáticas Básicas", disabled: false }]);
+      
     }catch(error){
       console.error("Error al obtener los programas:", error);
     }
