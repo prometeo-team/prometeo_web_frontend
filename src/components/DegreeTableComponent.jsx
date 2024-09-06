@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { useState, useEffect, React  } from "react";
-import { Table, Space, Input, Button, Dropdown, message } from "antd";
+import { Table, Space, Input, Button, Select, message } from "antd";
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { FaEye } from "react-icons/fa";
 import { HiSearchCircle, HiPlus } from "react-icons/hi";
@@ -57,14 +57,14 @@ function TableComponent({ dataSource, columns, parameterAction }) {
 
   const items = [
     {
+      value: '1',
       label: 'Pregrado',
-      key: '1',
-      icon: <UserOutlined />,
+      
     },
     {
+      value: '2',
       label: 'PosGrado',
-      key: '2',
-      icon: <UserOutlined />,
+      
     }
   ]
 
@@ -88,14 +88,16 @@ function TableComponent({ dataSource, columns, parameterAction }) {
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiSearchCircle className="w-8 h-8" />}
           />
-          <Dropdown className="h-10 max-md:mb-3" menu={menuProps}>
-            <Button>
-              <Space>
-                Seleccione
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
+          <Select
+              className="h-10 ml-2 mr-2 max-md:-ml-3 max-md:mb-3"
+              // Aquí usamos el estado "selectedCareer"
+              style={{ width: 250 }}
+              onChange={(value) => {
+                handleMenuClick(value); // Llama a la función cuando cambia la selección
+              }}
+              options={items} // Las opciones vienen de "careerList"
+              placeholder="Selecciona una carrera" // Placeholder para cuando no haya valor seleccionado
+            />
           <Button type="primary" className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
 
         </div>
