@@ -3,8 +3,9 @@ import { IoIosArrowBack, IoMdCheckmarkCircle } from "react-icons/io";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
+import { Input, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import InputComponent from "../components/InputComponent";
-import { Input } from "antd";
 import ModalComponent from "./ModalComponent";
 
 const user = sessionStorage.getItem('user');
@@ -20,6 +21,7 @@ const FormExtensionComponent = () => {
   const [newCredits, setNewCredits] = useState([]);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isButtonVisible2, setIsButtonVisible2] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,9 +57,9 @@ const FormExtensionComponent = () => {
   }
   };
 
-  const Program = () =>{
+  const Program = async () =>{
     try{
-      /*const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -65,25 +67,22 @@ const FormExtensionComponent = () => {
         },
       });
       const result = await response.json();
-      if (result.status === "200 OK") {
-        //setear las amterias y validar que los campos + no sena mayorea a la cantidad de materias que se pueden poner o a que sumen 20 los creditos
-        const carearrsubjects = result.data.map(program => ({ value: program.subjects.id, label: program.subjects.name }));
+      if (response.status===200 ) {
+        const carearrsubjects = result.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
+        console.log(carearrsubjects);
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
-      }*/
+      }
       setIsButtonVisible(false);
-      setMaterias([{  value: "1", label: "Logica Matemática", disabled: false },
-        { value: "2", label: "Estructuración del Pensamiento", disabled: false },
-        { value: "3", label: "Inglés", disabled: false },
-        { value: "4", label: "Física 1", disabled: false },
-        { value: "5", label: "Matemáticas Básicas", disabled: false }]);
     }catch(error){
       console.error("Error al obtener los programas:", error);
     }
   };
 
   const handleOpenModalCheck = () => {
+    setIsButtonVisible2(false);
+    setLoading(true);
     fetchSave();
   };
 
@@ -322,21 +321,26 @@ const FormExtensionComponent = () => {
         </div>
         <div className='flex items-start justify-start mt-4'>
         {isButtonVisible2 && (
-            <button
-              className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
-              onClick={handleOpenModalCheck}
-            >
-              <span>Generar Solicitud</span>
-              <BsPersonFillCheck className="ml-2 h-5 w-6" />
-            </button>
-            )}
-            <ModalComponent
-              visible={modalVisibleCheck}
-              onClose={handleCloseModalCheck}
-              content="Supletorio solicitado correctamente"
-              icon={<IoMdCheckmarkCircle />}
-            />
+          <button
+            className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+            onClick={handleOpenModalCheck}
+          >
+            <span>Generar Solicitud</span>
+            <BsPersonFillCheck className="ml-2 h-5 w-6" />
+          </button>
+        )}
+        {loading  && (
+          <div className="loader-container">
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
           </div>
+        )}
+          <ModalComponent
+            visible={modalVisibleCheck}
+            onClose={handleCloseModalCheck}
+            content="Supletorio solicitado correctamente"
+            icon={<IoMdCheckmarkCircle />}
+          />
+        </div>
       </div>
     </div>
   );
