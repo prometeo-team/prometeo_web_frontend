@@ -1,16 +1,20 @@
 import  { useState, useEffect, useRef  } from 'react';
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import  TitleComponent from "../components/TitleComponent";
 import DegreeTableComponent  from "../components/DegreeTableComponent";
 import UserCArdComponent from '../components/UserCardComponet';
+import ModalComponent from "../components/ModalComponent";
 
 const user = sessionStorage.getItem('user');
 var career;
 
 function degreeTablePage() {
-  
+  const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
   const [careerList, setcareerList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [filas, setFilas] = useState([]);
+  const navigate = useNavigate();
   const columns = [
    
     {
@@ -40,7 +44,6 @@ function degreeTablePage() {
     },
   ];
 
-    
   useEffect(() => {
     const obtenerCarrerasYDatos = async () => {
       const primeraCarrera = await obtenerCarreras(); // Asegúrate de esperar los datos
@@ -60,11 +63,10 @@ function degreeTablePage() {
         ? [...prev, username] // Añadir si está marcado
         : prev.filter(us => us !== username) // Eliminar si está desmarcado
     );
-    console.log(selectedDocuments);
   };
   
 
-  const obtenerDatos = async (caso) => {
+  const obtenerDatos = async () => {
     if (!career) {
       console.error("No hay carrera seleccionada.");
       return;
@@ -131,11 +133,46 @@ function degreeTablePage() {
     console.log(e);
     career=e;
     obtenerDatos();
-  }
-  const handelConvocatoria =  () => {
-    console.log(selectedDocuments);
+  };
+
+  const handelConvocatoria = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    myHeaders.append("Content-Type", "application/json"); 
+
+    const subjectList = selectedDocuments.map(credit => ({
+      username: credit
+    }));
+    const raw = JSON.stringify(subjectList);
+    //console.log(subjectList);
+     
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+      console.log(requestOptions)
+
+
+    try {
+    const response = await  fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/degreeApplication?programName=${career}`, requestOptions)
+    const result = await response.json();
+        if (response.status === 200) {
+          setModalVisibleCheck(true);
+        } else {
+          console.error("Error en la respuesta:", result.message || response.statusText);
+        }
+    } catch (error) {
+        console.error("Error al obtener los programas:", error);
+    }
     
-  }
+  };
+
+  const handleCloseModalCheck = () => {
+    setModalVisibleCheck(false);
+    navigate("/admin/dashboard");
+  };
 
   return (
     <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>
@@ -151,6 +188,12 @@ function degreeTablePage() {
             <DegreeTableComponent dataSource={filas} columns={columns} careers={careerList} degree={handelConvocatoria} parameterAction={handleSelectDocument} selectedDocuments={selectedDocuments} select={handleCarreras} />
           </div>
         </div>
+        <ModalComponent
+            visible={modalVisibleCheck}
+            onClose={handleCloseModalCheck}
+            content="Postulación realizada correctamente"
+            icon={<IoMdCheckmarkCircle />}
+          />
     </div>
   );
 }

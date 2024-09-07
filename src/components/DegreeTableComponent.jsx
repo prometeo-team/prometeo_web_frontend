@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 
 import { useState, useEffect, React  } from "react";
-import { Table, Checkbox , Input, Button, Select, ConfigProvider  } from "antd";
+import { Table, Checkbox , Input, Button, Select, ConfigProvider, Spin } from "antd";
 import { HiSearchCircle, HiPlus } from "react-icons/hi";
+import { LoadingOutlined } from '@ant-design/icons';
 import "./TableComponent.css";
 
 function TableComponent({ dataSource, columns, parameterAction, careers, selectedDocuments, select, degree }) {
@@ -16,6 +17,8 @@ function TableComponent({ dataSource, columns, parameterAction, careers, selecte
   const [searchText, setSearchText] = useState("");
   const [careerList, setCareerList] = useState([]);
   const [selectedCareer, setSelectedCareer] = useState(careerList.length > 0 ? careerList[0].value : undefined);
+  const [isButtonVisible2, setIsButtonVisible2] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
@@ -79,6 +82,8 @@ function TableComponent({ dataSource, columns, parameterAction, careers, selecte
   };
 
   const handleButtonClick = (e) => {
+    setIsButtonVisible2(false);
+    setLoading(true);
     degree(e);
   };
 
@@ -106,8 +111,14 @@ function TableComponent({ dataSource, columns, parameterAction, careers, selecte
               options={careerList} // Las opciones vienen de "careerList"
               placeholder="Selecciona una carrera" // Placeholder para cuando no haya valor seleccionado
             />
-          <Button type="primary" onClick={handleButtonClick} className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
-
+            {isButtonVisible2 && (
+            <Button type="primary" onClick={handleButtonClick} className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
+            )}
+            {loading  && (
+            <div className="loader-container">
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </div>
+          )}
         </div>
         <div className="overflow-x-auto">
           <Table
