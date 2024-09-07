@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import InfoSRComponent from '../components/AdminInfoRrequest';
+import InfoSRComponent2 from '../components/AdminInfoRrequest2';
 import ChatSR from '../components/ComponentChat';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
@@ -14,6 +15,7 @@ const InfoStudentRequestPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [documents, setDocuments] = useState([]); // Inicializar con un array vacío
     const [loading, setLoading] = useState(false);
+    const [detail2, setDetail2] = useState(true);
 
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -76,6 +78,11 @@ const InfoStudentRequestPage = () => {
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
                     <InfoSRComponent />
                 </div>
+                {detail2 && (
+                    <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl mt-4 border ">
+                    <InfoSRComponent2 />
+                    </div>
+                )}
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">
                     <ChatSR id={id} />
                 </div>

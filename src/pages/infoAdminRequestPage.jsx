@@ -23,21 +23,22 @@ const InfoAdminRequestPage = () => {
   const chart3Ref = useRef(null);
 
   useEffect(() => {
-    fetchGrafics('');
     const obtenerCarrerasYDatos = async () => {
       const primeraCarrera = await obtenerCarreras(); // Asegúrate de esperar los datos
       if (primeraCarrera) {
-        career = primeraCarrera; // Establecer la carrera
+        career = primeraCarrera;
+        fetchGrafics(''); // Establecer la carrera
         obtenerDatos(''); // Ahora obtener los datos con la carrera
       }
     };
+    
   
     obtenerCarrerasYDatos(); // Llamar a la función asíncrona
   }, []);
 
   const fetchGrafics = async (filter) =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics${filter}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics?programName=${career}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -141,8 +142,8 @@ const InfoAdminRequestPage = () => {
   
 
   const obtenerCarreras = async () => {
-    /*try {
-      const response = await fetch(`http://localhost:3030/api/user/Admincareer?username=${user}`, {
+    try {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/Admincareer?username=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -151,29 +152,28 @@ const InfoAdminRequestPage = () => {
       });
       const result = await response.json();
       if (response.status === 200) {
-        const extractedData = result.map(item => ({ career: item.career }));
-        setcareerList(extractedData);
-        career = careerList[0].career;
+        const carrerasSimuladas = result.data.career;
+        console.log(carrerasSimuladas)
+        setcareerList(carrerasSimuladas);
+        career = careerList[0];
+        // Retornar el primer elemento solo si careerList tiene elementos
+        if (carrerasSimuladas.length > 0) {
+          return carrerasSimuladas[0];
+        } else {
+          return null;
+        }
       }else {
           console.error("Error en la respuesta:", result.message);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
-    } */
+    } 
       const carrerasSimuladas = [
         { career: "Ing Ambiental" },
         { career: "Bioingenieria" },
       ];
-    
-      // Establecer el estado de careerList con los datos simulados
-      setcareerList(carrerasSimuladas);
       
-      // Retornar el primer elemento solo si careerList tiene elementos
-      if (carrerasSimuladas.length > 0) {
-        return carrerasSimuladas[0].career;
-      } else {
-        return null;
-      }
+      
   };
 
   const handleView = (e, record) => {
@@ -207,7 +207,7 @@ const InfoAdminRequestPage = () => {
       fetchGrafics('');
       obtenerDatos('');
     }else{
-    fetchGrafics('?requestType=' + option);
+    fetchGrafics('&requestType=' + option);
     obtenerDatos('&nameType=' + option);
     }
   };
@@ -215,6 +215,24 @@ const InfoAdminRequestPage = () => {
   const handleCarreras =  (e) => {
     console.log(e);
     career=e;
+    // Destruir los gráficos actuales
+    if (chart1Ref.current) chart1Ref.current.destroy();
+    if (chart2Ref.current) chart2Ref.current.destroy();
+    if (chart3Ref.current) chart3Ref.current.destroy();
+
+    // Elimina la clase 'active' de todos los elementos
+    const elements = document.querySelectorAll('[name="process"]');
+    elements.forEach(element => {
+      element.classList.remove('active');
+      element.classList.add('inactive');
+    });
+
+    // Añade la clase 'active' al elemento seleccionado
+    const selectedElement = document.getElementById('all');
+    if (selectedElement) {
+      selectedElement.classList.add('active');
+      selectedElement.classList.remove('inactive');
+    }
     fetchGrafics('');
     obtenerDatos('');
   }
