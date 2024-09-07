@@ -1,13 +1,11 @@
 /* eslint-disable react/prop-types */
 
 import { useState, useEffect, React  } from "react";
-import { Table, Space, Input, Button, Select, message } from "antd";
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { FaEye } from "react-icons/fa";
+import { Table, Checkbox , Input, Button, Select, ConfigProvider  } from "antd";
 import { HiSearchCircle, HiPlus } from "react-icons/hi";
 import "./TableComponent.css";
 
-function TableComponent({ dataSource, columns, parameterAction }) {
+function TableComponent({ dataSource, columns, parameterAction, careers, selectedDocuments, select, degree }) {
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
     key: index,
@@ -16,6 +14,8 @@ function TableComponent({ dataSource, columns, parameterAction }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
+  const [careerList, setCareerList] = useState([]);
+  const [selectedCareer, setSelectedCareer] = useState(careerList.length > 0 ? careerList[0].value : undefined);
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
@@ -26,24 +26,43 @@ function TableComponent({ dataSource, columns, parameterAction }) {
 
   useEffect(() => {
     addActionColumn();
-  }, []);
+  }, [selectedDocuments]);
+
+  useEffect(() => {
+    const fetchCareers = () => {
+      const items = careers.map(item => ({ value: item, label: item }));
+      setCareerList(items);
+  
+      // Establecer el primer elemento como carrera seleccionada por defecto
+      if (items.length > 0) {
+        setSelectedCareer(items[0].value);
+      }
+    };
+  
+    fetchCareers();
+  }, [careers]);
 
   const addActionColumn = () => {
     setColumnsadd([
       ...columns,
       {
-        title: "Acción",
-        key: "action",
+        title: 'Seleccionar',
+        dataIndex: 'select',
+        key: 'select',
         render: (_, record) => (
-          <Space size="middle">
-            <a
-              className="text-3xl"
-              href="#"
-              onClick={(e) => parameterAction(e, record)}
-            >
-              <FaEye />
-            </a>
-          </Space>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary:"#43737e",
+              },
+            }}
+          >
+            <Checkbox 
+              checked={selectedDocuments.includes(record.Id)}
+              onChange={(e) => parameterAction(record.Id, e.target.checked)}
+            />
+          </ConfigProvider>
+          
         ),
       },
     ]);
@@ -55,27 +74,15 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     )
   );
 
-  const items = [
-    {
-      value: '1',
-      label: 'Pregrado',
-      
-    },
-    {
-      value: '2',
-      label: 'PosGrado',
-      
-    }
-  ]
-
   const handleMenuClick = (e) => {
-    console.log('click', e);
+    select(e);
   };
 
-  const menuProps = {
-    items,
-    onClick: handleMenuClick,
+  const handleButtonClick = (e) => {
+    degree(e);
   };
+
+ 
 
   return (
     <div className="mx-auto">
@@ -88,17 +95,18 @@ function TableComponent({ dataSource, columns, parameterAction }) {
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiSearchCircle className="w-8 h-8" />}
           />
-          <Select
+         <Select
               className="h-10 ml-2 mr-2 max-md:-ml-3 max-md:mb-3"
-              // Aquí usamos el estado "selectedCareer"
+              value={selectedCareer} // Aquí usamos el estado "selectedCareer"
               style={{ width: 250 }}
               onChange={(value) => {
+                setSelectedCareer(value);
                 handleMenuClick(value); // Llama a la función cuando cambia la selección
               }}
-              options={items} // Las opciones vienen de "careerList"
+              options={careerList} // Las opciones vienen de "careerList"
               placeholder="Selecciona una carrera" // Placeholder para cuando no haya valor seleccionado
             />
-          <Button type="primary" className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
+          <Button type="primary" onClick={handleButtonClick} className='shadow-lg float-right color-button text-sm md:text-base flex items-center lg:text-lg h-12 max-md:mb-3'>Crear Nueva Convocatoria <HiPlus /></Button>
 
         </div>
         <div className="overflow-x-auto">

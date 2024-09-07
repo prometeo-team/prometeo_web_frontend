@@ -167,13 +167,7 @@ const InfoAdminRequestPage = () => {
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
-    } 
-      const carrerasSimuladas = [
-        { career: "Ing Ambiental" },
-        { career: "Bioingenieria" },
-      ];
-      
-      
+    }
   };
 
   const handleView = (e, record) => {
