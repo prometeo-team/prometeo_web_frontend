@@ -73,7 +73,7 @@ function degreeTablePage() {
     }
   
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/getAllStudents`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/listDegreeApplicationStudents?careerName=${career}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,10 @@ function degreeTablePage() {
       });
       
       const result = await response.json();
-      if (response.status === 200) {
+      if (result.status === 200) {
+        if(result.data=null){
+          console.log(result.data)
+        }else{
         const extractedData = result.data.map(student => ({
           Id: student.userEntity.username,
           documentNumber: student.documentNumber,
@@ -92,6 +95,7 @@ function degreeTablePage() {
         }));
         setFilas(extractedData);
         setSelectedDocuments(extractedData.map(student => student.Id));
+      }
       } else {
         console.error("Error en la respuesta:", result.message);
       }
