@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import "./TableComponent.css";
 
 function TableComponent({ dataSource, columns, parameterAction, careers, select }) {
-  console.log(careers);
+  console.log(careers[0]);
  
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
@@ -33,7 +33,7 @@ function TableComponent({ dataSource, columns, parameterAction, careers, select 
 
   useEffect(() => {
     const fetchCareers = () => {
-      const items = careers.map(item => ({ value: item.career, label: item.career }));
+      const items = careers.map(item => ({ value: item, label: item }));
       setCareerList(items);
   
       // Establecer el primer elemento como carrera seleccionada por defecto
