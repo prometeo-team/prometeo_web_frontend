@@ -2,16 +2,46 @@ import './RequestTypeComponent.css';
 import { Col, Row } from 'antd';
 import CardComponent from './CardComponent';
 import { FloatButton } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined';
 import { Link, useNavigate } from 'react-router-dom';
 import ModalAskCarrer from '../components/ModalAskCarrer.jsx';
+import { elements } from 'chart.js';
+const user = sessionStorage.getItem('user');
 var where = "";
 function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
+   const [isVisibleDegree, setIsVisibleDegree] = useState(false);
    const [isModalOpen, setIsModalOpen] = useState(false);
+   const [Degree, setDegree] = useState([]);
    const navigate = useNavigate();
    
+
+   useEffect(() => {
+      fetchdegre();
+    }, []);
+
+    const fetchdegre = async () =>{
+      try {
+         const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/degreeApplicationByUser?username=${user}`, {
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json',
+             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+           },
+         });
+         
+         const result = await response.json();
+         if(response.status===200){
+            setIsVisibleDegree(true);
+            const prevDegree = result.map(subjet =>subjet.title.split(" - ")[1]);
+            console.log(prevDegree);
+            setDegree(prevDegree);
+         }
+      }catch(error){
+         console.error("Error al obtener los datos:", error);
+      }
+   }
 
    const toggleVisibility = () => {
       setIsVisible(!isVisible);
@@ -204,6 +234,7 @@ function RequestTypeComponent() {
                         <CardComponent title="Legalización de matrícula" icon="8" onCardClick={() => handleCardClick(9)} />
                      </Link>
                   </Col>
+                  {isVisibleDegree &&(
                   <Col id='postulacionG' className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/postulacion-grado"
@@ -215,6 +246,7 @@ function RequestTypeComponent() {
                         <CardComponent title="Postulacion a Grados" icon="10" onCardClick={() => handleCardClick(10)} />
                      </Link>
                   </Col>
+                  )}
                </Row>
                <FloatButton
                   tooltip={<div>volver</div>}
