@@ -47,6 +47,12 @@ const InfoStudentRequestPage = () => {
         if (isModalOpen) {
             obtenerDocumentos();
         }
+        if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
+            setDetail2(true);
+        }else{
+            setDetail2(false);
+        }
+
     }, [id, isModalOpen]);
 
     const showModal = () => {
