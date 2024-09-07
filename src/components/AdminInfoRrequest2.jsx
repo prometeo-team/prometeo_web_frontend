@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Descriptions, Button, Modal, notification } from 'antd';
-import { BsInfoCircleFill } from "react-icons/bs";
-import { FaCheck } from "react-icons/fa";
+import { Descriptions, Input } from 'antd';
+import InputComponent from "./InputComponent";
 import './AdminInfoRrequest.css';
 
+const { TextArea } = Input;
 const ComponentInfoSR = () => {
-  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statuses, setStatuses] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const [initialStatus, setInitialStatus] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [initialStatusValue, setInitialStatusValue] = useState('');
 
 
   const url = window.location.href;
@@ -21,9 +16,9 @@ const ComponentInfoSR = () => {
   const tipo = params.get('tipo');
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStatuses = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationForCouncil?idRequest=${id}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/get?id=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -31,74 +26,27 @@ const ComponentInfoSR = () => {
           },
         });
         const result = await response.json();
-        const { data: userInfo } = result;
-
-        if (userInfo.length > 0) {
-          const info = userInfo[0];
-          const jsonData = {
-            items: [
-              { key: '1', label: 'Solicitante', children: `${info.name} ${info.last_name}` },
-              { key: '2', label: 'Jornada', children: info.study_time },
-              { key: '3', label: 'Fecha Ingreso', children: new Date(info.admission_date).toLocaleDateString() },
-              { key: '4', label: 'Cant. perdida calidad estudiantil', children: info.count_lose_quality_study },
-              { key: '5', label: 'Tipo de documento', children: info.document_type },
-              { key: '6', label: 'Número de documento', children: info.document_number },
-              { key: '7', label: 'Semestre', children: info.period },
-              { key: '8', label: 'Carrera', children: info.description },
-              { key: '9', label: 'Prom. Ult. Semestre', children: info.average_last_period },
-              { key: '10', label: 'Prom. acumulado', children: info.average_accumulate },
-            ],
-          };
-          setData(jsonData.items);
+        if(response.status==200){
+          const data = result.data.infoSubjects.map(subjets => ({label: subjets.subject_name, info:subjets.detail}))
+          setStatuses(data);
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      } finally {
-        setIsLoading(false);
+        console.error("Error al obtener los estados:", error);
       }
     };
 
-
-    fetchData();
-
-  }, []);
-
-  const fetchStatuses = async () => {
-    try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      const result = await response.json();
-      const { data: statusData } = result.data;
-      setStatuses(statusData);
-      if (statusData.length > 0) {
-        const initial = statusData[0];
-        setInitialStatus(initial);
-        setInitialStatusValue(initial);
-        setSelectedStatus(initial);
-      }
-    } catch (error) {
-      console.error("Error al obtener los estados:", error);
+    if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
+      fetchStatuses();
     }
-  };
-
-  useEffect(() => {
-    fetchStatuses();
-  }, [id]);
-
-
-  
-
+    
+  }, []);
   
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+  
   return (
     <>
       <Descriptions
@@ -112,8 +60,39 @@ const ComponentInfoSR = () => {
         layout="horizontal"
         
       >
-        
+         
       </Descriptions>
+      <div className="grid grid-flow-col gap-4">
+        <div className="grid grid-flow-row ">
+          <h4 className="text-md font-bold text-[#9ca3af]">Materia</h4>
+          <div className="flex justify-center items-center flex-col w-full">
+            {statuses.map((subject) => (
+              <div key={subject.id} className="flex justify-center items-center w-full mb-4">
+                <div className="w-3/4 p-1">
+                  <InputComponent
+                    id="prueba"
+                    name="subjects"
+                    type="readOnly"
+                    placeholder="Materia"
+                    variant="form-input"
+                    value={subject.label}
+                  />
+                  </div>
+                <div className="w-11/12">
+                  <TextArea
+                    id="prueba"
+                    showCount
+                    maxLength={200}
+                    style={{ height: 80, resize: "none" }}
+                    value={subject.info}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
     </>
   );
