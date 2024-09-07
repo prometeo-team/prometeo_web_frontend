@@ -95,8 +95,8 @@ const FormAddition_CancelComponent = ({type}) => {
       });
       const result = await response.json();
       if (response.status===200 ) {
-        credits = parseInt(result.creditsTotal);
-        const carearrsubjects = result.subjects.map(program => ({ key: program.credits, value: program.id, label: program.name }));
+        credits = parseInt(result.data.totalEnrolledCredits);
+        const carearrsubjects = result.data.subjects.map(program => ({ key: program.credits, value: program.id, label: program.name }));
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
@@ -119,7 +119,7 @@ const FormAddition_CancelComponent = ({type}) => {
       });
       const result = await response.json();
       if (response.status===200 ) {
-        const carearrsubjects = result.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
+        const carearrsubjects = result.data.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
         console.log(carearrsubjects);
         setMaterias(carearrsubjects);
       }else {
