@@ -11,12 +11,7 @@ function UserCardComponent({ number }) {
     const [user, setUser] = useState('');
     const [token, setToken] = useState(null);
     const [showNotifications, setShowNotifications] = useState(false);
-    const [notifications, setNotifications] = useState([
-        { id: 1, message: 'Primera notificación' },
-        { id: 2, message: 'Segunda notificación' },
-        { id: 3, message: 'Tercera notificación' },
-        { id: 4, message: 'Cuarta notificación' }
-    ]);
+    const [notifications, setNotifications] = useState([]);
 
     const notificationRef = useRef(null);
 
@@ -61,8 +56,27 @@ function UserCardComponent({ number }) {
         window.location.reload();
     };
 
+    const fetchDegree = async () => {
+        try {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/byUser?userName=${user}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (result.status === "200 OK") {
+                
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+    };
+
     const toggleNotifications = () => {
-        console.log(showNotifications);
         if(showNotifications==true){
             setShowNotifications(false);
         }else if(showNotifications==false){
