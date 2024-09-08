@@ -88,7 +88,6 @@ function App() {
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
-      console.log('Token:', token);
       try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -99,7 +98,6 @@ function App() {
             .join('')
         );
         const decodedToken = JSON.parse(jsonPayload);
-        console.log('Decoded Token:', decodedToken);
         if (decodedToken.authorities.includes('ROLE_STUDENT')) {
           setRole('ROLE_STUDENT');
         } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {

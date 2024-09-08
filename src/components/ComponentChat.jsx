@@ -65,8 +65,8 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
           },
           body: JSON.stringify(messages),
         });
+
         const data = await response.json();
-        console.log('Respuesta del servidor:', data);
       } catch (error) {
         console.error('Error al enviar mensajes al backend:', error);
       }

@@ -6,3 +6,26 @@
 .color-button:hover {
     background-color: #43737E;
 }
+
+.table-container {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .ant-table {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .ant-pagination {
+    margin-top: 10px;
+    text-align: right;
+  }
+  
+  
