@@ -3,6 +3,7 @@ import './ComponentChat.css';
 import { PiUserCircleBold } from "react-icons/pi";
 import { RiMessage3Fill } from "react-icons/ri";
 import { IoSend } from "react-icons/io5";
+import { getInfoToken } from '../utils/utils';
 
 const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
   const [messages, setMessages] = useState([]);
@@ -34,46 +35,50 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
     };
 
     obtenerComentarios();
-  }, [id]); // Dependencia de 'id' para obtener los comentarios cuando 'id' cambie
-
-  const currentUser = 'User1';
+  }, [id]); 
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
+    const userInfo = getInfoToken(); // Aquí obtienes el nombre del usuario (userInfo.sub)
     if (inputMessage.trim() !== '') {
       const newMessage = {
         id: messages.length + 1,
         text: inputMessage,
-        sender: currentUser,
+        sender: userInfo.sub, // Agrega el nombre del remitente
         timestamp: new Date().toISOString(),
       };
-      setMessages([...messages, newMessage]);
-      setInputMessage('');
-    }
-  };
-
-  useEffect(() => {
-    const sendMessagesToBackend = async () => {
+  
       try {
-        const response = await fetch('http://tu-servidor-backend.com/api/messages', {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/saveComment?id_requestDetail=${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
-          body: JSON.stringify(messages),
+          body: JSON.stringify({
+            id: String(newMessage.id),             
+            name_user: userInfo.sub,             
+            published_at: newMessage.timestamp,   
+            body: newMessage.text                 
+          }),
         });
-        const data = await response.json();
-        console.log('Respuesta del servidor:', data);
+  
+        const result = await response.json();
+        if (response.ok) {
+          setMessages([...messages, newMessage]); 
+          setInputMessage('');                    
+        } else {
+          console.error('Error al enviar el mensaje:', result);
+        }
       } catch (error) {
-        console.error('Error al enviar mensajes al backend:', error);
+        console.error('Error en la solicitud de envío de comentario:', error);
       }
-    };
-
-    sendMessagesToBackend();
-  }, [messages]);
+    }
+  };
+  
 
   return (
     <div className="chat-container">

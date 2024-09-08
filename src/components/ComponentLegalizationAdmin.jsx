@@ -210,8 +210,6 @@ const ComponentLegalizationAdmin = () => {
             </select>
           </div>
         </Descriptions.Item>
-
-
         {selectedStatus === 'No valida' ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full">
