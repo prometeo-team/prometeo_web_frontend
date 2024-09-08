@@ -120,7 +120,7 @@ const FormAddition_CancelComponent = ({type}) => {
       const result = await response.json();
       if (response.status===200 ) {
         const carearrsubjects = result.data.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
-        console.log(carearrsubjects);
+
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
@@ -190,16 +190,13 @@ const FormAddition_CancelComponent = ({type}) => {
     if (type == "Adición de creditos") {
       setIsButtonVisible2(true);
       if (option && option.selectedOption) {
-        console.log(option);
         const selectedCredits = parseInt(option.selectedOption.key, 10);
         const id = option.target.id;
         const id_subject = option.selectedOption.value;
         const label = option.selectedOption.label;
         if(credits+selectedCredits<=20){
           const index = newCredits.findIndex(credit => credit.id === id);
-          console.log(index);
           if (index!=-1) {
-            console.log("existe");
             credits= credits-newCredits[index].credits;
             setNewCredits((prevCredits) =>
               prevCredits.map((subject) =>
@@ -211,7 +208,6 @@ const FormAddition_CancelComponent = ({type}) => {
             credits=credits+selectedCredits;
           }else{
             credits=credits+selectedCredits;
-            console.log("no existe");
             setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject, subject_name: label}]);
           }
             setIsButtonVisible(credits<20);
@@ -224,14 +220,11 @@ const FormAddition_CancelComponent = ({type}) => {
       setIsButtonVisible2(true);
       setIsButtonVisible(true);
       if (option && option.selectedOption) {
-        console.log(option);
         const id = option.target.id;
         const id_subject = option.selectedOption.value;
         const label = option.selectedOption.label;
         const index = newCredits.findIndex(credit => credit.id === id);
-          console.log(index);
           if (index!=-1) {
-            console.log("existe");
             credits= credits-newCredits[index].credits;
             setNewCredits((prevCredits) =>
               prevCredits.map((subject) =>
@@ -241,7 +234,6 @@ const FormAddition_CancelComponent = ({type}) => {
               )
             );
           }else{
-            console.log("no existe");
             setNewCredits([...newCredits, {id: id, id_subject: id_subject, subject_name: label}]);
           }
       }
@@ -251,11 +243,9 @@ const FormAddition_CancelComponent = ({type}) => {
   const handlePlusButton = () => {
     if(subjects.length<materias.length){
       const newId = `subject${subjects.length}`; // Genera un ID único para cada nuevo componente
-      console.log("nuevo id: "+newId);
       setSubjects([...subjects, { id: newId, disabled: false}]); // Añade una nueva entrada al estado
       if(type=="Adición de creditos"){
         const id = `subject${subjects.length-1}`;
-        console.log("id adicion "+id);
         setSubjects((prevSub) =>
           prevSub.map((subject) =>
             subject.id === id
@@ -279,7 +269,6 @@ const FormAddition_CancelComponent = ({type}) => {
         setIsButtonVisible(false);
       }else if(type=="Cancelación de creditos"){
         const id = `subject${subjects.length-1}`;
-        console.log("id adicion "+id);
         setSubjects((prevSub) =>
           prevSub.map((subject) =>
             subject.id === id

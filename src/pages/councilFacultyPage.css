@@ -3,3 +3,56 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+
+/* Para los números de página activos */
+.ant-pagination-item-active {
+    background-color: #97B749;
+    border-color: #97B749;
+}
+
+/* Color del texto en el número de página activo */
+.ant-pagination-item-active a {
+    color: white;
+}
+
+/* Borde y color del texto de los números de página no activos */
+.ant-pagination-item a {
+    color: #97B749;
+    border-color: #97B749;
+}
+
+/* Color de las flechas de paginación */
+.ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination-next .ant-pagination-item-link {
+    color: #97B749;
+    border-color: #97B749;
+}
+
+/* Hover para el número de página */
+.ant-pagination-item:hover a {
+    color: white;
+}
+
+/* Hover para el borde de los números */
+.ant-pagination-item:hover {
+    border-color: #97B749;
+}
+
+/* Hover para las flechas */
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+    border-color: #97B749;
+    color: #97B749;
+}
+
+/* CouncilFacultyPage.css */
+.table-container {
+    background-color: white; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra */
+    margin: 20px auto; /* Centrando el contenedor con margen */
+    max-width: 95%; /* Ancho máximo del contenedor */
+}
+

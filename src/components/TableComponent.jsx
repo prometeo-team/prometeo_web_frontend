@@ -10,15 +10,8 @@ function TableComponent({ dataSource, columns, parameterAction }) {
     ...fila,
     key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
   }));
-  //console.log(dataSource);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [searchText, setSearchText] = useState("");
 
-  const handlePageChange = (page, pageSize) => {
-    setPage(page);
-    setPageSize(pageSize);
-  };
+  const [searchText, setSearchText] = useState("");
 
   const [columnsadd, setColumnsadd] = useState(columns);
 
@@ -48,6 +41,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
       },
     ]);
   };
+
   //modificar para poder buscar bien
   const filteredData = filasConKey.filter((item) =>
     Object.values(item).some((value) =>
@@ -68,6 +62,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
           <Button
             type="primary"
             className="color-button text-sm md:text-base lg:text-lg h-auto ml-2"
+            onClick={() => console.log('Buscar...')}
           >
             Buscar
           </Button>
@@ -77,15 +72,7 @@ function TableComponent({ dataSource, columns, parameterAction }) {
             columns={columnsadd}
             dataSource={filteredData}
             rowClassName={() => "bg-white"}
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: filteredData.length,
-              onChange: handlePageChange,
-              showSizeChanger: true,
-              onShowSizeChange: handlePageChange,
-              pageSizeOptions: ["5", "10"],
-            }}
+            pagination={false} // Deshabilitar la paginación interna
           />
         </div>
       </div>
