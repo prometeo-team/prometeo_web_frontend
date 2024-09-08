@@ -1,14 +1,20 @@
 import  { useState, useEffect, useRef  } from 'react';
+import { Table, Space, Input, Select,Pagination, Button,Tag, Spin } from "antd";
 import UserCArdComponent from '../components/UserCardComponet';
 import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent2';
 import CardGraficsComponent from '../components/CardGraficsComponent';
-import { Tag } from 'antd';
+import { FaEye } from "react-icons/fa";
+import { HiSearchCircle } from "react-icons/hi";
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../components/LoaderComponent.jsx';
 import '../App.css';
 
 const user = sessionStorage.getItem('user');
 var career;
+
+const { Search } = Input;
 
 const InfoAdminRequestPage = () => {
   const navigate = useNavigate();
@@ -17,6 +23,13 @@ const InfoAdminRequestPage = () => {
   const [proceso, setProceso] = useState([]);
   const [careerList, setcareerList] = useState([]);
   const [Fin, setFin] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCareer, setSelectedCareer] = useState(undefined);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selecteType, setSelecteType] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
+  const [isTableLoading, setIsTableLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   const chart1Ref = useRef(null);
   const chart2Ref = useRef(null);
@@ -27,14 +40,26 @@ const InfoAdminRequestPage = () => {
       const primeraCarrera = await obtenerCarreras(); // Asegúrate de esperar los datos
       if (primeraCarrera) {
         career = primeraCarrera;
+        setSelectedCareer(primeraCarrera);
         fetchGrafics(''); // Establecer la carrera
-        obtenerDatos(''); // Ahora obtener los datos con la carrera
+        obtenerDatos(1, "", "", primeraCarrera);
       }
     };
     
-  
     obtenerCarrerasYDatos(); // Llamar a la función asíncrona
   }, []);
+
+  useEffect(() => {
+    if (selectedCareer) {
+      obtenerDatos(page, searchQuery, selecteType, selectedCareer.value); // Ejecuta con la carrera seleccionada
+    }
+  }, [page, searchQuery, selecteType, selectedCareer]);
+
+  useEffect(() => {
+    if (careerList.length > 0) {
+      setSelectedCareer(careerList[0]); // Asegúrate de que sea el formato correcto para el Select
+    }
+  }, [careerList]);
 
   const fetchGrafics = async (filter) =>{
     try{
@@ -104,17 +129,32 @@ const InfoAdminRequestPage = () => {
       title: 'Tipo de Solicitud',
       dataIndex: 'tipo_solicitud',
       key: 'tipo_solicitud',
+    },
+    {
+      title: 'Acción',
+      key: 'accion',
+      render: (_, record) => (
+        <FaEye
+          style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
+          onClick={() =>  record.tipo_solicitud === "Legalización de matrícula" ?
+            navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`)
+          :
+            navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`)
+          }
+        />
+      ),
     }
   ];
 
-  const obtenerDatos = async (caso) => {
-    if (!career) {
-      console.error("No hay carrera seleccionada.");
-      return;
-    }
-  
+  const handleSearch = (value) => {
+    setSearchQuery(value); // Actualizamos el estado de búsqueda
+    setPage(1); // Reseteamos a la primera página cuando se hace una búsqueda
+  };
+
+  const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
+    setIsTableLoading(true);  
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=1&&carrer=${career}${caso}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=${currentPage}&&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -122,8 +162,13 @@ const InfoAdminRequestPage = () => {
         },
       });
       
+      if (!response.ok) {
+        throw new Error('Error al obtener datos');
+      }
       const result = await response.json();
-      if (result.status === "200") {
+      setIsLoading(false);
+
+      if (result && result.data) {
         const extractedData = result.data.content.map(item => ({
           id_solicitud: item.requestEntity.idRequest,
           name: `${item.requestEntity.userEntity.name} ${item.requestEntity.userEntity.lastName}`,
@@ -132,12 +177,16 @@ const InfoAdminRequestPage = () => {
           tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
         }));
         setFilas(extractedData);
+        setTotalItems(result.data.totalElements);
       } else {
         console.error("Error en la respuesta:", result.message);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     } 
+    finally {
+      setIsTableLoading(false);
+    }
   };
   
 
@@ -153,8 +202,9 @@ const InfoAdminRequestPage = () => {
       const result = await response.json();
       if (response.status === 200) {
         const carrerasSimuladas = result.data.career;
+        const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
         console.log(carrerasSimuladas)
-        setcareerList(carrerasSimuladas);
+        setcareerList(items);
         career = careerList[0];
         // Retornar el primer elemento solo si careerList tiene elementos
         if (carrerasSimuladas.length > 0) {
@@ -169,15 +219,6 @@ const InfoAdminRequestPage = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
-
-  const handleView = (e, record) => {
-    e.preventDefault();
-    if (record.tipo_solicitud === "Legalización de matrícula") {
-      navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`);
-    } else {
-      navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
-    }
-  };  
   
   const handleClickType = (option) => {
     // Destruir los gráficos actuales
@@ -201,11 +242,13 @@ const InfoAdminRequestPage = () => {
 
     // Realiza la solicitud fetch
     if(option=='all'){
+      selecteType("")
       fetchGrafics('');
       obtenerDatos('');
     }else{
+      setSelecteType(option);
     fetchGrafics('&requestType=' + option);
-    obtenerDatos('&nameType=' + option);
+    obtenerDatos();
     }
   };
 
@@ -230,8 +273,9 @@ const InfoAdminRequestPage = () => {
       selectedElement.classList.add('active');
       selectedElement.classList.remove('inactive');
     }
-    fetchGrafics('');
-    obtenerDatos('');
+    setSelectedCareer(career); // Actualiza el estado de la carrera seleccionada
+    fetchGrafics(''); // Actualiza los gráficos con la nueva carrera
+    obtenerDatos(1, searchQuery, selecteType, career); 
   }
 
   return (
@@ -251,7 +295,64 @@ const InfoAdminRequestPage = () => {
         </div>
         <div className='w-full mt-16'>
           <div className='ml-8 max-md:ml-3 mb-20 w-11/12'>
-            <TableComponent dataSource={filas} columns={columns} careers={careerList} parameterAction={handleView} select={handleCarreras} />
+          {isLoading ? (
+            <div className="loader-container">
+              <Loader className="h-12 w-12" />
+            </div>
+          ) : (
+            <div className="table-container ">
+              <Search
+                placeholder="Buscar aquí..."
+                enterButton={
+                  <Button style={{ backgroundColor: "#97B749", borderColor: "#97B749", color: "white" }}>
+                    Buscar
+                  </Button>
+                }
+                prefix={<HiSearchCircle className="w-6 h-6" style={{ color: "#97B749" }} />}
+                onSearch={handleSearch}
+                style={{
+                  width: "60%",
+                  borderRadius: "15px",
+                  padding: "10px",
+                }}
+              />
+              <Select
+                className="h-11 ml-2" 
+                value={selectedCareer}
+                style={{ width: 250 }}
+                onChange={(value) => {
+                  setSelectedCareer(value);
+                  handleCarreras(value); 
+                }}
+                options={careerList}
+                placeholder="Selecciona una carrera"
+              />
+              
+              <div className="table-responsive" style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                {isTableLoading ? (
+                  <div style={{ textAlign: 'center', padding: '20px' }}>
+                    <Spin size="large" /> {/* Loader solo para la tabla */}
+                  </div>
+                ) : (
+                  <Table
+                    dataSource={filas} // Ya no es filtrado localmente, el servidor devuelve los resultados
+                    columns={columns}
+                    rowKey="request_id"
+                    pagination={false}
+                  />
+                )}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+                <Pagination
+                  current={page}
+                  pageSize={10} // Asumimos 10 elementos por página
+                  total={totalItems} // Total de items desde el backend
+                  onChange={(page) => setPage(page)} // Actualiza la página actual
+                  showSizeChanger={false} // Deshabilitamos el cambio de tamaño de página
+                />
+              </div>
+            </div>
+            )}
           </div>
         </div>
     </div>
