@@ -1,10 +1,11 @@
-import { Table, Button, notification, Pagination } from 'antd';
+import { Table, Button, Pagination } from 'antd';
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ModalActa from '../components/ModalActaInsert';
 import { TitleComponent } from "../components/";
 import { Input } from 'antd';
+import UserCardComponent from '../components/UserCardComponet';
 
 const { Search } = Input;
 
@@ -29,14 +30,14 @@ function CouncilTablePage() {
     const formatDate = (dateString) => {
         // Intentar convertir la fecha de manera flexible
         const date = new Date(dateString);
-        
+
         if (!isNaN(date.getTime())) {
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
             const year = date.getFullYear();
             return `${day}-${month}-${year}`;
-        } 
-        
+        }
+
         // Si no es una fecha válida, manejarla manualmente (en caso de fechas con "COT")
         const dateParts = dateString.split(' ');
         if (dateParts.length === 6) {
@@ -45,7 +46,7 @@ function CouncilTablePage() {
             const year = dateParts[5];
             return `${day}-${month}-${year}`;
         }
-        
+
         return dateString; // Si no se puede formatear, devolver el valor original
     };
 
@@ -142,16 +143,17 @@ function CouncilTablePage() {
     ];
 
     return (
-        <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>
+        <div className='w-full flex mr-4 max-md:mr-0 h-screen scroll-container flex-col'>
             <div className="ml-8 mt-4">
+                <UserCardComponent number={2} />
                 <div>
                     <TitleComponent title={"Actas Consejo"} />
                 </div>
 
-               
+
 
                 <div className="table-container">
-                <Search
+                    <Search
                         placeholder="Buscar documentos..."
                         enterButton={
                             <Button style={{ backgroundColor: "#97B749", borderColor: "#97B749", color: "white" }}>
@@ -166,13 +168,13 @@ function CouncilTablePage() {
                         }}
                     />
                     <div className="overflow-x-auto whitespace-nowrap">
-                    <Table
-                        dataSource={dataSource}
-                        columns={columns}
-                        loading={loading}
-                        pagination={false}
-                        rowKey="id_documento"
-                    />
+                        <Table
+                            dataSource={dataSource}
+                            columns={columns}
+                            loading={loading}
+                            pagination={false}
+                            rowKey="id_documento"
+                        />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
                         <Pagination

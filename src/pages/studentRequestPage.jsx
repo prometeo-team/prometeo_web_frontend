@@ -186,7 +186,7 @@ const StudentRequestPage = () => {
 
           <div className="ml-5 mb-5">
             <Button
-              onClick={() => navigate('/homePage')}
+              onClick={() => navigate('/')}
               type="primary"
               className="color-button text-sm md:text-base lg:text-lg h-auto"
               icon={<ArrowLeftOutlined />}

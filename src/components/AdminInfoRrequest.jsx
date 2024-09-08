@@ -11,9 +11,9 @@ const ComponentInfoSR = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false); // Estado para el nuevo modal
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-
 
   const url = window.location.href;
   const urlObj = new URL(url);
@@ -58,9 +58,7 @@ const ComponentInfoSR = () => {
       }
     };
 
-
     fetchData();
-
   }, []);
 
   const fetchStatuses = async () => {
@@ -80,6 +78,11 @@ const ComponentInfoSR = () => {
         setInitialStatus(initial);
         setInitialStatusValue(initial);
         setSelectedStatus(initial);
+        
+        // Verificar si algún estado contiene "Firma"
+        if (statusData.some(status => status.includes('Firma'))) {
+          setIsFirmaModalVisible(true);
+        }
       }
     } catch (error) {
       console.error("Error al obtener los estados:", error);
@@ -89,7 +92,6 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     fetchStatuses();
   }, [id]);
-
 
   const handleOk = async () => {
     if (selectedStatus !== initialStatus) {
@@ -129,6 +131,7 @@ const ComponentInfoSR = () => {
         console.error("Error al actualizar el estado:", error);
       } finally {
         setIsModalVisible(false);
+        setIsFirmaModalVisible(false); // Cerrar el modal de Firma también
       }
     } else {
       notification.warning({
@@ -141,6 +144,7 @@ const ComponentInfoSR = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setIsFirmaModalVisible(false); // Cerrar el modal de Firma también
   };
 
   const handleSelectChange = (value) => {
@@ -157,6 +161,7 @@ const ComponentInfoSR = () => {
 
   return (
     <>
+      {/* Descriptions Section */}
       <Descriptions
         title={
           <div className="flex flex-wrap items-center justify-between">
@@ -167,7 +172,7 @@ const ComponentInfoSR = () => {
         }
         layout="vertical"
         column={{
-          xl: 3,
+          xl: 2,
           lg: 2,
           md: 2,
           sm: 1,
@@ -192,6 +197,7 @@ const ComponentInfoSR = () => {
           </Descriptions.Item>
         ))}
 
+        {/* Status Selection Section */}
         <Descriptions.Item className="ml-4 w-full md:w-1/3">
           <div className="bg-[#97B749] rounded-lg w-full h-9 -mt-6 custom-btn shadow-md ml-4 ">
             <select
@@ -207,6 +213,8 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
+        
+        {/* Confirm Button Section */}
         {selectedStatus === 'No Aprobado' ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
@@ -219,7 +227,6 @@ const ComponentInfoSR = () => {
                   onChange={handleAdditionalInfoChange}
                   rows={4}
                 />
-
               </div>
               <Button
                 type="primary"
@@ -243,6 +250,7 @@ const ComponentInfoSR = () => {
         )}
       </Descriptions>
 
+      {/* Existing Modal */}
       <Modal
         title="Confirmación de Cambio de Estado"
         visible={isModalVisible}
@@ -252,6 +260,18 @@ const ComponentInfoSR = () => {
         cancelText="Cancelar"
       >
         <p>¿Está seguro de que desea cambiar el estado de {initialStatusValue} a {selectedStatus}?</p>
+      </Modal>
+
+      {/* New Modal for 'Firma' */}
+      <Modal
+        title="Acción Requerida: Firma"
+        visible={isFirmaModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Confirmar Firma"
+        cancelText="Cancelar"
+      >
+        <p>El estado actual requiere una firma. ¿Desea proceder con la firma?</p>
       </Modal>
     </>
   );
