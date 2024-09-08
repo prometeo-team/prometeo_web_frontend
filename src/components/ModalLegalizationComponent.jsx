@@ -7,18 +7,12 @@ import "./ModalLegalizationComponent.css";
 
 const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const [doc1, setDoc1] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
-  const [doc2, setDoc2] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
-  const [doc3, setDoc3] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
-  const [doc4, setDoc4] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
-  const [doc5, setDoc5] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
   const [doc6, setDoc6] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
-      const documentsWithNames = [doc1, doc2, doc3, doc4, doc5, doc6]
+      const documentsWithNames = [ doc6]
         .filter((file) => file.pdf && file.pdf !== null)
         .map((file) => ({
           url: file.pdf,

@@ -102,30 +102,74 @@ const CouncilFacultyPage = () => {
         fetchData(1, value); // Hacer fetch con la búsqueda
     };
 
-    const handleDownload = async () => {
+    const handleClick = () => {
+        navigate('/admin/historial-consejo');
+    };
+
+    const handleDownloadPrometeo = async () => {
         try {
-            const response = await fetch('URL_DEL_ARCHIVO', {
+            const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/council/getDocumentTemplateCouncil', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(new Blob([blob]));
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Carte Reintegro';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+    
+            if (response.ok) {
+                const result = await response.json();
+                if (result && result.data) {
+                    // Extraer la URL real del JSON
+                    const url = result.data.split('https://')[1];
+                    if (url) {
+                        window.open(`https://${url}`, '_blank'); // Abrir URL en una nueva pestaña
+                    } else {
+                        console.error('URL no encontrada en la respuesta de Prometeo');
+                    }
+                } else {
+                    console.error('Error en la respuesta de Prometeo:', result);
+                }
+            } else {
+                console.error('Error al obtener el archivo Prometeo:', response.statusText);
+            }
         } catch (error) {
-            console.error('Error al descargar el archivo:', error);
+            console.error('Error al descargar el archivo Prometeo:', error);
         }
     };
-
+    
+    const handleDownloadActaConsejo = async () => {
+        try {
+            const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/council/getExcelCouncil', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+    
+            if (response.ok) {
+                const result = await response.json();
+                if (result && result.data) {
+                    // Extraer la URL real del JSON
+                    const url = result.data.split('https://')[1];
+                    if (url) {
+                        window.open(`https://${url}`, '_blank'); // Abrir URL en una nueva pestaña
+                    } else {
+                        console.error('URL no encontrada en la respuesta de Acta de Consejo');
+                    }
+                } else {
+                    console.error('Error en la respuesta de Acta de Consejo:', result);
+                }
+            } else {
+                console.error('Error al obtener el archivo Acta de Consejo:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al descargar el archivo Acta de Consejo:', error);
+        }
+    };
+    
+    
+  
     return (
         <div className='h-screen scroll-container'>
             <div className="max-w-titleComponent">
@@ -133,7 +177,7 @@ const CouncilFacultyPage = () => {
                 <TitleComponent title="Inicio de Acta" />
             </div>
 
-            <div className="table-container">
+            <div className="table-container p-4">
                 <Search
                     placeholder="Buscar aquí..."
                     enterButton={
@@ -143,20 +187,24 @@ const CouncilFacultyPage = () => {
                     }
                     prefix={<HiSearchCircle className="w-6 h-6" style={{ color: "#97B749" }} />}
                     onSearch={handleSearch}
+                    className="mb-4"
                     style={{
                         width: "60%",
-                        borderRadius: "15x",
+                        borderRadius: "15px",
                         padding: "10px",
                     }}
                 />
-                <Table
-                    dataSource={dataSource}
-                    columns={columns}
-                    loading={loading}
-                    pagination={false}
-                    rowKey="id_solicitud"
-                />
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+                <div className="overflow-x-auto whitespace-nowrap">
+                    <Table
+                        dataSource={dataSource}
+                        columns={columns}
+                        loading={loading}
+                        pagination={false}
+                        rowKey="id_solicitud"
+                        className="min-w-max"
+                    />
+                </div>
+                <div className="flex justify-end mt-4">
                     <Pagination
                         current={page}
                         pageSize={10}
@@ -166,43 +214,45 @@ const CouncilFacultyPage = () => {
                     />
                 </div>
             </div>
-
-            {/* Sección adicional con los formatos de descarga */}
-            <div className="flex justify-center">
-                <div className='bg-white p-4 rounded-lg shadow-md m-5 w-1/2 max-md:w-full'>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="col-span-2">
+            <div className="flex flex-wrap w-full">
+                <div className='bg-white p-4 rounded-lg shadow-md m-5 w-full custom-item'>
+                    <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+                        <div className="lg:col-span-2">
                             <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Formato PROMETEO</h2>
                             <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
                         </div>
-                        <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
+                        <div className="lg:col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
                             <div>
-                                <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-between items-center">
-                                    <p className="max-md:hidden">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
+                                <Button onClick={handleDownloadPrometeo} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-center items-center">
+                                    <p className="flex-1 text-center">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='bg-white p-4 rounded-lg shadow-md m-5 w-full custom-item'>
+                    <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+                        <div className="lg:col-span-2">
+                            <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Acta de consejo</h2>
+                            <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
+                        </div>
+                        <div className="lg:col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
+                            <div>
+                                <Button onClick={handleDownloadActaConsejo} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-center items-center">
+                                    <p className="flex-1 text-center">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
                                 </Button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div className="flex justify-center">
-                <div className='bg-white p-4 rounded-lg shadow-md m-5 w-1/2 max-md:w-full max-md:h-auto'>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="col-span-2">
-                            <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Acta de consejo</h2>
-                            <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
-                        </div>
-                        <div className="col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
-                            <div>
-                                <Button onClick={handleDownload} className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-between items-center">
-                                    <p className="max-md:hidden">Descargar</p> <LuDownload className="ml-2 h-7 w-8" />
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex justify-center items-center mt-4"></div>
-                </div>
+            <div className="flex justify-center items-center w-full mb-4">
+                <Button
+                    onClick={handleClick}
+                    className="w-36 h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-center items-center"
+                >
+                    <p>Historial de actas</p>
+                </Button>
             </div>
         </div>
     );

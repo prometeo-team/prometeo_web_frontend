@@ -23,11 +23,6 @@ function CouncilTablePage() {
 
     const handleCloseModal = () => {
         setModalVisible(false);
-        notification.info({
-            message: 'Importante',
-            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir Acta".',
-            placement: 'bottomRight',
-        });
     };
 
     // Función para formatear la fecha en dd-mm-yyyy
@@ -170,6 +165,7 @@ function CouncilTablePage() {
                             padding: "10px",
                         }}
                     />
+                    <div className="overflow-x-auto whitespace-nowrap">
                     <Table
                         dataSource={dataSource}
                         columns={columns}
@@ -177,6 +173,7 @@ function CouncilTablePage() {
                         pagination={false}
                         rowKey="id_documento"
                     />
+                    </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
                         <Pagination
                             current={page}
