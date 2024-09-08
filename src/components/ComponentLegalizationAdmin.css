@@ -1,0 +1,37 @@
+.custom-textarea {
+    /* Asegúrate de que el TextArea tome el ancho completo de su contenedor */
+    width: 100%;
+    /* Define un ancho máximo específico para pantallas más grandes */
+    max-width: 26rem;
+    /* Ajusta este valor según tus necesidades */
+    /* Evita que el contenido se desborde */
+    box-sizing: border-box;
+}
+
+.custom-textarea :hover{
+    color:  #43737E !important;
+    border-color: #43737E !important;
+}
+
+/* Opcional: Ajustes adicionales para pantallas pequeñas */
+@media (max-width: 768px) {
+
+    /* Ajusta este valor según el punto de interrupción deseado */
+    .custom-textarea {
+        max-width: 10rem !;
+        /* Ajusta el ancho máximo para pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 995px) {
+
+    /* Ajusta este valor según el punto de interrupción deseado */
+    .custom-textarea {
+        max-width: 20rem !important;
+        /* Ajusta el ancho máximo para pantallas más pequeñas */
+    }
+}
+
+.custom-btn:hover {
+    background-color: #43737E !important;
+}

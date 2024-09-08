@@ -9,7 +9,7 @@ import UserCArdComponent from '../components/UserCardComponet';
 
 const InfoStudentRequestPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [documents, setDocuments] = useState([]); // Inicializar con un array vacío
+    const [documents, setDocuments] = useState([]); 
     const [loading, setLoading] = useState(false);
 
     const url = window.location.href;

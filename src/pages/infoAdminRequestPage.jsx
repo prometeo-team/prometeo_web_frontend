@@ -172,9 +172,12 @@ const InfoAdminRequestPage = () => {
 
   const handleView = (e, record) => {
     e.preventDefault();
-    navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
-
-  };
+    if (record.tipo_solicitud === "Legalización de matrícula") {
+      navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`);
+    } else {
+      navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
+    }
+  };  
   
   const handleClickType = (option) => {
     // Destruir los gráficos actuales
@@ -232,7 +235,7 @@ const InfoAdminRequestPage = () => {
   }
 
   return (
-    <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>
+    <div className='w-full flex max-md:mr-0 h-screen scroll-container flex-col'>
         <div className='w-full mt-0 float-right h-20'>
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
