@@ -13,6 +13,7 @@ function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
    const [isVisibleDegree, setIsVisibleDegree] = useState(false);
    const [isModalOpen, setIsModalOpen] = useState(false);
+   const [CardProcess, setCardProcess] = useState(null);
    const [Degree, setDegree] = useState([]);
    const navigate = useNavigate();
    
@@ -56,46 +57,56 @@ function RequestTypeComponent() {
 
       switch (option) {
          case 1:
+            setCardProcess('Adición de Créditos');
             setIsModalOpen(true);
             where = '/student/solicitud-adicion';
             console.log('Adición de créditos');
             break;
          case 2:
+            setCardProcess('Retiro de Créditos');
             setIsModalOpen(true);
             where="/student/solicitud-cancelacion";
             console.log('Cancelación de créditos');
             break;
          case 3:
+            setCardProcess('Incapacidades Estudiantes');
             setIsModalOpen(true);
             where="/student/solicitud-incapacidad";
             console.log('Incapacidades Médicas');
             break;
          case 4:
+            setCardProcess('Supletorios');
             setIsModalOpen(true);
             where="/student/solicitud-supletorio";
             console.log('Supletorios');
             break;
          case 5:
+            setCardProcess('Reintegro');
             setIsModalOpen(true);
             where="/student/reintegro";
             break;
          case 6:
+            setCardProcess('Reembolso');
             setIsModalOpen(true);
             where="/student/reembolso";
             break;
          case 7:
+            setCardProcess('Reserva de Cupo');
             setIsModalOpen(true);
             where="/student/reserva";
             break;
          case 8:
+            setCardProcess('Activación de Cupo');
             setIsModalOpen(true);
             where="/student/activacion-cupo";
             break;
          case 9:
+            setCardProcess('Legalización de matrícula');
             setIsModalOpen(true);
             where="/student/legalizacion-matricula";
             break;
          case 10:
+            setCardProcess('Postulación a Grados');
             setIsModalOpen(true);
             where="/student/postulacion-grado";
             break;
@@ -131,6 +142,8 @@ function RequestTypeComponent() {
             isVisible={isModalOpen}
             onConfirm={handleModalConfirm}
             onCancel={handleModalCancel}
+            process ={CardProcess}
+            degreePrograms={Degree}
          />
          {isVisible && (
             <div className="requestLayout mt-16 ml-12" id="options">

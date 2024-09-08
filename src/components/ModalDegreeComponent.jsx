@@ -41,7 +41,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
         pdf7 && { url: pdf7, name: fileName7, originalfile: originalfile7 },
       ].filter(doc => doc !== null);
       setDocuments(documentsWithNames);
-      onClose();
+      onClose(true);
       setConfirmLoading(false);
     }, 1000);
   };

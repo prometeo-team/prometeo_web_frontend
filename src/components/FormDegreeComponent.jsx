@@ -14,7 +14,7 @@ import './FormDegreeComponent.css';
 
 const user = sessionStorage.getItem('user');
 let career;
-const role = 'pre';
+let role;
 
 const FormDegreeComponent = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -34,7 +34,8 @@ const FormDegreeComponent = () => {
         const url = window.location.href;
         const urlObj = new URL(url);
         const params = new URLSearchParams(urlObj.search);
-        career = params.get('carrera');
+        career = params.get('carrera').split("-")[0];
+        role = params.get('carrera').split("-")[1];
         if (career) {
             try {
                 const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
@@ -59,17 +60,19 @@ const FormDegreeComponent = () => {
     };
 
     const handleOpenModal = () => {
-        if(role=='pre'){
+        if(role=='pregrado'){
             setModalVisible(true);
-        }else if(role=='pos'){
+        }else if(role=='posgrado'){
             setModalVisible2(true);
         }
 
     };
 
-    const handleCloseModal = () => {
+    const handleCloseModal = (option) => {
         console.log(documents);
-        setIsButtonVisible(true);
+        if(option){
+            setIsButtonVisible(true);
+        }
         setModalVisible(false);
         notification.info({
             message: 'Importante',
@@ -79,9 +82,12 @@ const FormDegreeComponent = () => {
         });
     };
 
-    const handleCloseModal2 = () => {
+    const handleCloseModal2 = (option) => {
         console.log(documents);
-        setIsButtonVisible(true);
+        if(option){
+            setIsButtonVisible(true);
+        }
+        setMod
         setModalVisible2(false);
         notification.info({
             message: 'Importante',
