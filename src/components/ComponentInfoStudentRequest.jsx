@@ -77,10 +77,10 @@ function ComponentInfoSR() {
     return <div>No se encontró la información de la solicitud o los estados.</div>;
   }
 
-  const stepsData = Object.keys(statusData).filter(key => 
-    key !== "No Aprobado" && 
-    key !== "Finalizado" && 
-    key !== "No valida" && // Filtra pasos que tengan "No valida"
+  const stepsData = Object.keys(statusData).filter(key =>
+    key !== "No Aprobado" &&
+    key !== "Finalizado" &&
+    key !== "No valida" &&  // Evitar que se elimine en el filtro inicial
     (key !== "Pendiente Firma 100%" || statusData["Pendiente Firma 100%"] === true) &&
     (key !== "Pendiente Firma 85%" || statusData["Pendiente Firma 85%"] === true) &&
     (key !== "Pendiente Firma 50%" || statusData["Pendiente Firma 50%"] === true)
@@ -88,6 +88,10 @@ function ComponentInfoSR() {
 
   if (statusData["No Aprobado"]) {
     stepsData.push("No Aprobado");
+  }
+
+  if (statusData["No valida"]) {
+    stepsData.push("No valida");
   }
 
   stepsData.push("Finalizado");
@@ -141,7 +145,7 @@ function ComponentInfoSR() {
           <div className="custom-steps flex">
             {steps.map((step, index) => (
               <div key={index} className="flex flex-col items-center mr-8">
-                <div 
+                <div
                   className={`step-indicator ${index < steps.findIndex(s => s.status === 'finish') ? 'bg-[#43737E]' : (step.status === 'finish' ? 'bg-[#97B749]' : 'bg-gray-400')} rounded-full w-8 h-8 flex items-center justify-center text-white`}
                 >
                   {index + 1}

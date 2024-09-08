@@ -18,7 +18,6 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
-  const tipo = params.get('tipo');
 
   useEffect(() => {
     const fetchData = async () => {
