@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Button, Pagination, Input } from 'antd';
+import { Table, Tag, Button, Pagination, Input, Spin } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import UserCardComponent from '../components/UserCardComponet';
 import { getInfoToken } from '../utils/utils';
@@ -7,6 +7,7 @@ import Loader from '../components/LoaderComponent.jsx';
 import { useNavigate } from 'react-router-dom';
 import { TitleComponent } from '../components/';
 import { HiSearchCircle } from "react-icons/hi";
+import { FaEye } from 'react-icons/fa';
 import './studentRequestPage.css';
 
 const { Search } = Input;
@@ -15,37 +16,50 @@ const StudentRequestPage = () => {
   const navigate = useNavigate();
   const [filas, setFilas] = useState([]); // Aseguramos que filas sea un arreglo
   const [isLoading, setIsLoading] = useState(true);
+  const [isTableLoading, setIsTableLoading] = useState(false); // Estado para el loader de la tabla
   const [page, setPage] = useState(1); // Página actual
   const [totalItems, setTotalItems] = useState(0); // Total de solicitudes
-  const [totalPages, setTotalPages] = useState(1); // Total de páginas
   const [searchQuery, setSearchQuery] = useState(""); // Estado para el buscador
 
-  useEffect(() => {
-    const userInfo = getInfoToken();
+  // Modificar el fetch para incluir el searchQuery
+  const obtenerDatos = async (currentPage = 1, query = "") => {
+    setIsTableLoading(true); // Activar el estado de cargando para la tabla
+    try {
+      const userInfo = getInfoToken();
 
-    const obtenerDatos = async () => {
-      setIsLoading(true); // Activar el estado de cargando
-      try {
-        const response = await fetch(`http://127.0.0.1:3030/api/request/getRequestsByStudent?page=${page}&username=${userInfo.sub}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
-        const result = await response.json();
+      // Asegurarse de que la URL y la petición sean correctas.
+      const response = await fetch(`http://127.0.0.1:3030/api/request/getRequestsByStudent?page=${currentPage}&username=${userInfo.sub}&search_query=${query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error al obtener datos');
+      }
+
+      const result = await response.json();
+      setIsLoading(false);
+      
+      if (result && result.data) {
         setFilas(result.data?.content || []); // Aseguramos que filas sea un arreglo
         setTotalItems(result.data.totalItems); // Total de items proporcionados por el backend
-        setTotalPages(result.data.totalPages); // Total de páginas proporcionadas por el backend
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      } finally {
-        setIsLoading(false); // Desactivar el estado de cargando
+      } else {
+        console.error('Error en la estructura de la respuesta', result);
       }
-    };
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    } finally {
+      setIsTableLoading(false);
+    }
+  };
 
-    obtenerDatos();
-  }, [page]);
+  useEffect(() => {
+    // Llamar obtenerDatos al cambiar la página o el query
+    obtenerDatos(page, searchQuery);
+  }, [page, searchQuery]); // Escuchar tanto `page` como `searchQuery`
 
   const columns = [
     {
@@ -79,7 +93,11 @@ const StudentRequestPage = () => {
         } else if (status === 'En Verificacion') {
           color = '#F1C40F';
         } else if (status === 'En Finanzas') {
-          color = 'red';
+          color = 'blue';
+        } else if (status === 'Consejo') {
+          color = 'cyan';
+        } else if (status === 'No valida') {
+          color = 'volcano';
         }
         return <Tag color={color}>{status || 'DESCONOCIDO'}</Tag>;
       },
@@ -94,26 +112,23 @@ const StudentRequestPage = () => {
       dataIndex: 'programStudent',
       key: 'programStudent',
     },
+    {
+      title: 'Acción',
+      key: 'accion',
+      render: (_, record) => (
+        <FaEye
+          style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
+          onClick={() => navigate(`/student/mi-solicitud?id=${record.request_id}&tipo=${record.requestTypeEntity.nameType}`)}
+        />
+      ),
+    }
   ];
 
-  const handleView = (e, record) => {
-    e.preventDefault();
-    const requestId = record.request_id;
-    navigate(`/student/mi-solicitud?id=${requestId}&tipo=${record.requestTypeEntity.nameType}`);
-  };
-
+  // Actualizamos la búsqueda y hacemos el llamado al endpoint con el query
   const handleSearch = (value) => {
-    setSearchQuery(value.toLowerCase()); // Actualizamos el estado con el valor de búsqueda
+    setSearchQuery(value); // Actualizamos el estado de búsqueda
+    setPage(1); // Reseteamos a la primera página cuando se hace una búsqueda
   };
-
-  // Filtrar filas basado en el query de búsqueda, aseguramos que filas sea un arreglo
-  const filteredData = Array.isArray(filas)
-    ? filas.filter((item) =>
-      Object.values(item).some((value) =>
-        value?.toString().toLowerCase().includes(searchQuery)
-      )
-    )
-    : [];
 
   return (
     <div className="student-request-page">
@@ -128,30 +143,35 @@ const StudentRequestPage = () => {
             <TitleComponent title={'Mis Solicitudes'} />
           </div>
 
-
           <div className="table-container">
-          <Search
-                    placeholder="Buscar aquí..."
-                    enterButton={
-                        <Button style={{ backgroundColor: "#97B749", borderColor: "#97B749", color: "white" }}>
-                            Buscar
-                        </Button>
-                    }
-                    prefix={<HiSearchCircle className="w-6 h-6" style={{ color: "#97B749" }} />}
-                    onSearch={handleSearch}
-                    style={{
-                        width: "60%",
-                        borderRadius: "15x",
-                        padding: "10px",
-                    }}
-                />
+            <Search
+              placeholder="Buscar aquí..."
+              enterButton={
+                <Button style={{ backgroundColor: "#97B749", borderColor: "#97B749", color: "white" }}>
+                  Buscar
+                </Button>
+              }
+              prefix={<HiSearchCircle className="w-6 h-6" style={{ color: "#97B749" }} />}
+              onSearch={handleSearch}
+              style={{
+                width: "60%",
+                borderRadius: "15px",
+                padding: "10px",
+              }}
+            />
             <div className="table-responsive" style={{ overflowX: 'auto', maxWidth: '100%' }}>
-              <Table
-                dataSource={filteredData}
-                columns={columns}
-                rowKey="request_id"
-                pagination={false}
-              />
+              {isTableLoading ? (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                  <Spin size="large" /> {/* Loader solo para la tabla */}
+                </div>
+              ) : (
+                <Table
+                  dataSource={filas} // Ya no es filtrado localmente, el servidor devuelve los resultados
+                  columns={columns}
+                  rowKey="request_id"
+                  pagination={false}
+                />
+              )}
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
               <Pagination
