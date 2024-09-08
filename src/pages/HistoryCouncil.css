@@ -1,0 +1,21 @@
+/* CouncilFacultyPage.css */
+.table-container {
+    background-color: white; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra */
+    margin: 20px auto; /* Centrando el contenedor con margen */
+    max-width: 80%; /* Ancho máximo del contenedor */
+    min-width: 80%; /* Ancho mínimo del contenedor */
+}
+
+.document-link {
+    color: #007BFF; /* Azul predeterminado */
+    text-decoration: none;
+    font-weight: 500; /* Hacerlo un poco más grueso */
+}
+
+.document-link:hover {
+    color: #0056b3; /* Azul más oscuro en hover */
+    text-decoration: underline; /* Subrayado en hover */
+}
