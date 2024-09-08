@@ -193,7 +193,7 @@ const ComponentLegalizationAdmin = () => {
         <Descriptions.Item className="ml-4 w-full md:w-1/3">
           <div className="bg-[#97B749] rounded-lg w-full h-9 -mt-6 custom-btn shadow-md ml-4">
             <select
-              className="w-full h-14 mr-4 -mt-3 text-xs md:text-sm lg:text-base text-white rounded-lg font-bold flex justify-between items-center bg-transparent border-none outline-none text-center md:mt-16"
+              className="w-full h-14 mr-4 -mt-3 text-xs md:text-sm lg:text-base text-white rounded-lg font-bold flex justify-between items-center bg-transparent border-none outline-none text-center "
               value={selectedStatus}
               onChange={(e) => handleSelectChange(e.target.value)}
               disabled={statuses.length === 0} // Desactivar si está vacío
@@ -216,7 +216,7 @@ const ComponentLegalizationAdmin = () => {
               <div className="flex flex-col w-full md:w-3/5">
                 <h4 className="text-sm font-bold ml-5 -pb-4">Razón de invalidez:</h4>
                 <textarea
-                  className="p-4 custom-textarea w-full h-24 ml-3 mr-6 text-xs md:text-sm rounded-lg shadow-md resize-none overflow-auto"
+                  className="p-4 custom-textarea w-full h-24 ml-3 mr-6 text-xs md:text-sm rounded-lg shadow-md resize-none overflow-auto border-[#43737E]"
                   placeholder="Ingrese la razón de invalidez"
                   value={additionalInfo}
                   onChange={handleAdditionalInfoChange}

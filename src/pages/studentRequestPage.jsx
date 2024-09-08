@@ -131,7 +131,7 @@ const StudentRequestPage = () => {
   };
 
   return (
-    <div className="student-request-page">
+    <div className="w-full flex mr-4 max-md:mr-0 h-screen scroll-container flex-col">
       {isLoading ? (
         <div className="loader-container">
           <Loader className="h-12 w-12" />
@@ -143,7 +143,7 @@ const StudentRequestPage = () => {
             <TitleComponent title={'Mis Solicitudes'} />
           </div>
 
-          <div className="table-container">
+          <div className="table-container ">
             <Search
               placeholder="Buscar aquí..."
               enterButton={
