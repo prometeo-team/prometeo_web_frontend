@@ -34,7 +34,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
       ].filter(doc => doc !== null);
       console.log(documentsWithNames);
       setDocuments(documentsWithNames);
-      onClose();
+      onClose(true);
       setConfirmLoading(false);
     }, 1000);
   };

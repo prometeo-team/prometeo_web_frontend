@@ -14,14 +14,18 @@ const getInfoToken = () => {
     return JSON.parse(jsonPayload);
 };
 
-const ModalAskCarrer = ({ isVisible, onConfirm }) => {
+const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
     const [programs, setPrograms] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (isVisible) {
             document.body.classList.add('modal-body-blur');
-            fetchPrograms(); 
+            if(process=='Postulación a Grados'){
+                fetchDegree();
+            }else{
+                fetchPrograms(); 
+            }
         } else {
             document.body.classList.remove('modal-body-blur');
         }
@@ -40,7 +44,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
             });
             const result = await response.json();
             if (result.status === "200 OK") {
-                const programOptions = result.data.map(program => ({ value: program, label: program }));
+                const programOptions = result.data.map(program => ({ value: program, label: program, disabled: false }));
                 if(programOptions.length == 1){
                     setPrograms(programOptions);
                     document.getElementById('carrer_select').value = programOptions[0].value;
@@ -48,6 +52,37 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
                 }else{
                     setPrograms(programOptions);
                 }
+                console.log('Programas obtenidos:', programOptions);
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+    };
+
+    const fetchDegree = async () => {
+        const userInfo = getInfoToken();
+        console.log('userInfo:', userInfo);
+        try {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getProgramsAndTypeByStudent?username=${userInfo.sub}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (result.status === "200 OK") {
+                const programOptions = result.data.map(program => ({ value: program.description+'-'+program.tipo, label: program.description, disabled: true}));
+                setPrograms(programOptions);
+                setPrograms(prevProgams =>
+                    prevProgams.map(program =>
+                        degreePrograms.includes(program.label)
+                        ? { ...program, disabled: false }
+                        : program
+                    )
+                  );
                 console.log('Programas obtenidos:', programOptions);
             } else {
                 console.error("Error en la respuesta:", result.message);
@@ -72,7 +107,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm }) => {
             <select id="carrer_select" className='custom-select bg-gray-200 rounded-md p-2  '>
                 <option className='custom-option' selected disabled>Seleccione una opción</option>
                 {programs.map((programs) => (
-                    <option id={programs.value} key={programs.value} value={programs.value}>
+                    <option id={programs.value} disabled={programs.disabled} key={programs.value} value={programs.value}>
                         {programs.label}
                     </option>
                 ))}
