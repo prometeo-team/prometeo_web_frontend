@@ -116,7 +116,8 @@ function councilTablePage() {
     const combinedDataSource = [...filteredConsejoRows, ...filteredOtherRows];
 
     return (
-        <div className="mr-4 ml-4 mt-4">
+        <div className='w-full flex mr-24 max-md:mr-0 h-screen scroll-container flex-col'>    
+        <div className="ml-8 mt-4">
             <div>
                 <TitleComponent title={"Actas Consejo"} />
             </div>
@@ -151,6 +152,7 @@ function councilTablePage() {
                     onClose={handleCloseModal}
                     //setDocuments={setDocuments}
                 />
+            </div>
             </div>
 
 

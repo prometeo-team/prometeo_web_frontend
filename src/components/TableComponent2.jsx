@@ -1,6 +1,5 @@
-import { useState, useEffect, React } from "react";
-import { Table, Space, Input, Button,Select  } from "antd";
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { useState, useEffect } from "react";
+import { Table, Space, Input, Select } from "antd";
 import { FaEye } from "react-icons/fa";
 import { HiSearchCircle } from "react-icons/hi";
 import PropTypes from 'prop-types';
@@ -8,7 +7,7 @@ import "./TableComponent.css";
 
 function TableComponent({ dataSource, columns, parameterAction, careers, select }) {
   console.log(careers[0]);
- 
+
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
     key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
@@ -35,13 +34,13 @@ function TableComponent({ dataSource, columns, parameterAction, careers, select 
     const fetchCareers = () => {
       const items = careers.map(item => ({ value: item, label: item }));
       setCareerList(items);
-  
+
       // Establecer el primer elemento como carrera seleccionada por defecto
       if (items.length > 0) {
         setSelectedCareer(items[0].value);
       }
     };
-  
+
     fetchCareers();
   }, [careers]);
 
@@ -63,7 +62,7 @@ function TableComponent({ dataSource, columns, parameterAction, careers, select 
                 parameterAction(e, record);
               }}
             >
-              <FaEye  className='text-[#97B749]'/>
+              <FaEye className='text-[#97B749]' />
             </a>
           </Space>
         ),
@@ -77,38 +76,31 @@ function TableComponent({ dataSource, columns, parameterAction, careers, select 
     )
   );
 
-  
+
   return (
     <div className="mx-auto">
       <div className="boxTable border-2 border-gray-300 p-5 rounded-2xl text-5xl">
         <div className="mb-3 w-full  flex flex-row max-md:flex-col">
-          <div className="max-md:w-2/3">
+          <div className="max-md:w-2/3 flex items-center">
             <Input
               placeholder="Buscar aquí..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              prefix={<HiSearchCircle className="w-8 h-8" />}
+              prefix={<HiSearchCircle className="w-8 h-8 text-[#43737E]" />}
+              className="flex-grow" 
             />
-            <Button
-              type="primary"
-              className="color-button text-sm md:text-base lg:text-lg h-auto ml-2"
-            >
-              Buscar
-            </Button>
-          
             <Select
-              className="h-10 ml-2 max-md:-ml-3 max-md:mb-3"
-              value={selectedCareer} // Aquí usamos el estado "selectedCareer"
+              className="h-11 ml-2" 
+              value={selectedCareer}
               style={{ width: 250 }}
               onChange={(value) => {
                 setSelectedCareer(value);
-                handleMenuClick(value); // Llama a la función cuando cambia la selección
+                handleMenuClick(value); 
               }}
-              options={careerList} // Las opciones vienen de "careerList"
-              placeholder="Selecciona una carrera" // Placeholder para cuando no haya valor seleccionado
+              options={careerList}
+              placeholder="Selecciona una carrera"
             />
-
-            </div>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <Table

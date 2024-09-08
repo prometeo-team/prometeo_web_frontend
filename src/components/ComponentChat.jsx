@@ -11,7 +11,7 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
   useEffect(() => {
     const obtenerComentarios = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getRequestComments?id_request=${id}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getRequestComments?id_requestDetail=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
