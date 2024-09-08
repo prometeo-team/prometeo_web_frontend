@@ -1,5 +1,6 @@
 .max-w-titleComponent {
-    max-width: calc(100% - 2rem); /* Considerando un padding de 1rem en TitleComponent */
+    max-width: calc(100% - 2rem);
+    /* Considerando un padding de 1rem en TitleComponent */
     margin-right: auto;
     margin-left: auto;
 }
@@ -48,11 +49,26 @@
 
 /* CouncilFacultyPage.css */
 .table-container {
-    background-color: white; /* Fondo blanco */
-    padding: 20px; /* Espaciado interno */
-    border-radius: 15px; /* Bordes redondeados */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra */
-    margin: 20px auto; /* Centrando el contenedor con margen */
-    max-width: 95%; /* Ancho máximo del contenedor */
+    background-color: white;
+    /* Fondo blanco */
+    padding: 20px;
+    /* Espaciado interno */
+    border-radius: 15px;
+    /* Bordes redondeados */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+    margin: 20px auto;
+    /* Centrando el contenedor con margen */
+    max-width: 95%;
+    /* Ancho máximo del contenedor */
 }
 
+@media (max-width: 670px) {
+    .custom-container {
+        flex-direction: column;
+    }
+
+    .custom-item {
+        width: 100%;
+    }
+}

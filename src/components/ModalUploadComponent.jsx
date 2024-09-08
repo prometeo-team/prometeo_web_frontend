@@ -5,7 +5,7 @@ import { AiFillFilePdf } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import PropTypes from "prop-types";
 
-const ModalReEnrollmentComponent = ({ visible, onClose, setDocuments }) => {
+const ModalUploadComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf, setPdf] = useState(null);
   const [fileName, setFileName] = useState("Archivo no seleccionado");
@@ -40,7 +40,7 @@ const ModalReEnrollmentComponent = ({ visible, onClose, setDocuments }) => {
   const handleDelete = () => {
     setFileName("Archivo no seleccionado");
     setPdf(null);
-    setInputKey(Date.now()); // Forzar la recreación del input
+    setInputKey(Date.now()); 
   };
 
   const truncateFileName = (name) => {
@@ -122,10 +122,10 @@ const ModalReEnrollmentComponent = ({ visible, onClose, setDocuments }) => {
   );
 };
 
-ModalReEnrollmentComponent.propTypes = {
+ModalUploadComponent.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   setDocuments: PropTypes.func.isRequired,
 };
 
-export default ModalReEnrollmentComponent;
+export default ModalUploadComponent;
