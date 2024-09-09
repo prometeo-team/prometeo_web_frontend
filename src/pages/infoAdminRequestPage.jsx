@@ -50,12 +50,6 @@ const InfoAdminRequestPage = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedCareer) {
-      obtenerDatos(page, searchQuery, selecteType, selectedCareer.value); // Ejecuta con la carrera seleccionada
-    }
-  }, [page, searchQuery, selecteType, selectedCareer]);
-
-  useEffect(() => {
     if (careerList.length > 0) {
       setSelectedCareer(careerList[0]); // Asegúrate de que sea el formato correcto para el Select
     }
@@ -63,7 +57,7 @@ const InfoAdminRequestPage = () => {
 
   const fetchGrafics = async (filter) =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics?programName=${career}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +75,8 @@ const InfoAdminRequestPage = () => {
     } catch(error) {
       console.error("Error al obtener los datos:", error);
     }
-  }
+  };
+
   const columns = [
     {
       title: 'Solicitud',
@@ -149,12 +144,13 @@ const InfoAdminRequestPage = () => {
   const handleSearch = (value) => {
     setSearchQuery(value); // Actualizamos el estado de búsqueda
     setPage(1); // Reseteamos a la primera página cuando se hace una búsqueda
+    obtenerDatos(1,value,selecteType,selectedCareer.value)
   };
 
   const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
     setIsTableLoading(true);  
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=${currentPage}&&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -240,16 +236,10 @@ const InfoAdminRequestPage = () => {
       selectedElement.classList.remove('inactive');
     }
 
-    // Realiza la solicitud fetch
-    if(option=='all'){
-      selecteType("")
-      fetchGrafics('');
-      obtenerDatos('');
-    }else{
-      setSelecteType(option);
-    fetchGrafics('&requestType=' + option);
-    obtenerDatos();
-    }
+  setSelecteType(option === 'all' ? "" : option);
+  fetchGrafics(option === 'all' ? '' : '&requestType=' + option);
+  obtenerDatos(1, searchQuery, option === 'all' ? "" : option, selectedCareer.value);
+
   };
 
   const handleCarreras =  (e) => {
@@ -275,7 +265,12 @@ const InfoAdminRequestPage = () => {
     }
     setSelectedCareer(career); // Actualiza el estado de la carrera seleccionada
     fetchGrafics(''); // Actualiza los gráficos con la nueva carrera
-    obtenerDatos(1, searchQuery, selecteType, career); 
+    obtenerDatos(1, searchQuery, selecteType, e); 
+  }
+
+  const handelChangePage = (e) =>{
+    setPage(e);
+    obtenerDatos(e,searchQuery,selecteType,selectedCareer.value);
   }
 
   return (
@@ -347,7 +342,7 @@ const InfoAdminRequestPage = () => {
                   current={page}
                   pageSize={10} // Asumimos 10 elementos por página
                   total={totalItems} // Total de items desde el backend
-                  onChange={(page) => setPage(page)} // Actualiza la página actual
+                  onChange={(page) => handelChangePage(page)} // Actualiza la página actual
                   showSizeChanger={false} // Deshabilitamos el cambio de tamaño de página
                 />
               </div>
