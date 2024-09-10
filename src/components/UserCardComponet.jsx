@@ -4,15 +4,19 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { useEffect, useRef, useState } from 'react';
+import { notification}  from "antd";
+import { IoAlertCircleSharp } from "react-icons/io5";
 import './UserCardComponent.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate,useLocation  } from 'react-router-dom';
 
 function UserCardComponent({ number }) {
+    const location = useLocation();
     const [user, setUser] = useState('');
     const [token, setToken] = useState(null);
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
-
+    const [role, setRole] = useState(null);
+    const navigate = useNavigate();
     const notificationRef = useRef(null);
 
     useEffect(() => {
@@ -31,24 +35,23 @@ function UserCardComponent({ number }) {
 
                 setUser(decodedToken.sub);
                 setToken(storedToken);
+                if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+                    setRole('ROLE_STUDENT');
+                  } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+                    setRole('ROLE_ADMIN');
+                  }
             } catch (error) {
                 console.error('Error decoding token:', error.message);
             }
         }
-
-        // Cierra la lista si se hace clic fuera de ella
-        /*function handleClickOutside(event) {
-            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-                setShowNotifications(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };*/
     }, []);
 
+    useEffect(() => {
+        if (user) {
+            fetchNotification();
+        }
+    }, [user, location.pathname]); // Esto hará que el fetch se ejecute cada vez que cambies de página
+    
     const handleLogout = () => {
         sessionStorage.clear();
         setUser('');
@@ -56,7 +59,7 @@ function UserCardComponent({ number }) {
         window.location.reload();
     };
 
-    const fetchDegree = async () => {
+    const fetchNotification = async () => {
         try {
             const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/byUser?userName=${user}`, {
                 method: 'GET',
@@ -66,7 +69,52 @@ function UserCardComponent({ number }) {
                 },
             });
             const result = await response.json();
-            if (result.status === "200 OK") {
+            if (response.status === 200) {
+                const prevNotification =  result.data.map(notification => ({id: notification.id,message:notification.title,request: notification.requestDetailId}));
+                setNotifications(prevNotification);
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+    };
+
+    const fetchRequest = async (request) => {
+        try {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestById?id=${request}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (response.status === 200) {
+                const type = result.data.requestTypeEntity.nameType;
+                
+                return type;
+                
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+    };
+
+    const fetchView = async (id) => {
+        try {
+            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/markAsRead?notificationId=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+            if (response.status === 200) {
+               console.log(result.message);
                 
             } else {
                 console.error("Error en la respuesta:", result.message);
@@ -77,20 +125,51 @@ function UserCardComponent({ number }) {
     };
 
     const toggleNotifications = () => {
-        if(showNotifications==true){
-            setShowNotifications(false);
-        }else if(showNotifications==false){
-            setShowNotifications(true);
-        }
+        setShowNotifications(prevState => !prevState);
     };
 
     const handleDeleteNotification = (id) => {
         setNotifications(notifications.filter(notification => notification.id !== id));
+        fetchView(id);
+    };
+
+    const handleClickNotification = async (id,request) => {
+        try {
+            setNotifications(notifications.filter(notification => notification.id !== id));
+            if(request===-1){
+                if(role=='ROLE_STUDENT'){
+                    navigate(`/student/crear-solicitud`);
+                    notification.info({
+                        message: 'Importante',
+                        description: 'Se a habilitado la postulación a grados".',
+                        placement: 'bottomRight',
+                        icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+                    })
+                }
+            }else{
+                var type = await  fetchRequest(request);
+                if(role=='ROLE_STUDENT'){
+                    navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                }else{
+                    if(type=='Legalización de matrícula'){
+                        navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                    }else{
+                        navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                    }
+                }
+            }
+            fetchView(id);
+        } catch (error) {
+            console.error("Error al manejar la notificación:", error);
+        }
+       console.log('id: '+id);
+       console.log('request: '+ request);
+
     };
 
     let notificationIcon = null;
-    if (number > 1) {
-        notificationIcon = <div className={classNames('w-5 h-5 rounded-full text-center bg-red-600 -ml-3 text-white')}><span>{number}</span></div>;
+    if (notifications.length > 1) {
+        notificationIcon = <div className={classNames('w-5 h-5 rounded-full text-center bg-red-600 -ml-3 text-white')}><span>{notifications.length}</span></div>;
     }
 
     return (
@@ -113,18 +192,19 @@ function UserCardComponent({ number }) {
                                     style={{
                                         top: 'calc(100% + 10px)', // Debajo de la campana
                                         maxHeight: '200px',       // Altura fija
-                                        overflowY: 'auto',        // Scroll si es necesario
-                                        zIndex: 10                // Para asegurarse que esté por encima
+                                        overflowY: 'auto',        // Scroll solo vertical
+                                        zIndex: 10,               // Para asegurarse que esté por encima
+                                        overflowX: 'hidden'       // Evitar scroll horizontal
                                     }}>
                                     <h3 className="text-lg font-bold mb-2 text-black">Notificaciones</h3>
                                     <ul>
                                         {notifications.length > 0 ? (
                                             notifications.map(notification => (
-                                                <li key={notification.id} className="flex justify-between items-center mb-2 text-black">
-                                                    <span>{notification.message}</span>
+                                                <li key={notification.id} className="flex justify-between items-center mb-2  hover:bg-zinc-400 text-black">
+                                                    <span onClick={()=>handleClickNotification(notification.id,notification.request)} className="break-words cursor-pointer text-wrap max-w-[75%]">{notification.message}</span> {/* Hacer que el texto se ajuste */}
                                                     <button
                                                         onClick={() => handleDeleteNotification(notification.id)}
-                                                        className="bg-red-500 text-white p-1 rounded-full">
+                                                        className="bg-red-500 ml-2 text-white p-1 rounded-full">
                                                         X
                                                     </button>
                                                 </li>
