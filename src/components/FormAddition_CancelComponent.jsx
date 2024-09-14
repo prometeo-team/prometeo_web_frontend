@@ -72,7 +72,7 @@ const FormAddition_CancelComponent = ({type}) => {
 
   const fetchRequest = async (request) => {
     try {
-      const response = await  fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", request)
+      const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", request)
       const result = await response.json();
           if (result.status === "200 OK") {
             setModalVisibleCheck(true);
