@@ -72,7 +72,7 @@ const Navbar = () => {
             </Link>
           </>
         )}
-        {userRoles.includes('ROLE_ADMIN') && (
+        {(userRoles.includes('ROLE_ACADEMIC') || userRoles.includes('ROLE_COORDINADORPOS') || userRoles.includes('ROLE_COORDINADORPRE') || userRoles.includes('ROLE_SUBACADEMIC') || userRoles.includes('ROLE_ADMIN') )&& (
           <>
             <Link to="/admin/dashboard" className="inline-block">
               <button className="bg-transparent bg-gray-700 btn-hover px-4 py-2 rounded mb-2 sm:mb-0">Solicitudes</button>

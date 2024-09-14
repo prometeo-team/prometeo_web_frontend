@@ -58,6 +58,19 @@ function App() {
     { name: 'Configuración', path: '/admin/config' },
   ];
 
+  const menucoordinador = [
+    { name: 'Inicio', path: '/' },
+    { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
+    { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
+    { name: 'Grados', path: '/admin/grados-tabla' }
+  ];
+
+  const menucareerS = [
+    { name: 'Inicio', path: '/' },
+    { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
+    { name: 'Grados', path: '/admin/grados-tabla' }
+  ];
+
   const showNavbar = () => {
     const noNavbarRoutes = ['/login', '/', '/home'];
     const pathname = location.pathname;
@@ -69,31 +82,9 @@ function App() {
     return !(isNoNavbarRoute || isNotFoundRoute);
   };
 
-  const getUserType = () => {
-    const path = location.pathname;
-    if (path.startsWith('/student')) {
-      return 1; // Estudiante
-    } else if (path.startsWith('/admin')) {
-      return 2; // Administrador
-    } else if (path.startsWith('/teacher')) {
-      return 3;
-    }else{
-      return 0; // Otro tipo de usuario
-    }
-  };
+  
 
-  const getMenu = () => {
-    const userType = getUserType();
-    if (userType === 1) {
-      return menuStudent;
-    } else if (userType === 2) {
-      return menuManagement;
-    }  else if (userType === 3) {
-      return menuTeacher;
-    }else {
-      return [];
-    }
-  };
+  
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -114,6 +105,14 @@ function App() {
           setRole('ROLE_ADMIN');
         }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
           setRole('ROLE_TEACHER');
+        }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+          setRole('ROLE_ACADEMIC');
+        }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+          setRole('ROLE_SUBACADEMIC');
+        }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+          setRole('ROLE_COORDINADORPRE');
+        }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+          setRole('ROLE_COORDINADORPOS');
         }
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -122,6 +121,22 @@ function App() {
     setIsTokenProcessed(true);
   }, []);
 
+  const getMenu = () => {
+    if (role === "ROLE_STUDENT") {
+      return menuStudent;
+    }else if (role === "ROLE_TEACHER") {
+      return menuTeacher;
+    }else if (role === "ROLE_ACADEMIC" || role === "ROLE_SUBACADEMIC") {
+      return menuManagement;
+    }else if(role === "ROLE_COORDINADORPRE" || role === "ROLE_COORDINADORPOS"){
+      return menucoordinador;
+    }else if(role === "ROLE_ADMIN"){
+      return menucareerS;
+    }else {
+      return [];
+    }
+  };
+  
   const ProtectedRoute = ({ allowedRoles, children }) => {
     if (!isTokenProcessed) {
       return <div>Loading...</div>;
@@ -130,6 +145,8 @@ function App() {
       return <Navigate to="/login" />;
     } 
     if (!allowedRoles.includes(role)) {
+      console.log("no encontrado");
+      console.log("no encontrado");
       return <Navigate to="/" />;
     }
     return children;
@@ -208,27 +225,27 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/admin/dashboard" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <InfoAdminRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-tabla" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <CouncilTablePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-facultad" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <CouncilFacultyPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/solicitud" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN",]}>
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <InfoAdminSRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/grados-tabla" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_ADMIN","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <DegreeTablePage />
           </ProtectedRoute>
         } />
@@ -268,17 +285,17 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/admin/config" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC"]}>
             <ConfigDatePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/historial-consejo" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <HistoryCouncil />
           </ProtectedRoute>
         } />
         <Route path="/admin/legalizacion-solicitud" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_ADMIN","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <LegalizationRequestAdmin />
           </ProtectedRoute>
         } />
