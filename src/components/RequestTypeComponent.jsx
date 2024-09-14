@@ -10,6 +10,7 @@ import { elements } from 'chart.js';
 const user = sessionStorage.getItem('user');
 var where = "";
 function RequestTypeComponent() {
+   const [role, setRole] = useState(null);
    const [isVisible, setIsVisible] = useState(true);
    const [isVisibleDegree, setIsVisibleDegree] = useState(false);
    const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +20,29 @@ function RequestTypeComponent() {
    
 
    useEffect(() => {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split('')
+              .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+              .join('')
+          );
+          const decodedToken = JSON.parse(jsonPayload);
+          if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+            setRole('ROLE_STUDENT');
+          } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+            setRole('ROLE_ADMIN');
+          }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+            setRole('ROLE_TEACHER');
+          }
+        } catch (error) {
+          console.error('Error decoding token:', error);
+        }
+      }
       fetchdegre();
     }, []);
 
@@ -147,6 +171,7 @@ function RequestTypeComponent() {
          />
          {isVisible && (
             <div className="requestLayout mt-16 ml-12" id="options">
+               {role=="ROLE_STUDENT" && (
                <Row gutter={[16, 16]} justify="center">
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
@@ -261,6 +286,21 @@ function RequestTypeComponent() {
                   </Col>
                   )}
                </Row>
+               )}
+               {role=="ROLE_TEACHER" && (
+               <Row gutter={[16, 16]} justify="center">
+                  <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
+                     <Link
+                        to="/teacher/solicitud-incapacidad"
+                        onClick={(e) => {
+                           navigate('/teacher/solicitud-incapacidad');
+                        }}
+                     >
+                        <CardComponent title="Incapacidades Médicas" icon="3" onCardClick={() => handleCardClick(3)} />
+                     </Link>
+                  </Col>
+               </Row>
+               )}
                <FloatButton
                   tooltip={<div>volver</div>}
                   icon={<ArrowLeftOutlined className="iconButtonReturn" />}

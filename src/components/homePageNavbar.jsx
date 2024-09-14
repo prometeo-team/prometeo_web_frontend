@@ -62,6 +62,16 @@ const Navbar = () => {
             </Link>
           </>
         )}
+        {userRoles.includes('ROLE_TEACHER') && (
+          <>
+            <Link to="/teacher/crear-solicitud" className="inline-block">
+              <button className="bg-transparent bg-gray-700 btn-hover px-4 py-2 rounded mb-2 sm:mb-0">Crear solicitud</button>
+            </Link>
+            <Link to="/teacher/mis-solicitudes" className="inline-block">
+              <button className="bg-transparent bg-gray-700 btn-hover px-4 py-2 rounded mb-2 sm:mb-0">Mis solicitudes</button>
+            </Link>
+          </>
+        )}
         {userRoles.includes('ROLE_ADMIN') && (
           <>
             <Link to="/admin/dashboard" className="inline-block">

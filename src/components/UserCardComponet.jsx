@@ -39,6 +39,8 @@ function UserCardComponent({ number }) {
                     setRole('ROLE_STUDENT');
                   } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
                     setRole('ROLE_ADMIN');
+                  }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+                    setRole('ROLE_TEACHER');
                   }
             } catch (error) {
                 console.error('Error decoding token:', error.message);
@@ -150,12 +152,15 @@ function UserCardComponent({ number }) {
                 var type = await  fetchRequest(request);
                 if(role=='ROLE_STUDENT'){
                     navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
-                }else{
+                }else if(role=='ROLE_ADMIN'){
                     if(type=='Legalización de matrícula'){
                         navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
                     }else{
                         navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
                     }
+                }else if(role=='ROLE_TEACHER'){
+                    navigate(`/teacher/mi-solicitud?id=${request}&tipo=${type}`);
+                    
                 }
             }
             fetchView(id);

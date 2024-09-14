@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import UserCArdComponent from '../components/UserCardComponet';
 
 const InfoStudentRequestPage = () => {
+    const [role, setRole] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [documents, setDocuments] = useState([]); 
     const [loading, setLoading] = useState(false);
@@ -44,6 +45,32 @@ const InfoStudentRequestPage = () => {
         }
     }, [id, isModalOpen]);
 
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if (token) {
+          try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+              atob(base64)
+                .split('')
+                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+            );
+            const decodedToken = JSON.parse(jsonPayload);
+            if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+              setRole('ROLE_STUDENT');
+            } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+              setRole('ROLE_ADMIN');
+            }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+                setRole('ROLE_TEACHER');
+              }
+          } catch (error) {
+            console.error('Error decoding token:', error);
+          }
+        }
+      }, []);
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -72,11 +99,20 @@ const InfoStudentRequestPage = () => {
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-3">
                     <InfoSRComponent />
                 </div>
+                {role == "ROLE_STUDENT" &&(
                 <div>
                     <Link to="/student/mis-solicitudes">
                         <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4' icon={<ArrowLeftOutlined />}>Volver</Button>
                     </Link>
                 </div>
+                )}
+                {role == "ROLE_TEACHER" &&(
+                <div>
+                    <Link to="/teacher/mis-solicitudes">
+                        <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4' icon={<ArrowLeftOutlined />}>Volver</Button>
+                    </Link>
+                </div>
+                )}
             </div>
 
             <Modal
