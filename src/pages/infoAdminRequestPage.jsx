@@ -57,7 +57,7 @@ const InfoAdminRequestPage = () => {
 
   const fetchGrafics = async (filter) =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career}`, {
+      const response = await fetch(`http://localhost:3030/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const InfoAdminRequestPage = () => {
   const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
     setIsTableLoading(true);  
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
+      const response = await fetch(`http://localhost:3030/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -165,6 +165,7 @@ const InfoAdminRequestPage = () => {
       setIsLoading(false);
 
       if (result && result.data) {
+        console.log(result.data.content);
         const extractedData = result.data.content.map(item => ({
           id_solicitud: item.requestEntity.idRequest,
           name: `${item.requestEntity.userEntity.name} ${item.requestEntity.userEntity.lastName}`,
@@ -172,6 +173,7 @@ const InfoAdminRequestPage = () => {
           status: item.requestDetailEntity.status.name,
           tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
         }));
+        console.log(extractedData);
         setFilas(extractedData);
         setTotalItems(result.data.totalElements);
       } else {
@@ -188,7 +190,7 @@ const InfoAdminRequestPage = () => {
 
   const obtenerCarreras = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/Admincareer?username=${user}`, {
+      const response = await fetch(`http://localhost:3030/api/user/Admincareer?username=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -201,6 +203,7 @@ const InfoAdminRequestPage = () => {
         const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
         console.log(carrerasSimuladas)
         setcareerList(items);
+        setcareerList([...items,{ value: 'Docentes', label: 'Docentes' }]);
         career = careerList[0];
         // Retornar el primer elemento solo si careerList tiene elementos
         if (carrerasSimuladas.length > 0) {

@@ -13,16 +13,17 @@ import './studentRequestPage.css';
 const { Search } = Input;
 
 const StudentRequestPage = () => {
+  const [role, setRole] = useState(null);
   const navigate = useNavigate();
   const [filas, setFilas] = useState([]); // Aseguramos que filas sea un arreglo
   const [isLoading, setIsLoading] = useState(true);
   const [isTableLoading, setIsTableLoading] = useState(false); // Estado para el loader de la tabla
-  const [page, setPage] = useState(1); // Página actual
+  const [page, setPage] = useState(0); // Página actual
   const [totalItems, setTotalItems] = useState(0); // Total de solicitudes
   const [searchQuery, setSearchQuery] = useState(""); // Estado para el buscador
 
   // Modificar el fetch para incluir el searchQuery
-  const obtenerDatos = async (currentPage = 1, query = "") => {
+  const obtenerDatos = async (currentPage = 0, query = "") => {
     setIsTableLoading(true); // Activar el estado de cargando para la tabla
     try {
       const userInfo = getInfoToken();
@@ -59,7 +60,33 @@ const StudentRequestPage = () => {
   useEffect(() => {
     // Llamar obtenerDatos al cambiar la página o el query
     obtenerDatos(page, searchQuery);
-  }, [page, searchQuery]); // Escuchar tanto `page` como `searchQuery`
+  }, [page, searchQuery]);// Escuchar tanto `page` como `searchQuery`
+  
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+          setRole('ROLE_STUDENT');
+        } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+          setRole('ROLE_ADMIN');
+        }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+          setRole('ROLE_TEACHER');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
 
   const columns = [
     {
@@ -118,7 +145,11 @@ const StudentRequestPage = () => {
       render: (_, record) => (
         <FaEye
           style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
-          onClick={() => navigate(`/student/mi-solicitud?id=${record.request_id}&tipo=${record.requestTypeEntity.nameType}`)}
+          onClick={() => role=='ROLE_STUDENT' ?
+            navigate(`/student/mi-solicitud?id=${record.request_id}&tipo=${record.requestTypeEntity.nameType}`)
+            :
+            navigate(`/teacher/mi-solicitud?id=${record.request_id}&tipo=${record.requestTypeEntity.nameType}`)
+          }
         />
       ),
     }

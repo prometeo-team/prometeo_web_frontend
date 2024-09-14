@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import InfoSRComponent from '../components/AdminInfoRrequest';
 import InfoSRComponent2 from '../components/AdminInfoRrequest2';
+import InfoSRComponent3 from '../components/AdminInfoRrequest3';
 import ChatSR from '../components/ComponentChat';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
@@ -15,7 +16,9 @@ const InfoStudentRequestPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [documents, setDocuments] = useState([]); // Inicializar con un array vacío
     const [loading, setLoading] = useState(false);
-    const [detail2, setDetail2] = useState(true);
+    const [detail1, setDetail1] = useState(true);
+    const [detail2, setDetail2] = useState(false);
+    const [detail3, setDetail3] = useState(false);
 
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -49,8 +52,14 @@ const InfoStudentRequestPage = () => {
         }
         if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
             setDetail2(true);
+            setDetail3(false);
+        }else if (tipo=='Incapacidades Docentes'){
+            setDetail1(false);
+            setDetail2(false);
+            setDetail3(true);
         }else{
             setDetail2(false);
+            setDetail3(false);
         }
 
     }, [id, isModalOpen]);
@@ -81,13 +90,20 @@ const InfoStudentRequestPage = () => {
                         onClick={showModal}
                     >Documentos adjuntos</Button>
                 </div>
+                {detail1 && (
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
                     <InfoSRComponent />
                 </div>
+                )}
                 {detail2 && (
                     <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl mt-4 border ">
                     <InfoSRComponent2 />
                     </div>
+                )}
+                {detail3 && (
+                <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
+                    <InfoSRComponent3 />
+                </div>
                 )}
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">
                     <ChatSR id={id} />

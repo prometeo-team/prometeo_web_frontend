@@ -43,6 +43,12 @@ function App() {
     { name: 'Otras Solicitudes', path: '/student/solicitud-otra' },
     { name: 'Ayuda' }
   ];
+  const menuTeacher = [
+    { name: 'Inicio', path: '/' },
+    { name: 'Mis Solicitudes', path: '/teacher/mis-solicitudes' },
+    { name: 'Crear Solicitud', path: '/teacher/crear-solicitud' },
+    { name: 'Ayuda' }
+  ];
 
   const menuManagement = [
     { name: 'Inicio', path: '/' },
@@ -58,7 +64,7 @@ function App() {
 
     const isNoNavbarRoute = noNavbarRoutes.includes(pathname);
 
-    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/student/mis-solicitudes', '/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ].includes(pathname) && pathname !== '*';
+    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/teacher/crear-solicitud', '/student/mis-solicitudes', '/teacher/mis-solicitudes','/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad','/teacher/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ,'/teacher/mi-solicitud' ].includes(pathname) && pathname !== '*';
 
     return !(isNoNavbarRoute || isNotFoundRoute);
   };
@@ -69,7 +75,9 @@ function App() {
       return 1; // Estudiante
     } else if (path.startsWith('/admin')) {
       return 2; // Administrador
-    } else {
+    } else if (path.startsWith('/teacher')) {
+      return 3;
+    }else{
       return 0; // Otro tipo de usuario
     }
   };
@@ -80,7 +88,9 @@ function App() {
       return menuStudent;
     } else if (userType === 2) {
       return menuManagement;
-    } else {
+    }  else if (userType === 3) {
+      return menuTeacher;
+    }else {
       return [];
     }
   };
@@ -102,6 +112,8 @@ function App() {
           setRole('ROLE_STUDENT');
         } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
           setRole('ROLE_ADMIN');
+        }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+          setRole('ROLE_TEACHER');
         }
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -110,20 +122,21 @@ function App() {
     setIsTokenProcessed(true);
   }, []);
 
-  const ProtectedRoute = ({ roleRequired, children }) => {
+  const ProtectedRoute = ({ allowedRoles, children }) => {
     if (!isTokenProcessed) {
       return <div>Loading...</div>;
     }
     if (!role) {
       return <Navigate to="/login" />;
-    } else if (role !== roleRequired) {
+    } 
+    if (!allowedRoles.includes(role)) {
       return <Navigate to="/" />;
     }
     return children;
   };
 
   ProtectedRoute.propTypes = {
-    roleRequired: PropTypes.string.isRequired, 
+    allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired, 
     children: PropTypes.node.isRequired,
   };
 
@@ -140,112 +153,132 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/student/crear-solicitud" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
+            <CreateRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/teacher/crear-solicitud" element={
+          <ProtectedRoute allowedRoles={["ROLE_TEACHER"]}>
             <CreateRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/student/mis-solicitudes" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
+            <StudentRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/teacher/mis-solicitudes" element={
+          <ProtectedRoute allowedRoles={["ROLE_TEACHER"]}>
             <StudentRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/student/mi-solicitud" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
+            <InfoRequestPage />
+          </ProtectedRoute>
+        } />
+         <Route path="/teacher/mi-solicitud" element={
+          <ProtectedRoute allowedRoles={["ROLE_TEACHER"]}>
             <InfoRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/student/legalizacion-matricula" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationLegalizationPage />
           </ProtectedRoute>
         } />
         <Route path="/student/reintegro" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationReEnroolmentPage />
           </ProtectedRoute>
         } />
         <Route path="/student/reembolso" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationRefundPage />
           </ProtectedRoute>
         } />
         <Route path="/student/activacion-cupo" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationSlotActivationPage />
           </ProtectedRoute>
         } />
         <Route path="/student/reserva" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationReservationPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/dashboard" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC"]}>
             <InfoAdminRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-tabla" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC"]}>
             <CouncilTablePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-facultad" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC"]}>
             <CouncilFacultyPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/solicitud" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN",]}>
             <InfoAdminSRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/grados-tabla" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
             <DegreeTablePage />
           </ProtectedRoute>
         } />
         <Route path="/student/solicitud-incapacidad" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
+            <IncapacityPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/teacher/solicitud-incapacidad" element={
+          <ProtectedRoute allowedRoles={["ROLE_TEACHER"]}>
             <IncapacityPage />
           </ProtectedRoute>
         } />
         <Route path="/student/solicitud-supletorio" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <ExtensionPage />
           </ProtectedRoute>
         } />
         <Route path="/student/solicitud-otra" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <OtherRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/student/solicitud-adicion" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationAdditionPage />
           </ProtectedRoute>
         } />
         <Route path="/student/solicitud-cancelacion" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationCancelPage />
           </ProtectedRoute>
         } />
         <Route path="/student/postulacion-grado" element={
-          <ProtectedRoute roleRequired="ROLE_STUDENT">
+          <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationDegreePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/config" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
             <ConfigDatePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/historial-consejo" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
             <HistoryCouncil />
           </ProtectedRoute>
         } />
         <Route path="/admin/legalizacion-solicitud" element={
-          <ProtectedRoute roleRequired="ROLE_ADMIN">
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
             <LegalizationRequestAdmin />
           </ProtectedRoute>
         } />

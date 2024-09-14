@@ -15,6 +15,7 @@ let career;
 const { TextArea } = Input;
 
 const FormIncapacityComponent = () => {
+  const [role, setRole] = useState(null);
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [subjects, setSubjects] = useState([{ id: "subject0", idtxt: "subject0_txt", disabled: false }]); // 1Estado inicial para las materias
@@ -28,7 +29,33 @@ const FormIncapacityComponent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchInfo();
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+          console.log('ROLE_STUDENT');
+          setRole('ROLE_STUDENT');
+        } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+          console.log('ROLE_ADMIN');
+          setRole('ROLE_ADMIN');
+        }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+          console.log('ROLE_TEACHER');
+          setRole('ROLE_TEACHER');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+      fetchInfo();
   }, []);
 
   const fetchInfo = async () => {
@@ -38,7 +65,7 @@ const FormIncapacityComponent = () => {
     career = params.get('carrera');
     if (career) {
     try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
+        const response = await fetch(`http://localhost:3030/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +89,7 @@ const FormIncapacityComponent = () => {
 
   const Program = async () =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`http://localhost:3030/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -94,12 +121,21 @@ const FormIncapacityComponent = () => {
   const handleOpenModalCheck = () => {
     setIsButtonVisible2(false);
     setLoading(true);
-    fetchSave();
+    if(role=='ROLE_STUDENT'){
+      fetchSave();
+    }
+    if(role=='ROLE_TEACHER'){
+      fetchSave2();
+    }
   };
 
   const handleCloseModalCheck = () => {
     setModalVisibleCheck(false);
-    navigate("/student/mis-solicitudes");
+    if(role=='ROLE_STUDENT'){
+      navigate("/student/mis-solicitudes");
+    } else if(role=='ROLE_TEACHER'){
+      navigate("/teacher/mis-solicitudes");
+    }
   };
 
   const handleChange = (option) => {
@@ -198,7 +234,7 @@ const FormIncapacityComponent = () => {
       console.log("no existe");
       setNewCredits([...newCredits, {id: idM, idtxt: id, id_subject: null, subject_name: null, txt: text}]);
     }
-  }
+  };
 
   const fetchSave = async () => {
       const myHeaders = new Headers();
@@ -233,7 +269,7 @@ const FormIncapacityComponent = () => {
 
 
     try {
-    const response = await  fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions)
+    const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions)
     const result = await response.json();
         if (result.status === "200 OK") {
           setModalVisibleCheck(true);
@@ -244,48 +280,119 @@ const FormIncapacityComponent = () => {
         console.error("Error al obtener los programas:", error);
     }
   };
+
+  const fetchSave2 = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    const formdata = new FormData();
+    
+    const requestJson = new Blob([JSON.stringify({
+      userEntity: user,
+      requestTypeEntity: 'Incapacidades Docentes',
+      programStudent: 'Docentes',
+    })], { type: 'application/json' });
+
+    formdata.append("request", requestJson);
+
+    if (documents.length > 0) {
+      console.log(documents);
+      documents.forEach((file) => {
+        formdata.append("files", file.originalfile);
+      });
+    }
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: formdata,
+      redirect: "follow"
+    };
+
+
+  try {
+  const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions)
+  const result = await response.json();
+      if (result.status === "200 OK") {
+        setModalVisibleCheck(true);
+      } else {
+        console.error("Error en la respuesta:", result.message);
+      }
+  } catch (error) {
+      console.error("Error al obtener los programas:", error);
+  }
+};
+
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
+      {role == "ROLE_STUDENT" &&(
       <Link to="/student/crear-solicitud">
         <button className="w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color">
           <IoIosArrowBack className=" h-7 w-7" />
           <span className="ml-2">Volver</span>
         </button>
       </Link>
+       )}
+       {role == "ROLE_TEACHER" &&(
+      <Link to="/teacher/crear-solicitud">
+        <button className="w-40 h-5 font-bold text-lg flex  items-center mb-5 font-color">
+          <IoIosArrowBack className=" h-7 w-7" />
+          <span className="ml-2">Volver</span>
+        </button>
+      </Link>
+       )}
       {/* Información del estudiante */}
+      {role == "ROLE_STUDENT" &&(
       <h2 className="text-xl font-bold text-black ml-2 mt-5 mb-5">
         Información del estudiante
       </h2>
+       )}
+       {role == "ROLE_STUDENT" &&(
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="w-full max-w-xs">
-            <h3 className='text-black truncate'>Nombre(s)</h3>
-            <InputComponent id="name_input" type="readOnly" variant="form-input" placeholder={studentInfo.name || "Nombre"} value={studentInfo.name || ""} className="w-full" />
-            <h3 className='text-black truncate mt-2'>Tipo de documento</h3>
-            <InputComponent id="documente_type" type="readOnly" variant="form-input" placeholder={studentInfo.document_type || "Tipo de documento"} value={studentInfo.document_type || ""} className="w-full" />
-            <h3 className='text-black truncate mt-2'>Carrera</h3>
-            <InputComponent id="cumulative_average_input" type="readOnly" variant="form-input" placeholder={career || "Carrera"} value={career || ""} className="w-full" />
+          <h3 className='text-black truncate'>Nombre(s)</h3>
+          <InputComponent id="name_input" type="readOnly" variant="form-input" placeholder={studentInfo.name || "Nombre"} value={studentInfo.name || ""} className="w-full" />
+          <h3 className='text-black truncate mt-2'>Tipo de documento</h3>
+          <InputComponent id="documente_type" type="readOnly" variant="form-input" placeholder={studentInfo.document_type || "Tipo de documento"} value={studentInfo.document_type || ""} className="w-full" />
+          {role == "ROLE_STUDENT" &&(
+          <h3 className='text-black truncate mt-2'>Carrera</h3>
+          )}
+          {role == "ROLE_STUDENT" &&(
+          <InputComponent id="cumulative_average_input" type="readOnly" variant="form-input" placeholder={career || "Carrera"} value={career || ""} className="w-full" />
+          )}
         </div>
         <div className="w-full max-w-xs">
-            <h3 className="text-black truncate">Apellidos</h3>
-            <InputComponent id="last_name_input" type="readOnly" variant="form-input" placeholder={studentInfo.last_name || "Apellidos"} value={studentInfo.last_name || ""} className="w-full" />
-            <h3 className="text-black truncate mt-2">No. de documento</h3>
-            <InputComponent id="admission_date_input" type="readOnly" variant="form-input" placeholder={studentInfo.document_number || "No. de documento"} value={studentInfo.document_number || ""} className="w-full" />
-            <h3 className="text-black truncate mt-2">Dirección</h3>
-            <InputComponent id="academic_loss_input" type="readOnly" variant="form-input" placeholder={studentInfo.address || "Cantidad"} value={studentInfo.address || ""} className="w-full" />
+          <h3 className="text-black truncate">Apellidos</h3>
+          <InputComponent id="last_name_input" type="readOnly" variant="form-input" placeholder={studentInfo.last_name || "Apellidos"} value={studentInfo.last_name || ""} className="w-full" />
+          <h3 className="text-black truncate mt-2">No. de documento</h3>
+          <InputComponent id="admission_date_input" type="readOnly" variant="form-input" placeholder={studentInfo.document_number || "No. de documento"} value={studentInfo.document_number || ""} className="w-full" />
+          {role == "ROLE_STUDENT" &&(
+          <h3 className="text-black truncate mt-2">Dirección</h3>
+          )}
+            {role == "ROLE_STUDENT" &&(
+          <InputComponent id="academic_loss_input" type="readOnly" variant="form-input" placeholder={studentInfo.address || "Cantidad"} value={studentInfo.address || ""} className="w-full" />
+          )}
         </div>
         <div className="w-full max-w-xs">
             <h3 className='text-black truncate'>Teléfono</h3>
             <InputComponent id="schedule_input" type="readOnly" variant="form-input" placeholder={studentInfo.phone || "Jornada"} value={studentInfo.phone || ""} className="w-full" />
+            {role == "ROLE_STUDENT" &&(
             <h3 className='text-black truncate mt-2'>Semestre</h3>
+          )} {role == "ROLE_STUDENT" &&(
             <InputComponent id="semester_input" type="readOnly" variant="form-input" placeholder={studentInfo.semester || "Semestre"} value={studentInfo.semester || ""} className="w-full" />
+          )} {role == "ROLE_STUDENT" &&(
             <h3 className='text-black truncate mt-2'>Correo electrónico</h3>
+          )} {role == "ROLE_STUDENT" &&(
             <InputComponent id="career_input" type="readOnly" variant="form-input" placeholder={studentInfo.email + "@unbosque.edu.co" || "Programa académico"} value={studentInfo.email + "@unbosque.edu.co" || ""} className="w-full" />
-        </div>
+          )}
+            </div>
       </div>
+       )}
+      {role == "ROLE_STUDENT" &&(
       <div>
         <div className="w-full border-t border-black "></div>
       </div>
+       )}
       {/* Actividades */}
+      {role == "ROLE_STUDENT" &&(
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
           <h2 className="text-xl font-bold text-black mt-5 mb-5">
@@ -336,8 +443,9 @@ const FormIncapacityComponent = () => {
           </div>
         </div>
       </div>
+       )}
       <div>
-      <div className="w-full border-t border-black "></div>
+        <div className="w-full border-t border-black "></div>
       </div>
       {/* Documentos */}
       <div className="ml-2 grid grid-flow-row">
@@ -386,7 +494,7 @@ const FormIncapacityComponent = () => {
               )}
               {(
                 <div className='flex items-start justify-start'>
-                  {isButtonVisible2 && (
+                  {(isButtonVisible2 || role=='ROLE_TEACHER') && (
                   <button
                     className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
                     onClick={handleOpenModalCheck}
