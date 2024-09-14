@@ -17,7 +17,7 @@ const LoginPage = () => {
                     />
                 </div>
                 <hr className="image-line" />
-                <h1 className='h1Login'>Facultad De Ingeniería Virtual</h1>
+                <h1 className='h1Login '>Facultad De Ingeniería Virtual</h1>
             </div>
             <div className="square-container p-6 rounded-lg w-full md:w-1/2 mt-6 md:mt-0">
                 <div className="flex flex-col items-center h-full">

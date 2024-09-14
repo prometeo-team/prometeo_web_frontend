@@ -37,7 +37,7 @@ const HomePage = () => {
                     </div>
 
                     <div className="bg-[#97B749] p-4 rounded-2xl shadow-md m-5 absolute left-1/2 transform -translate-x-1/2 -translate-y-3/4 text-center w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[40%]">
-                        <h1 className="font-bold text-white text-2xl sm:text-2xl md:text-4xl">CALENDARIO ACADEMICO</h1>
+                        <h1 className="font-bold text-white  text-2xl sm:text-2xl md:text-4xl">CALENDARIO ACADÉMICO</h1>
                     </div>
                 </div>
                 <div className="councill-container bg-gray-100 p-4 rounded-lg shadow-md m-5 mt-12 border-[#43737E] border-2">
