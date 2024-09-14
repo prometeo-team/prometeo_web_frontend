@@ -11,10 +11,13 @@ const ComponentInfoSR = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false); // Estado para el nuevo modal
+  const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [pdfUrl, setPdfUrl] = useState(''); // URL del PDF
 
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  const username = userInfo ? userInfo.sub : '';
   const url = window.location.href;
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
@@ -59,7 +62,7 @@ const ComponentInfoSR = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const fetchStatuses = async () => {
     try {
@@ -78,16 +81,74 @@ const ComponentInfoSR = () => {
         setInitialStatus(initial);
         setInitialStatusValue(initial);
         setSelectedStatus(initial);
-        
-        // Verificar si algún estado contiene "Firma"
-        if (statusData.some(status => status.includes('Firma'))) {
-          setIsFirmaModalVisible(true);
-        }
       }
     } catch (error) {
       console.error("Error al obtener los estados:", error);
     }
   };
+
+  const sendDocument = async (s3url) => {
+    const nameDoc = s3url.split("/")[4]; 
+    console.log(nameDoc)
+    try {
+      const response = await fetch(s3url);
+      if (!response.ok) {
+        throw new Error('No se pudo descargar el archivo desde S3');
+      }
+      const fileBlob = await response.blob();
+      console.log(fileBlob);
+      const file = new File([fileBlob], nameDoc, {type: fileBlob.type});
+      console.log(file);
+      const formData = new FormData();
+      
+      formData.append('file', file);
+      formData.append("idRequest", id);
+      formData.append("userAdmin", username);
+
+      const uploadResponse = await fetch('http://localhost:3030/api/request/firmDocumentMail ', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('No se pudo subir el archivo');
+      }
+
+      console.log('Archivo subido exitosamente');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchDocument = async () => {
+      try {
+        const response = await fetch(`http://localhost:3030/api/request/generate?requestId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+        const result = await response.json();
+
+        if (result.status === "200" && result.data) {
+          console.log(result.data);
+          setPdfUrl(result.data);
+
+        } else {
+          console.error('No se encontró el documento.');
+        }
+      } catch (error) {
+        console.error('Error al obtener el documento:', error);
+      }
+    };
+
+    fetchDocument();
+  }, [id]);
 
   useEffect(() => {
     fetchStatuses();
@@ -96,8 +157,7 @@ const ComponentInfoSR = () => {
   const handleOk = async () => {
     if (selectedStatus !== initialStatus) {
       try {
-        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-        const username = userInfo ? userInfo.sub : '';
+
 
         let putUrl = `https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
 
@@ -131,7 +191,7 @@ const ComponentInfoSR = () => {
         console.error("Error al actualizar el estado:", error);
       } finally {
         setIsModalVisible(false);
-        setIsFirmaModalVisible(false); // Cerrar el modal de Firma también
+        setIsFirmaModalVisible(false);
       }
     } else {
       notification.warning({
@@ -144,7 +204,7 @@ const ComponentInfoSR = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setIsFirmaModalVisible(false); // Cerrar el modal de Firma también
+    setIsFirmaModalVisible(false);
   };
 
   const handleSelectChange = (value) => {
@@ -155,13 +215,17 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
+  const handleFirmar = () => {
+    sendDocument(pdfUrl);
+    setIsFirmaModalVisible(false);
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <>
-      {/* Descriptions Section */}
       <Descriptions
         title={
           <div className="flex flex-wrap items-center justify-between">
@@ -197,11 +261,10 @@ const ComponentInfoSR = () => {
           </Descriptions.Item>
         ))}
 
-        {/* Status Selection Section */}
         <Descriptions.Item className="ml-4 w-full md:w-1/3">
-          <div className="bg-[#97B749] rounded-lg w-full h-9 -mt-6 custom-btn shadow-md ml-4 ">
+          <div className="bg-[#97B749] rounded-lg w-full h-9 -mt-6 custom-btn shadow-md ml-4">
             <select
-              className="w-full h-14 mr-4 -mt-3 text-xs md:text-sm lg:text-base text-white rounded-lg font-bold flex justify-between items-center bg-transparent border-none outline-none text-center "
+              className="w-full h-14 mr-4 -mt-3 text-xs md:text-sm lg:text-base text-white rounded-lg font-bold flex justify-between items-center bg-transparent border-none outline-none text-center"
               value={selectedStatus}
               onChange={(e) => handleSelectChange(e.target.value)}
             >
@@ -213,8 +276,6 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
-        
-        {/* Confirm Button Section */}
         {selectedStatus === 'No Aprobado' ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
@@ -242,15 +303,20 @@ const ComponentInfoSR = () => {
             <Button
               type="primary"
               className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
-              onClick={() => setIsModalVisible(true)}
+              onClick={() => {
+                if (initialStatusValue.includes('Firma')) {
+                  setIsFirmaModalVisible(true);
+                } else {
+                  setIsModalVisible(true);
+                }
+              }}
             >
-              Confirmar <FaCheck className="ml-2 md:ml-4" />
+              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'} <FaCheck className="ml-2 md:ml-4" />
             </Button>
           </Descriptions.Item>
         )}
       </Descriptions>
 
-      {/* Existing Modal */}
       <Modal
         title="Confirmación de Cambio de Estado"
         visible={isModalVisible}
@@ -262,17 +328,36 @@ const ComponentInfoSR = () => {
         <p>¿Está seguro de que desea cambiar el estado de {initialStatusValue} a {selectedStatus}?</p>
       </Modal>
 
-      {/* New Modal for 'Firma' */}
       <Modal
-        title="Acción Requerida: Firma"
+        title="Firma del Documento"
         visible={isFirmaModalVisible}
-        onOk={handleOk}
+        onOk={handleFirmar}
         onCancel={handleCancel}
-        okText="Confirmar Firma"
-        cancelText="Cancelar"
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancelar
+          </Button>,
+          <Button key="firmar" type="primary" onClick={handleFirmar}>
+            Firmar
+          </Button>,
+        ]}
       >
-        <p>El estado actual requiere una firma. ¿Desea proceder con la firma?</p>
+        <p>Por favor, revise el documento antes de firmarlo.</p>
+        {pdfUrl ? (
+          <div style={{ height: '600px', overflow: 'auto' }}>
+            <embed
+              src={pdfUrl}
+              type="application/pdf"
+              style={{ width: '100%', height: '100%' }}
+              title="Vista previa del PDF"
+            />
+          </div>
+        ) : (
+          <p>No se encontró el documento.</p>
+        )}
       </Modal>
+
+
     </>
   );
 };
