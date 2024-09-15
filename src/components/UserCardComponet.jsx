@@ -181,7 +181,7 @@ function UserCardComponent({ number }) {
     };
 
     let notificationIcon = null;
-    if (notifications.length > 1) {
+    if (notifications.length >= 1) {
         notificationIcon = <div className={classNames('w-5 h-5 rounded-full text-center bg-red-600 -ml-3 text-white')}><span>{notifications.length}</span></div>;
     }
 
