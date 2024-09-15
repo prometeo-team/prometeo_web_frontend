@@ -38,6 +38,14 @@ function RequestTypeComponent() {
             setRole('ROLE_ADMIN');
           }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
             setRole('ROLE_TEACHER');
+          }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+            setRole('ROLE_ACADEMIC');
+          }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+            setRole('ROLE_SUBACADEMIC');
+          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+            setRole('ROLE_COORDINADORPRE');
+          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+            setRole('ROLE_COORDINADORPOS');
           }
         } catch (error) {
           console.error('Error decoding token:', error);

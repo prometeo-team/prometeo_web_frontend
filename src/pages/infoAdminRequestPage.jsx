@@ -36,28 +36,32 @@ const InfoAdminRequestPage = () => {
   const chart3Ref = useRef(null);
 
   useEffect(() => {
-    const obtenerCarrerasYDatos = async () => {
-      const primeraCarrera = await obtenerCarreras(); // Asegúrate de esperar los datos
-      if (primeraCarrera) {
-        career = primeraCarrera;
-        setSelectedCareer(primeraCarrera);
-        fetchGrafics(''); // Establecer la carrera
-        obtenerDatos(1, "", "", primeraCarrera);
-      }
-    };
-    
-    obtenerCarrerasYDatos(); // Llamar a la función asíncrona
+    obtenerCarreras(); // Llamar a la función asíncrona
   }, []);
 
   useEffect(() => {
     if (careerList.length > 0) {
-      setSelectedCareer(careerList[0]); // Asegúrate de que sea el formato correcto para el Select
+      setSelectedCareer(careerList[0].label); // Asegúrate de que sea el formato correcto para el Select
     }
   }, [careerList]);
 
-  const fetchGrafics = async (filter) =>{
+  useEffect(() => {
+    if (careerList.length > 0 && selectedCareer) {
+      obtenerDatos(page,searchQuery,selecteType,selectedCareer);
+    }
+
+  }, [page,searchQuery,selecteType,selectedCareer]);
+
+  useEffect(() => {
+    if (careerList.length > 0 && selectedCareer) {
+      fetchGrafics(selecteType,selectedCareer);
+    }
+
+  }, [selecteType,selectedCareer]);
+
+  const fetchGrafics = async (filter="",career2="") =>{
     try{
-      const response = await fetch(`http://localhost:3030/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career}`, {
+      const response = await fetch(`http://localhost:3030/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career2}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -75,6 +79,115 @@ const InfoAdminRequestPage = () => {
     } catch(error) {
       console.error("Error al obtener los datos:", error);
     }
+  };
+
+  const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
+    setIsTableLoading(true);  
+    try {
+      const response = await fetch(`http://localhost:3030/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error al obtener datos');
+      }
+      const result = await response.json();
+      setIsLoading(false);
+
+      if (result && result.data) {
+        console.log(result.data.content);
+        const extractedData = result.data.content.map(item => ({
+          id_solicitud: item.requestEntity.idRequest,
+          name: `${item.requestEntity.userEntity.name} ${item.requestEntity.userEntity.lastName}`,
+          createdAt: item.requestEntity.createdAt,
+          status: item.requestDetailEntity.status.name,
+          tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
+        }));
+        console.log(extractedData);
+        setFilas(extractedData);
+        setTotalItems(result.data.totalElements);
+      } else {
+        console.error("Error en la respuesta:", result.message);
+      }
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    } 
+    finally {
+      setIsTableLoading(false);
+    }
+  };
+  
+  const obtenerCarreras = async () => {
+    try {
+      const response = await fetch(`http://localhost:3030/api/user/Admincareer?username=${user}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      if (response.status === 200) {
+        const carrerasSimuladas = result.data.career;
+        const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
+        console.log(carrerasSimuladas)
+        setcareerList(items);
+        setcareerList([...items,{ value: 'Docentes', label: 'Docentes' }]);
+      }else {
+          console.error("Error en la respuesta:", result.message);
+      }
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
+  
+  const handleClickType = (option) => {
+    // Destruir los gráficos actuales
+    if (chart1Ref.current) chart1Ref.current.destroy();
+    if (chart2Ref.current) chart2Ref.current.destroy();
+    if (chart3Ref.current) chart3Ref.current.destroy();
+
+    // Elimina la clase 'active' de todos los elementos
+    const elements = document.querySelectorAll('[name="process"]');
+    elements.forEach(element => {
+      element.classList.remove('active');
+      element.classList.add('inactive');
+    });
+
+    // Añade la clase 'active' al elemento seleccionado
+    const selectedElement = document.getElementById(option);
+    if (selectedElement) {
+      selectedElement.classList.add('active');
+      selectedElement.classList.remove('inactive');
+    }
+
+  setSelecteType(option === 'all' ? "" : option);
+  setPage(1);
+
+  };
+
+  const handleCarreras =  (e) => {
+    console.log(e);
+    career=e;
+    // Destruir los gráficos actuales
+    if (chart1Ref.current) chart1Ref.current.destroy();
+    if (chart2Ref.current) chart2Ref.current.destroy();
+    if (chart3Ref.current) chart3Ref.current.destroy();
+    setSelectedCareer(career);
+    setPage(1);
+  }
+
+  const handelChangePage = (e) =>{
+    setPage(e);
+  };
+
+  const handleSearch = (value) => {
+    setSearchQuery(value); // Actualizamos el estado de búsqueda
+    setPage(1); // Reseteamos a la primera página cuando se hace una búsqueda
   };
 
   const columns = [
@@ -141,140 +254,6 @@ const InfoAdminRequestPage = () => {
     }
   ];
 
-  const handleSearch = (value) => {
-    setSearchQuery(value); // Actualizamos el estado de búsqueda
-    setPage(1); // Reseteamos a la primera página cuando se hace una búsqueda
-    obtenerDatos(1,value,selecteType,selectedCareer.value)
-  };
-
-  const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
-    setIsTableLoading(true);  
-    try {
-      const response = await fetch(`http://localhost:3030/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error('Error al obtener datos');
-      }
-      const result = await response.json();
-      setIsLoading(false);
-
-      if (result && result.data) {
-        console.log(result.data.content);
-        const extractedData = result.data.content.map(item => ({
-          id_solicitud: item.requestEntity.idRequest,
-          name: `${item.requestEntity.userEntity.name} ${item.requestEntity.userEntity.lastName}`,
-          createdAt: item.requestEntity.createdAt,
-          status: item.requestDetailEntity.status.name,
-          tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
-        }));
-        console.log(extractedData);
-        setFilas(extractedData);
-        setTotalItems(result.data.totalElements);
-      } else {
-        console.error("Error en la respuesta:", result.message);
-      }
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    } 
-    finally {
-      setIsTableLoading(false);
-    }
-  };
-  
-
-  const obtenerCarreras = async () => {
-    try {
-      const response = await fetch(`http://localhost:3030/api/user/Admincareer?username=${user}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      const result = await response.json();
-      if (response.status === 200) {
-        const carrerasSimuladas = result.data.career;
-        const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
-        console.log(carrerasSimuladas)
-        setcareerList(items);
-        setcareerList([...items,{ value: 'Docentes', label: 'Docentes' }]);
-        career = careerList[0];
-        // Retornar el primer elemento solo si careerList tiene elementos
-        if (carrerasSimuladas.length > 0) {
-          return carrerasSimuladas[0];
-        } else {
-          return null;
-        }
-      }else {
-          console.error("Error en la respuesta:", result.message);
-      }
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    }
-  };
-  
-  const handleClickType = (option) => {
-    // Destruir los gráficos actuales
-    if (chart1Ref.current) chart1Ref.current.destroy();
-    if (chart2Ref.current) chart2Ref.current.destroy();
-    if (chart3Ref.current) chart3Ref.current.destroy();
-
-    // Elimina la clase 'active' de todos los elementos
-    const elements = document.querySelectorAll('[name="process"]');
-    elements.forEach(element => {
-      element.classList.remove('active');
-      element.classList.add('inactive');
-    });
-
-    // Añade la clase 'active' al elemento seleccionado
-    const selectedElement = document.getElementById(option);
-    if (selectedElement) {
-      selectedElement.classList.add('active');
-      selectedElement.classList.remove('inactive');
-    }
-
-  setSelecteType(option === 'all' ? "" : option);
-  fetchGrafics(option === 'all' ? '' : '&requestType=' + option);
-  obtenerDatos(1, searchQuery, option === 'all' ? "" : option, selectedCareer.value);
-
-  };
-
-  const handleCarreras =  (e) => {
-    console.log(e);
-    career=e;
-    // Destruir los gráficos actuales
-    if (chart1Ref.current) chart1Ref.current.destroy();
-    if (chart2Ref.current) chart2Ref.current.destroy();
-    if (chart3Ref.current) chart3Ref.current.destroy();
-
-    // Elimina la clase 'active' de todos los elementos
-    const elements = document.querySelectorAll('[name="process"]');
-    elements.forEach(element => {
-      element.classList.remove('active');
-      element.classList.add('inactive');
-    });
-
-    // Añade la clase 'active' al elemento seleccionado
-    const selectedElement = document.getElementById('all');
-    if (selectedElement) {
-      selectedElement.classList.add('active');
-      selectedElement.classList.remove('inactive');
-    }
-    setSelectedCareer(career); // Actualiza el estado de la carrera seleccionada
-    fetchGrafics(''); // Actualiza los gráficos con la nueva carrera
-    obtenerDatos(1, searchQuery, selecteType, e); 
-  }
-
-  const handelChangePage = (e) =>{
-    setPage(e);
-    obtenerDatos(e,searchQuery,selecteType,selectedCareer.value);
-  }
 
   return (
     <div className='w-full flex max-md:mr-0 h-screen scroll-container flex-col'>

@@ -47,9 +47,8 @@ function NavbarComponent({ menuItems }) {
                             const liClass = isLastItem ? ' ' : '';
                             const isManagement = index === 0 && item.name === "Gestión Solicitudes";
                             const liOption = isManagement ? 'mt-6' : '';
-                            const history = useNavigate();
                             return (
-                                <li onClick={() => history(item.path)} key={index}
+                                <li onClick={() => navigate(item.path)} key={index}
                                     className={`navbar_wrapper flex items-center gap-2 mb-5 text-white  max-md:text-2xl max-md:mb-5 transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp p-1 ${liClass} ${liOption}`}>
                                     {icon}
                                     <button className='text-white w-full text-left ml-1 max-md:hidden'>{item.name}</button>
@@ -62,6 +61,7 @@ function NavbarComponent({ menuItems }) {
         </>
 
     )
+    
 }
 
 export default NavbarComponent;

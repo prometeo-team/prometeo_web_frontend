@@ -5,7 +5,7 @@ import { HiSearchCircle } from "react-icons/hi";
 import PropTypes from 'prop-types';
 import "./TableComponent.css";
 
-function TableComponent({ dataSource, columns, parameterAction, careers, select }) {
+function TableComponent2({ dataSource, columns, parameterAction, careers, select }) {
   console.log(careers[0]);
 
   const filasConKey = dataSource.map((fila, index) => ({
@@ -123,7 +123,7 @@ function TableComponent({ dataSource, columns, parameterAction, careers, select 
   );
 }
 
-TableComponent.propTypes = {
+TableComponent2.propTypes = {
   dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(
     PropTypes.shape({
@@ -135,4 +135,4 @@ TableComponent.propTypes = {
   parameterAction: PropTypes.func,
 };
 
-export default TableComponent;
+export default TableComponent2;

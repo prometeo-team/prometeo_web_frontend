@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import './AdminInfoRrequest.css';
 
 const ComponentInfoSR = () => {
+  const [role, setRole] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statuses, setStatuses] = useState([]);
@@ -22,6 +23,40 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+            setRole('ROLE_STUDENT');
+          } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+            setRole('ROLE_ADMIN');
+          }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+            setRole('ROLE_TEACHER');
+          }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+            setRole('ROLE_ACADEMIC');
+          }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+            setRole('ROLE_SUBACADEMIC');
+          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+            setRole('ROLE_COORDINADORPRE');
+          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+            setRole('ROLE_COORDINADORPOS');
+          }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

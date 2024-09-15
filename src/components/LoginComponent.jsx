@@ -40,7 +40,7 @@ const LoginComponent = () => {
 
         try {
             // Realiza la solicitud al servidor
-            const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/auth/login', {
+            const response = await fetch('http://localhost:3030/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

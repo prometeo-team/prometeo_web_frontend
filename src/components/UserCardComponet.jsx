@@ -41,6 +41,14 @@ function UserCardComponent({ number }) {
                     setRole('ROLE_ADMIN');
                   }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
                     setRole('ROLE_TEACHER');
+                  }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+                    setRole('ROLE_ACADEMIC');
+                  }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+                    setRole('ROLE_SUBACADEMIC');
+                  }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+                    setRole('ROLE_COORDINADORPRE');
+                  }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+                    setRole('ROLE_COORDINADORPOS');
                   }
             } catch (error) {
                 console.error('Error decoding token:', error.message);
@@ -143,7 +151,7 @@ function UserCardComponent({ number }) {
                     navigate(`/student/crear-solicitud`);
                     notification.info({
                         message: 'Importante',
-                        description: 'Se a habilitado la postulación a grados".',
+                        description: 'Se ha habilitado la postulación a grados".',
                         placement: 'bottomRight',
                         icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
                     })
@@ -152,7 +160,7 @@ function UserCardComponent({ number }) {
                 var type = await  fetchRequest(request);
                 if(role=='ROLE_STUDENT'){
                     navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
-                }else if(role=='ROLE_ADMIN'){
+                }else if(role=='ROLE_ADMIN' || role=='ROLE_ACADEMIC' || role=='ROLE_SUBACADEMIC' || role=='ROLE_COORDINADORPRE' || role=='ROLE_COORDINADORPOS'){
                     if(type=='Legalización de matrícula'){
                         navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
                     }else{
