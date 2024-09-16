@@ -16,7 +16,7 @@ function CouncilTablePage() {
     const [page, setPage] = useState(1); // Página actual
     const [totalItems, setTotalItems] = useState(0); // Total de documentos
     const [searchQuery, setSearchQuery] = useState(''); // Estado para la búsqueda
-    const [pageSize, setPageSize] = useState(10); // Tamaño de la página
+    const [pageSize] = useState(10); // Tamaño de la página
 
     const handleOpenModal = () => {
         setModalVisible(true);
