@@ -35,7 +35,7 @@ const FormExtensionComponent = () => {
     career = params.get('carrera');
     if (career) {
     try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getInformationStudentOverview?username=${user}&career=${career}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const FormExtensionComponent = () => {
 
   const Program = async () =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ const FormExtensionComponent = () => {
 
 
   try {
-  const response = await  fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions)
+  const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
   const result = await response.json();
       if (result.status === "200 OK") {
         setModalVisibleCheck(true);

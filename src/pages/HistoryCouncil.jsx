@@ -67,7 +67,7 @@ function CouncilTablePage() {
     const fetchDocuments = async (currentPage = 1, query = "") => {
         setLoading(true);
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getCouncilDocuments?page=${currentPage}&searchQuery=${query}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getCouncilDocuments?page=${currentPage}&searchQuery=${query}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

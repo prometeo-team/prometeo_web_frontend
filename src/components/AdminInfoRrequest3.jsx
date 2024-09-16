@@ -23,7 +23,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestById?id=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getRequestById?id=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const ComponentInfoSR = () => {
   
   const fetchStatuses = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getManageStatusByRequest?idRequest=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const ComponentInfoSR = () => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         const username = userInfo ? userInfo.sub : '';
 
-        let putUrl = `https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
+        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
 
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;

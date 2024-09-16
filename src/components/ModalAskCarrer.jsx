@@ -35,7 +35,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
         const userInfo = getInfoToken();
         console.log('userInfo:', userInfo);
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getProgramsStudent?username=${userInfo.sub}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getProgramsStudent?username=${userInfo.sub}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
         const userInfo = getInfoToken();
         console.log('userInfo:', userInfo);
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getProgramsAndTypeByStudent?username=${userInfo.sub}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getProgramsAndTypeByStudent?username=${userInfo.sub}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ const CouncilFacultyPage = () => {
     const fetchData = async (currentPage = 1, query = "") => {
         setLoading(true);
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestCouncil?page=${currentPage}&searchQuery=${query}`,
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getRequestCouncil?page=${currentPage}&searchQuery=${query}`,
                 {
                     method: 'GET',
                     headers: {
@@ -108,7 +108,7 @@ const CouncilFacultyPage = () => {
 
     const handleDownloadPrometeo = async () => {
         try {
-            const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/council/getDocumentTemplateCouncil', {
+            const response = await fetch('${import.meta.env.VITE_API_URL}/council/getDocumentTemplateCouncil', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const CouncilFacultyPage = () => {
     
     const handleDownloadActaConsejo = async () => {
         try {
-            const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/council/getExcelCouncil', {
+            const response = await fetch('${import.meta.env.VITE_API_URL}/council/getExcelCouncil', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ function ComponentInfoSR() {
     const fetchRequestData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestById?id=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getRequestById?id=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function ComponentInfoSR() {
     if (requestData) {
       const fetchStatusData = async () => {
         try {
-          const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getStatusRecord?id_requestDetail=${id}&id_road=${requestData.requestTypeEntity.id}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/getStatusRecord?id_requestDetail=${id}&id_road=${requestData.requestTypeEntity.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

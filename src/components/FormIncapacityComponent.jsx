@@ -65,7 +65,7 @@ const FormIncapacityComponent = () => {
     career = params.get('carrera');
     if (career) {
     try {
-        const response = await fetch(`http://localhost:3030/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getInformationStudentOverview?username=${user}&career=${career}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const FormIncapacityComponent = () => {
 
   const Program = async () =>{
     try{
-      const response = await fetch(`http://localhost:3030/api/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/student/subjectsByCareer?careerName=${career}&userName=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ const FormIncapacityComponent = () => {
 
 
     try {
-    const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions)
+    const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
     const result = await response.json();
         if (result.status === "200 OK") {
           setModalVisibleCheck(true);
@@ -309,7 +309,7 @@ const FormIncapacityComponent = () => {
 
 
   try {
-  const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions)
+  const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
   const result = await response.json();
       if (result.status === "200 OK") {
         setModalVisibleCheck(true);

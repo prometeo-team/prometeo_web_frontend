@@ -29,7 +29,7 @@ const StudentRequestPage = () => {
       const userInfo = getInfoToken();
 
       // Asegurarse de que la URL y la petición sean correctas.
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestsByStudent?page=${currentPage}&username=${userInfo.sub}&search_query=${query}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getRequestsByStudent?page=${currentPage}&username=${userInfo.sub}&search_query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

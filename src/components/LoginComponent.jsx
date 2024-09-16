@@ -40,7 +40,7 @@ const LoginComponent = () => {
 
         try {
             // Realiza la solicitud al servidor
-            const response = await fetch('http://localhost:3030/api/auth/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

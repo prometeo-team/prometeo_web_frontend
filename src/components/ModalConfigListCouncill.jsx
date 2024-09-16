@@ -12,7 +12,7 @@ const ModalConfigListCouncill = () => {
 
   const fetchDates = async () => {
     try {
-      const response = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/processDate/getAllProcessDates', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ModalConfigListCouncill = () => {
 
   const deleteDate = async (processType, date) => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}&userAdmin=${userInfo.sub}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/processDate/deleteProcessDate?process_type=${encodeURIComponent(processType)}&date=${date}&userAdmin=${userInfo.sub}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

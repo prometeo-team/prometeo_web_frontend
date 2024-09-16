@@ -61,7 +61,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationForCouncil?idRequest=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getInformationForCouncil?idRequest=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const ComponentInfoSR = () => {
 
   const fetchStatuses = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getManageStatusByRequest?idRequest=${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getManageStatusByRequest?idRequest=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -140,8 +140,7 @@ const ComponentInfoSR = () => {
       formData.append("idRequest", id);
       formData.append("userAdmin", username);
 
-      const uploadResponse = await fetch('http://localhost:3030/api/request/firmDocumentMail ', {
-        method: 'POST',
+      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, {        method: 'POST',
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -161,7 +160,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchDocument = async () => {
       try {
-        const response = await fetch(`http://localhost:3030/api/request/generate?requestId=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/request/generate?requestId=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -194,7 +193,7 @@ const ComponentInfoSR = () => {
       try {
 
 
-        let putUrl = `https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
+        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
 
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
