@@ -72,7 +72,7 @@ const FormAddition_CancelComponent = ({type}) => {
 
   const fetchRequest = async (request) => {
     try {
-      const response = await  fetch(`${import.meta.env.VITE_API_URL}/api/request/uploadAndCreateRequest`, request)
+      const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, request)
       const result = await response.json();
           if (result.status === "200 OK") {
             setModalVisibleCheck(true);

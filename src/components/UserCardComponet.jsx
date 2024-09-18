@@ -162,9 +162,9 @@ function UserCardComponent({ number }) {
                     navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
                 }else if(role=='ROLE_ADMIN' || role=='ROLE_ACADEMIC' || role=='ROLE_SUBACADEMIC' || role=='ROLE_COORDINADORPRE' || role=='ROLE_COORDINADORPOS'){
                     if(type=='Legalización de matrícula'){
-                        navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                        navigate(`/admin/legalizacion-solicitud?id=${request}&tipo=${type}`);
                     }else{
-                        navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                        navigate(`/admin/solicitud?id=${request}&tipo=${type}`);
                     }
                 }else if(role=='ROLE_TEACHER'){
                     navigate(`/teacher/mi-solicitud?id=${request}&tipo=${type}`);
@@ -212,7 +212,7 @@ function UserCardComponent({ number }) {
                                     <h3 className="text-lg font-bold mb-2 text-black">Notificaciones</h3>
                                     <ul>
                                         {notifications.length > 0 ? (
-                                            notifications.map(notification => (
+                                            notifications.reverse().map(notification => (
                                                 <li key={notification.id} className="flex justify-between items-center mb-2  hover:bg-zinc-400 text-black">
                                                     <span onClick={()=>handleClickNotification(notification.id,notification.request)} className="break-words cursor-pointer text-wrap max-w-[75%]">{notification.message}</span> {/* Hacer que el texto se ajuste */}
                                                     <button
