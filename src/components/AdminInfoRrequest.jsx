@@ -140,7 +140,7 @@ const ComponentInfoSR = () => {
       formData.append("idRequest", id);
       formData.append("userAdmin", username);
 
-      const uploadResponse = await fetch('http://localhost:3030/api/request/firmDocumentMail ', {
+      const uploadResponse = await fetch('https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/firmDocumentMail ', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -161,7 +161,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchDocument = async () => {
       try {
-        const response = await fetch(`http://localhost:3030/api/request/generate?requestId=${id}`, {
+        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/generate?requestId=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
