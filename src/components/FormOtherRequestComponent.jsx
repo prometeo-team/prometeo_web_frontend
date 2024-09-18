@@ -97,7 +97,7 @@ const FormOtherRequestComponent = ({carrer}) => {
       <h2 className="text-xl font-bold text-black ml-2 mt-5 mb-5">
         Descripción de la solicitud
       </h2>
-      <p className="ml-3">*Descripcion obligatoria </p>
+      <p className="ml-3">*Descripción obligatoria </p>
       <div className="studentInfo_container ml-2 gap-5">
         <TextArea 
           showCount

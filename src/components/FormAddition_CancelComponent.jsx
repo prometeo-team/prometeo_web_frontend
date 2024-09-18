@@ -27,8 +27,8 @@ const FormAddition_CancelComponent = ({type}) => {
   const navigate = useNavigate();
 
   if(type=="Adición de creditos"){
-    text =`*la cantidad maxima que puede tener de creditos es 20 para mas comuniquese con la secretaria de su programa`;
-    txtcredits = `cantidad de cretitos : ${credits}`;
+    text =`*la cantidad máxima que puede tener de créditos es 20 para más comuníquese con la secretaria de su programa`;
+    txtcredits = `Cantidad de créditos : ${credits}`;
   }else if(type == "Cancelación de creditos"){
     text ='';
     txtcredits = '';

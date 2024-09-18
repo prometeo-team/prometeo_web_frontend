@@ -262,7 +262,7 @@ const FormLegalizationComponent = ({ carrer }) => {
                                 />
 
                                 <h3 className="text-black truncate">
-                                    <Tooltip title="Solo llenar si selecciono 'Otro' en tipo de documento">
+                                    <Tooltip title="Solo llenar si seleccionó 'Otro' en tipo de documento">
                                         <QuestionCircleOutlined className="font-color" />
                                     </Tooltip> Especifique tipo de documento
                                 </h3>
