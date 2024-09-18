@@ -61,7 +61,7 @@ const InfoAdminRequestPage = () => {
 
   const fetchGrafics = async (filter="",career2="") =>{
     try{
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/requestMonthlyStatistics?requestType=${filter}&programName=${career2}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/requestMonthlyStatistics?requestType=${filter}&programName=${career2}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const InfoAdminRequestPage = () => {
   const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
     setIsTableLoading(true);  
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -123,9 +123,9 @@ const InfoAdminRequestPage = () => {
   
   const obtenerCarreras = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/Admincareer?username=${user}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/Admincareer?username=${user}`, {
         method: 'GET',
-        headers: {
+        headers: {  
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },

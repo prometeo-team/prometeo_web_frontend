@@ -52,7 +52,7 @@ const getListData = (value, comiteDates, consejoDates, requestTypes = []) => {
 
 const fetchDates = async (setComiteDates, setConsejoDates) => {
   try {
-    const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/processDate/getAllProcessDates`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/processDate/getAllProcessDates`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const fetchDates = async (setComiteDates, setConsejoDates) => {
 
 const fetchRequestTypes = async (setRequestTypes) => {
   try {
-    const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestType/getAllRequestTypes`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/requestType/getAllRequestTypes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

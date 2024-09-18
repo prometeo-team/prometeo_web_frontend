@@ -35,7 +35,7 @@ const FormReservationComponent = () => {
     const fetchStudentInfo = async () => {
         if (career) {
             try {
-                const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getInformationStudentOverview?username=${user}&career=${career}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const FormReservationComponent = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/template/getTemplateDocumentWord?username=${user}&requestType=Reserva de Cupo&career=${career}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/template/getTemplateDocumentWord?username=${user}&requestType=Reserva de Cupo&career=${career}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ const FormReservationComponent = () => {
         }
     
         try {
-            const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", {
+            const response = await fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,

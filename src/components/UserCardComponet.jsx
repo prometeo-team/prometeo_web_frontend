@@ -71,7 +71,7 @@ function UserCardComponent({ number }) {
 
     const fetchNotification = async () => {
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/byUser?userName=${user}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/notifications/byUser?userName=${user}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function UserCardComponent({ number }) {
 
     const fetchRequest = async (request) => {
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getRequestById?id=${request}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getRequestById?id=${request}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ function UserCardComponent({ number }) {
 
     const fetchView = async (id) => {
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/markAsRead?notificationId=${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/notifications/markAsRead?notificationId=${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

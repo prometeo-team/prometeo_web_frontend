@@ -56,7 +56,7 @@ function RequestTypeComponent() {
 
     const fetchdegre = async () =>{
       try {
-         const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/notifications/degreeApplicationByUser?username=${user}`, {
+         const response = await fetch(`${import.meta.env.VITE_API_URL}/notifications/degreeApplicationByUser?username=${user}`, {
            method: 'GET',
            headers: {
              'Content-Type': 'application/json',

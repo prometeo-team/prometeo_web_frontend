@@ -37,7 +37,7 @@ const FormLegalizationComponent = ({ carrer }) => {
     const fetchLegalizationInfo = async () => {
         if (user && career) {
             try {
-                const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/getLegalizationInfoStudent?username=${user}&career=${career}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getLegalizationInfoStudent?username=${user}&career=${career}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             try {
                 setIsButtonLoading(true);
-                const response = await fetch("https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/uploadAndCreateRequest", requestOptions);
+                const response = await fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", requestOptions);
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);

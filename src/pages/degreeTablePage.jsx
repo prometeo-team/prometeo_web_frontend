@@ -73,7 +73,7 @@ function degreeTablePage() {
     }
   
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/student/listDegreeApplicationStudents?careerName=${career}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/student/listDegreeApplicationStudents?careerName=${career}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ function degreeTablePage() {
 
   const obtenerCarreras = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/user/Admincareer?username=${user}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/Admincareer?username=${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ function degreeTablePage() {
 
 
     try {
-    const response = await  fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/degreeApplication?programName=${career}`, requestOptions)
+    const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/degreeApplication?programName=${career}`, requestOptions)
     const result = await response.json();
         if (response.status === 200) {
           setModalVisibleCheck(true);

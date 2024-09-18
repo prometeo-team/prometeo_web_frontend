@@ -31,7 +31,7 @@ const ModalActaInsert = ({ visible, onClose }) => {
   
     try {
       const response = await fetch(
-        "https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/council/saveCouncilRecord",
+        "${import.meta.env.VITE_API_URL}/council/saveCouncilRecord",
         {
           method: "POST",
           headers: {

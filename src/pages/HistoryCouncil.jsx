@@ -16,7 +16,7 @@ function CouncilTablePage() {
     const [page, setPage] = useState(1); // Página actual
     const [totalItems, setTotalItems] = useState(0); // Total de documentos
     const [searchQuery, setSearchQuery] = useState(''); // Estado para la búsqueda
-    const [pageSize, setPageSize] = useState(10); // Tamaño de la página
+    const [pageSize] = useState(10); // Tamaño de la página
 
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -67,7 +67,7 @@ function CouncilTablePage() {
     const fetchDocuments = async (currentPage = 1, query = "") => {
         setLoading(true);
         try {
-            const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/getCouncilDocuments?page=${currentPage}&searchQuery=${query}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getCouncilDocuments?page=${currentPage}&searchQuery=${query}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

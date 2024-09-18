@@ -12,7 +12,7 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
   useEffect(() => {
     const obtenerComentarios = async () => {
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/getRequestComments?id_requestDetail=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/getRequestComments?id_requestDetail=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const ChatComponent = ({ id }) => { // Asegurarte de recibir 'id' como prop
       };
   
       try {
-        const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/requestDetail/saveComment?id_requestDetail=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/saveComment?id_requestDetail=${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

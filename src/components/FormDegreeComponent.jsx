@@ -38,7 +38,7 @@ const FormDegreeComponent = () => {
         role = params.get('carrera').split("-")[1];
         if (career) {
             try {
-                const response = await fetch(`http://localhost:3030/api/user/getInformationStudentOverview?username=${user}&career=${career}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getInformationStudentOverview?username=${user}&career=${career}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const FormDegreeComponent = () => {
   
   
       try {
-      const response = await  fetch("http://localhost:3030/api/request/uploadAndCreateRequest", requestOptions)
+      const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
       const result = await response.json();
           if (result.status === "200 OK") {
             setLoading(false);
