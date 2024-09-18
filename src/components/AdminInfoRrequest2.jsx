@@ -18,7 +18,7 @@ const ComponentInfoSR = () => {
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requestDetail/get?id=${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/get?id=${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
