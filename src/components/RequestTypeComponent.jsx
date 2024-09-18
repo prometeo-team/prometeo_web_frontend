@@ -289,7 +289,7 @@ function RequestTypeComponent() {
                            handleCardClick(10);
                         }}
                      >
-                        <CardComponent title="Postulacion a Grados" icon="10" onCardClick={() => handleCardClick(10)} />
+                        <CardComponent title="Postulación a Grados" icon="10" onCardClick={() => handleCardClick(10)} />
                      </Link>
                   </Col>
                   )}

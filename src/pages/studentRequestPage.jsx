@@ -103,7 +103,7 @@ const StudentRequestPage = () => {
       key: 'request_id',
     },
     {
-      title: 'Fecha de Creacion',
+      title: 'Fecha de Creación',
       dataIndex: 'createdAt',
       key: 'createdAt',
       sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),

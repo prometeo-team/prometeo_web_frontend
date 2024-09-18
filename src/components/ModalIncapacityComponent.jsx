@@ -61,7 +61,7 @@ const ModalIncapacityComponent = ({ visible, onClose, setDocuments }) => {
             wrapClassName="center-modal animate__animated animate__zoomIn "
           >
             <div className="text-center mb-4">
-              <h4 className="text-lg font-bold">Incapacidad medica - Formato .pdf*</h4>
+              <h4 className="text-lg font-bold">Incapacidad médica - Formato .pdf*</h4>
             </div>
             <div className="grid">
               <UploadDocumentComponent
