@@ -12,7 +12,7 @@ const ModalConfigListCouncill = () => {
 
   const fetchDates = async () => {
     try {
-      const response = await fetch('${import.meta.env.VITE_API_URL}/processDate/getAllProcessDates', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/processDate/getAllProcessDates`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

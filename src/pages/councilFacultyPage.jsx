@@ -108,7 +108,7 @@ const CouncilFacultyPage = () => {
 
     const handleDownloadPrometeo = async () => {
         try {
-            const response = await fetch('${import.meta.env.VITE_API_URL}/council/getDocumentTemplateCouncil', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/council/getDocumentTemplateCouncil`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const CouncilFacultyPage = () => {
     
     const handleDownloadActaConsejo = async () => {
         try {
-            const response = await fetch('${import.meta.env.VITE_API_URL}/council/getExcelCouncil', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/council/getExcelCouncil`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

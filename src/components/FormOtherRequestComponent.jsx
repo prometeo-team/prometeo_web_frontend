@@ -70,7 +70,7 @@ const FormOtherRequestComponent = ({carrer}) => {
 
 
     try {
-    const response = await  fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", requestOptions)
+    const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
     const result = await response.json();
         if (result.status === "200 OK") {
           setModalVisibleCheck(true);
