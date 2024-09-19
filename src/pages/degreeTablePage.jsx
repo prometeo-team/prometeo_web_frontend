@@ -38,7 +38,7 @@ function degreeTablePage() {
       key: "lastName",
     },
     {
-      title: "Número Telefonico",
+      title: "Número Telefónico",
       dataIndex: "phone",
       key: "phone",
     },

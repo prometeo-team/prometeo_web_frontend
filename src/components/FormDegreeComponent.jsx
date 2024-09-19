@@ -268,7 +268,7 @@ const FormDegreeComponent = () => {
                             <ModalComponent
                                 visible={modalVisibleCheck}
                                 onClose={handleCloseModalCheck}
-                                content="Postulacion realizada correctamente"
+                                content="Postulación realizada correctamente"
                                 icon={<IoMdCheckmarkCircle />}
                             />
                         </div>

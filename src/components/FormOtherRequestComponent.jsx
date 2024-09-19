@@ -70,7 +70,7 @@ const FormOtherRequestComponent = ({carrer}) => {
 
 
     try {
-    const response = await  fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", requestOptions)
+    const response = await  fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions)
     const result = await response.json();
         if (result.status === "200 OK") {
           setModalVisibleCheck(true);
@@ -97,7 +97,7 @@ const FormOtherRequestComponent = ({carrer}) => {
       <h2 className="text-xl font-bold text-black ml-2 mt-5 mb-5">
         Descripción de la solicitud
       </h2>
-      <p className="ml-3">*Descripcion obligatoria </p>
+      <p className="ml-3">*Descripción obligatoria </p>
       <div className="studentInfo_container ml-2 gap-5">
         <TextArea 
           showCount

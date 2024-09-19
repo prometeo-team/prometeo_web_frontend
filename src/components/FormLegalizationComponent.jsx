@@ -133,7 +133,7 @@ const FormLegalizationComponent = ({ carrer }) => {
 
             try {
                 setIsButtonLoading(true);
-                const response = await fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", requestOptions);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, requestOptions);
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);
@@ -262,7 +262,7 @@ const FormLegalizationComponent = ({ carrer }) => {
                                 />
 
                                 <h3 className="text-black truncate">
-                                    <Tooltip title="Solo llenar si selecciono 'Otro' en tipo de documento">
+                                    <Tooltip title="Solo llenar si seleccionó 'Otro' en tipo de documento">
                                         <QuestionCircleOutlined className="font-color" />
                                     </Tooltip> Especifique tipo de documento
                                 </h3>

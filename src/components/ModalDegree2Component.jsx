@@ -153,7 +153,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                       onDelete={handleDelete2}
                       clickClassNameP=".input-field2"
                       clickClassName="input-field2"
-                      label="Acta de Aprobacion Trabajo de Grado"
+                      label="Acta de Aprobación Trabajo de Grado"
                       detail="Entregada por los jurados"
                       isRequired={false}
                     />

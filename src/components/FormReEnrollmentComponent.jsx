@@ -135,7 +135,7 @@ const FormReEnrollmentComponent = () => {
         }
     
         try {
-            const response = await fetch("${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,

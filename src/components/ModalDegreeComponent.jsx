@@ -244,7 +244,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       clickClassNameP=".input-field6"
                       clickClassName="input-field6"
                       label="Fotocopia de VISA vigente"
-                      detail="Unicamente para estudiantes Extrangeros"
+                      detail="Unicamente para estudiantes Extranjeros"
                       isRequired={false}
                     />
                   </div>
