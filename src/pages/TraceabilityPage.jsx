@@ -2,16 +2,15 @@ import  { useState, useEffect, useRef  } from 'react';
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import  TitleComponent from "../components/TitleComponent";
-import DegreeTableComponent  from "../components/DegreeTableComponent";
+import TraceabilityTableComponent  from "../components/TraceabilityTableComponent";
 import UserCArdComponent from '../components/UserCardComponet';
-import ModalComponent from "../components/ModalComponent";
 
 const user = sessionStorage.getItem('user');
 var career;
 
 function degreeTablePage() {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
-  const [careerList, setcareerList] = useState([]);
+  const [careerList, setcareerList] = useState(['Procesos','Configuracion']);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [filas, setFilas] = useState([]);
   const navigate = useNavigate();
@@ -44,7 +43,7 @@ function degreeTablePage() {
     },
   ];
 
-  useEffect(() => {
+ /*useEffect(() => {
     const obtenerCarrerasYDatos = async () => {
       const primeraCarrera = await obtenerCarreras(); // Asegúrate de esperar los datos
       if (primeraCarrera) {
@@ -53,7 +52,7 @@ function degreeTablePage() {
       }
     };
     obtenerCarrerasYDatos(); // Llamar a la función asíncrona
-  }, []);
+  }, []);*/
 
   const handleSelectDocument = (username, checked) => {
     console.log(username);
@@ -82,8 +81,8 @@ function degreeTablePage() {
       });
       
       const result = await response.json();
-      if (response.ok) {
-        if(result.data==null){
+      if (result.status === 200) {
+        if(result.data=null){
           console.log(result.data)
         }else{
         const extractedData = result.data.map(student => ({
@@ -93,7 +92,6 @@ function degreeTablePage() {
           lastName: student.userEntity.lastName,
           phone: student.phone
         }));
-        console.log(extractedData);
         setFilas(extractedData);
         setSelectedDocuments(extractedData.map(student => student.Id));
       }
@@ -105,34 +103,7 @@ function degreeTablePage() {
     } 
   };
 
-  const obtenerCarreras = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/user/Admincareer?username=${user}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-      });
-      const result = await response.json();
-      if (response.status === 200) {
-        const carrerasSimuladas = result.data.career;
-        console.log(carrerasSimuladas)
-        setcareerList(carrerasSimuladas);
-        career = careerList[0];
-        // Retornar el primer elemento solo si careerList tiene elementos
-        if (carrerasSimuladas.length > 0) {
-          return carrerasSimuladas[0];
-        } else {
-          return null;
-        }
-      }else {
-          console.error("Error en la respuesta:", result.message);
-      }
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    }
-  };
+  
 
   const handleCarreras =  (e) => {
     console.log(e);
@@ -185,20 +156,15 @@ function degreeTablePage() {
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
         <div className='w-full mt-6'>
-          <TitleComponent title={"Postulacion a Grados"} />
+          <TitleComponent title={"Trazabilidad"} />
         </div>
 
         <div className='w-full mt-16'>
           <div className='ml-8 max-md:ml-3 mb-20 w-11/12'>
-            <DegreeTableComponent dataSource={filas} columns={columns} careers={careerList} degree={handelConvocatoria} parameterAction={handleSelectDocument} selectedDocuments={selectedDocuments} select={handleCarreras} />
+            <TraceabilityTableComponent dataSource={filas} columns={columns} careers={careerList} degree={handelConvocatoria} parameterAction={handleSelectDocument} selectedDocuments={selectedDocuments} select={handleCarreras} />
           </div>
         </div>
-        <ModalComponent
-            visible={modalVisibleCheck}
-            onClose={handleCloseModalCheck}
-            content="Postulación realizada correctamente"
-            icon={<IoMdCheckmarkCircle />}
-          />
+       
     </div>
   );
 }

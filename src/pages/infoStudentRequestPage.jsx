@@ -137,7 +137,11 @@ const InfoStudentRequestPage = () => {
                 ) : (
                     <List
                         itemLayout="vertical"
-                        dataSource={documents}
+                        dataSource={documents.filter(doc => 
+                            !doc.url.includes('__Ingles') &&
+                            !doc.url.includes('__Biblioteca') &&
+                            !doc.url.includes('__Finanzas')
+                        )}
                         renderItem={item => {
                             let fileName = item.url.split('/').pop();
                             fileName = fileName.replace(/_ID_\d+_/, '');

@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import { IoCalendar, IoSettingsOutline, IoSchoolOutline } from 'react-icons/io5';
 import { HiOutlineDocumentPlus, HiHome } from "react-icons/hi2";
+import { FaClipboardList } from "react-icons/fa";
 import { MdPerson } from "react-icons/md";
 
 function NavbarComponent({ menuItems }) {
@@ -42,6 +43,8 @@ function NavbarComponent({ menuItems }) {
                                 icon = <IoSettingsOutline className='ml-1 text-2xl' />;
                             } else if (item.name === "Grados") {
                                 icon = <IoSchoolOutline className='ml-1 text-2xl' />;
+                            }else if (item.name === "Trazabilidad") {
+                                icon =  <FaClipboardList className='ml-1 text-2xl' />;
                             }
                             const isLastItem = index === menuItems.length - 1 && item.name === "Ayuda"; // Verifica si es el último elemento
                             const liClass = isLastItem ? ' ' : '';
