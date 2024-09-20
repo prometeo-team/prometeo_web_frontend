@@ -5,7 +5,7 @@ import { AiFillFilePdf } from "react-icons/ai";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import "./ModalLegalizationComponent.css";
 
-const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
+const ModalLegalizationComponent = ({ visible, onClose, setDocuments, title, detail }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [doc6, setDoc6] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
 
@@ -109,10 +109,10 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments }) => {
             wrapClassName="my-5 animate__animated animate__zoomIn"
           >
             <div className="text-center mx-4">
-              <h4 className="text-lg font-bold">Documentos de Legalización Matrícula - Formato .pdf*</h4>
+              <h4 className="text-lg font-bold">{title}</h4>
             </div>
             <div className="flex items-center justify-center">
-              {renderUploadField(6, doc6, setDoc6, "Anexo de Afiliación EPS (Sin claves)", "Vigencia NO mayor a 30 días", true)}
+              {renderUploadField(6, doc6, setDoc6, title, detail, true)}
             </div>
             <div className="text-center mt-2">
               {allFilesSelected ? (
@@ -136,6 +136,8 @@ ModalLegalizationComponent.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   setDocuments: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,  // Añadido
+  detail: PropTypes.string.isRequired, // Añadido
 };
 
 export default ModalLegalizationComponent;

@@ -18,6 +18,33 @@ const CouncilFacultyPage = () => {
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
+    const [role, setRole] = useState('');
+    const [isTokenProcessed, setIsTokenProcessed] = useState(false);
+
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if (token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(
+                    atob(base64)
+                        .split('')
+                        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                        .join('')
+                );
+                const decodedToken = JSON.parse(jsonPayload);
+                if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+                    setRole('ROLE_ACADEMIC');
+                }
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        }
+        setIsTokenProcessed(true);
+    }, []);
+
 
     const fetchData = async (currentPage = 1, query = "") => {
         setLoading(true);
@@ -115,7 +142,7 @@ const CouncilFacultyPage = () => {
                     'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-    
+
             if (response.ok) {
                 const result = await response.json();
                 if (result && result.data) {
@@ -136,7 +163,7 @@ const CouncilFacultyPage = () => {
             console.error('Error al descargar el archivo Prometeo:', error);
         }
     };
-    
+
     const handleDownloadActaConsejo = async () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/council/getExcelCouncil`, {
@@ -146,7 +173,7 @@ const CouncilFacultyPage = () => {
                     'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                 },
             });
-    
+
             if (response.ok) {
                 const result = await response.json();
                 if (result && result.data) {
@@ -167,9 +194,9 @@ const CouncilFacultyPage = () => {
             console.error('Error al descargar el archivo Acta de Consejo:', error);
         }
     };
-    
-    
-  
+
+
+
     return (
         <div className='h-screen scroll-container'>
             <div className="max-w-titleComponent">
@@ -246,14 +273,17 @@ const CouncilFacultyPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center items-center w-full mb-4">
-                <Button
-                    onClick={handleClick}
-                    className="w-36 h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-center items-center"
-                >
-                    <p>Historial de actas</p>
-                </Button>
-            </div>
+            {role === 'ROLE_ACADEMIC' && (
+                <div className="flex justify-center items-center w-full mb-4">
+                    <Button
+                        onClick={handleClick}
+                        className="w-36 h-12 text-white rounded-lg shadow-md color-button font-bold flex justify-center items-center"
+                    >
+                        <p>Historial de actas</p>
+                    </Button>
+                </div>
+            )}
+
         </div>
     );
 };

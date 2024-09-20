@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LuUpload, LuDownload } from 'react-icons/lu';
 import { FaCheck } from 'react-icons/fa6';
 import { IoAlertCircleSharp } from 'react-icons/io5';
-import ModalLegalizationComponent from '../components/ModalLegalizationComponent';
+import ModalLegalizationComponent from '../components/ModalUploadRComponent.jsx';
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import Loader from './LoaderComponent.jsx';
@@ -442,6 +442,8 @@ const FormLegalizationComponent = ({ carrer }) => {
                                     visible={modalVisible}
                                     onClose={handleCloseModal}
                                     setDocuments={setDocuments}
+                                    title="Anexo de Afiliación EPS (Sin claves)" 
+                                    detail="Vigencia NO mayor a 30 días" 
                                 />
                             </div>
                         </div>
