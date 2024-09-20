@@ -4,7 +4,7 @@ import { LuUpload, LuDownload } from "react-icons/lu";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
 import { IoAlertCircleSharp } from "react-icons/io5";
-import ModalUploadComponent from './ModalUploadComponent';
+import ModalLegalizationComponent from './ModalUploadRComponent';
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
@@ -133,7 +133,7 @@ const FormActivationComponent = () => {
     
         if (documents.length > 0) {
             documents.forEach((file) => {
-                formData.append("files", file);
+                formData.append("files", file.originalfile);
             });
         }
     
@@ -207,10 +207,11 @@ const FormActivationComponent = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                    <ModalUploadComponent
+                    <ModalLegalizationComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
+                        title="Carta Activación reserva de cupo - Formato .pdf*"
                     />
                 </div>
             </div>

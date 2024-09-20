@@ -9,14 +9,15 @@ const ModalUploadComponent = ({ visible, onClose, setDocuments }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf, setPdf] = useState(null);
   const [fileName, setFileName] = useState("Archivo no seleccionado");
+  const [originalFile, setOriginalFile] = useState(null); // Guardar el archivo original
   const [inputKey, setInputKey] = useState(Date.now()); // Para forzar la recreación del input
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
-      const newDocument = pdf ? { url: pdf, name: fileName } : null;
+      const newDocument = pdf ? { url: pdf, name: fileName, originalFile: originalFile } : null;
       console.log("Nuevo documento:", newDocument);
-      setDocuments([newDocument].filter(Boolean));
+      setDocuments([newDocument].filter(Boolean)); // Guardar el archivo original
       onClose();
       setConfirmLoading(false);
     }, 1000);
@@ -34,12 +35,14 @@ const ModalUploadComponent = ({ visible, onClose, setDocuments }) => {
     if (file) {
       setFileName(file.name);
       setPdf(URL.createObjectURL(file));
+      setOriginalFile(file); // Guardar el archivo original
     }
   };
 
   const handleDelete = () => {
     setFileName("Archivo no seleccionado");
     setPdf(null);
+    setOriginalFile(null); // Reiniciar el archivo original
     setInputKey(Date.now()); 
   };
 

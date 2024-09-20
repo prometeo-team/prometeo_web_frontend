@@ -16,6 +16,8 @@ const ComponentInfoSR = () => {
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [pdfUrl, setPdfUrl] = useState(''); // URL del PDF
+  const [isFirmarDisabled, setIsFirmarDisabled] = useState(true);
+
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -23,6 +25,29 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+          setRole('ROLE_ACADEMIC');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
+  
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -170,7 +195,6 @@ const ComponentInfoSR = () => {
         const result = await response.json();
 
         if (result.status === "200" && result.data) {
-          console.log(result.data);
           setPdfUrl(result.data);
 
         } else {
@@ -249,11 +273,12 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
-  const handleFirmar = () => {
-    sendDocument(pdfUrl);
+  const handleFirmar = async () => {
+    await fetchDocument();  // Agrega esta línea
+    sendDocument(pdfUrl);   // Mueve esta línea después de fetchDocument
     setIsFirmaModalVisible(false);
   };
-
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -334,20 +359,23 @@ const ComponentInfoSR = () => {
           </Descriptions.Item>
         ) : (
           <Descriptions.Item className="ml-4 w-full md:w-1/3">
-            <Button
-              type="primary"
-              className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
-              onClick={() => {
-                if (initialStatusValue.includes('Firma')) {
-                  setIsFirmaModalVisible(true);
-                } else {
-                  setIsModalVisible(true);
-                }
-              }}
-            >
-              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'} <FaCheck className="ml-2 md:ml-4" />
-            </Button>
-          </Descriptions.Item>
+  <Button
+    type="primary"
+    className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
+    onClick={() => {
+      if (initialStatusValue.includes('Firma')) {
+        setIsFirmaModalVisible(true);
+      } else {
+        setIsModalVisible(true);
+      }
+    }}
+    disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
+  >
+    {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'} 
+    <FaCheck className="ml-2 md:ml-4" />
+  </Button>
+</Descriptions.Item>
+
         )}
       </Descriptions>
 

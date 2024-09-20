@@ -31,34 +31,37 @@
     background-color: #4e727c;
     color: #ffffff;
 }
-.scroll-container2 {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    
+
+.btn-class {
+  background-color: #97B749;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 70% !important;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-.scroll-container2::-webkit-scrollbar {
-    width: 12px; /* Ajusta el ancho de la barra de desplazamiento */
-    height: 12px;
-    margin-bottom: -100px;
+.btn-class:hover {
+  background-color: #43737E;
 }
 
-/* Estilo para la pista de la barra de desplazamiento */
-.scroll-container2::-webkit-scrollbar-track {
-    margin-bottom: -50px;
-    background: #f2f2f3; /* Haz la pista transparente o del color que desees */
-    margin-bottom: 2px; /* Ajusta el margen inferior */
-    border-radius: 10px; /* Aplica un borde redondeado a la pista */
-  }
+.btn-class.selected {
+  background-color: #43737E; /* Color cuando está seleccionado */
+}
 
-  .scroll-container2::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.5); /* Color y transparencia del "thumb" */
-    border-radius: 10px; /* Borde redondeado del "thumb" */
-    border: 2px solid transparent; /* Espacio alrededor del "thumb" */
-    background-clip: padding-box; /* Hace que el fondo se recorte para el borde */
-  }
+.btn-class span {
+  transition: transform 0.3s ease;
+}
 
-  .scroll-container2::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.7); /* Cambia el color al pasar el mouse sobre el "thumb" */
-  }
+.btn-class:hover span {
+  transform: scale(1.1);
+}
+
+
+.margin {
+  margin-left: 3rem !important;
+  margin-right: 3rem !important;
+}
