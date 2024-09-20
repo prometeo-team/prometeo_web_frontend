@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import InfoSRComponent from '../components/AdminInfoRrequest';
 import InfoSRComponent2 from '../components/AdminInfoRrequest2';
 import InfoSRComponent3 from '../components/AdminInfoRrequest3';
+import InfoSRComponent4 from '../components/AdminInfoRrequest4';
 import ChatSR from '../components/ComponentChat';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
@@ -19,6 +20,7 @@ const InfoStudentRequestPage = () => {
     const [detail1, setDetail1] = useState(true);
     const [detail2, setDetail2] = useState(false);
     const [detail3, setDetail3] = useState(false);
+    const [detail4, setDetail4] = useState(false);
 
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -53,13 +55,20 @@ const InfoStudentRequestPage = () => {
         if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
             setDetail2(true);
             setDetail3(false);
+            setDetail4(false);
         }else if (tipo=='Incapacidades Docentes'){
             setDetail1(false);
             setDetail2(false);
             setDetail3(true);
+            setDetail4(false);
+        }else if (tipo=='Postulación a Grados'){
+            setDetail2(false);
+            setDetail3(false);
+            setDetail4(true);
         }else{
             setDetail2(false);
             setDetail3(false);
+            setDetail4(false);
         }
 
     }, [id, isModalOpen]);
@@ -103,6 +112,11 @@ const InfoStudentRequestPage = () => {
                 {detail3 && (
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border ">
                     <InfoSRComponent3 />
+                </div>
+                )}
+                {detail4 && (
+                <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4">
+                    <InfoSRComponent4 />
                 </div>
                 )}
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">

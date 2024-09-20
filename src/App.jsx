@@ -27,7 +27,8 @@ import {
   RegistrationReservationPage,
   HistoryCouncil,
   Error404Page,
-  LegalizationRequestAdmin
+  LegalizationRequestAdmin,
+  TraceabilityPage
 } from './pages';
 import { NavbarComponent } from './components';
 
@@ -55,6 +56,7 @@ function App() {
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
     { name: 'Grados', path: '/admin/grados-tabla' },
+    //{ name: 'Trazabilidad', path: '/admin/Traceability' },
     { name: 'Configuración', path: '/admin/config' },
   ];
 
@@ -62,13 +64,15 @@ function App() {
     { name: 'Inicio', path: '/' },
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
-    { name: 'Grados', path: '/admin/grados-tabla' }
+    { name: 'Grados', path: '/admin/grados-tabla' },
+//{ name: 'Trazabilidad', path: '/admin/Traceability' }
   ];
 
   const menucareerS = [
     { name: 'Inicio', path: '/' },
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
-    { name: 'Grados', path: '/admin/grados-tabla' }
+    { name: 'Grados', path: '/admin/grados-tabla' },
+    //{ name: 'Trazabilidad', path: '/admin/Traceability' },
   ];
 
   const showNavbar = () => {
@@ -77,7 +81,7 @@ function App() {
 
     const isNoNavbarRoute = noNavbarRoutes.includes(pathname);
 
-    const isNotFoundRoute = !['/login', '/', '/home', '/student/crear-solicitud', '/teacher/crear-solicitud', '/student/mis-solicitudes', '/teacher/mis-solicitudes','/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad','/teacher/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ,'/teacher/mi-solicitud' ].includes(pathname) && pathname !== '*';
+    const isNotFoundRoute = !['/login', '/', '/home', '/admin/Traceability','/student/crear-solicitud', '/teacher/crear-solicitud', '/student/mis-solicitudes', '/teacher/mis-solicitudes','/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad','/teacher/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ,'/teacher/mi-solicitud' ].includes(pathname) && pathname !== '*';
 
     return !(isNoNavbarRoute || isNotFoundRoute);
   };
@@ -227,6 +231,11 @@ function App() {
         <Route path="/admin/dashboard" element={
           <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
             <InfoAdminRequestPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/Traceability" element={
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+            <TraceabilityPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-tabla" element={
