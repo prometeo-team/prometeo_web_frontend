@@ -23,6 +23,7 @@ import RegistrationReservationPage from "./registrationReservationPage";
 import HistoryCouncil from "./HistoryCouncil"
 import Error404Page from "./Error404Page";
 import LegalizationRequestAdmin from "./infoLegalizationAdmin"
+import TraceabilityPage from "./TraceabilityPage"
 
 export {
     HomePage,
@@ -50,4 +51,5 @@ export {
     HistoryCouncil,
     Error404Page,
     LegalizationRequestAdmin,
+    TraceabilityPage,
 }
