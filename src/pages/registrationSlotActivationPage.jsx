@@ -10,11 +10,10 @@ const RegistrationSlotActivationPage = () => {
     return (
         <div className='h-screen scroll-container ml-4'>
             <UserCardComponent  number={2} />
-            <Title title="Activación de cupo" />
+            <Title title="Activación reserva de cupo" />
             <div>
                 <FormSlotActivationComponent />
             </div>
-
         </div>
 
     )
