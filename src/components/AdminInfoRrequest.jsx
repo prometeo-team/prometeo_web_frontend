@@ -15,8 +15,7 @@ const ComponentInfoSR = () => {
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-  const [pdfUrl, setPdfUrl] = useState(''); // URL del PDF
-  const [isFirmarDisabled, setIsFirmarDisabled] = useState(true);
+  const [pdfUrl, setPdfUrl] = useState(''); 
 
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
@@ -148,6 +147,7 @@ const ComponentInfoSR = () => {
   };
 
   const sendDocument = async (s3url) => {
+    const user2 = sessionStorage.getItem('user');
     const nameDoc = s3url.split("/")[4]; 
     console.log(nameDoc)
     try {
@@ -161,11 +161,12 @@ const ComponentInfoSR = () => {
       console.log(file);
       const formData = new FormData();
       
-      formData.append('file', file);
       formData.append("idRequest", id);
-      formData.append("userAdmin", username);
+      formData.append("userAdmin", user2);
+      formData.append('file', file);
 
-      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, {        method: 'POST',
+      const uploadResponse = await fetch(`http://localhost:3030/api/request/firmDocumentMail`, {       
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -273,8 +274,7 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
-  const handleFirmar = async () => {
-    await fetchDocument();  // Agrega esta línea
+  const handleFirmar = async () => {  // Agrega esta línea
     sendDocument(pdfUrl);   // Mueve esta línea después de fetchDocument
     setIsFirmaModalVisible(false);
   };

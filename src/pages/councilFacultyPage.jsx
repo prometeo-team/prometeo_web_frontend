@@ -246,7 +246,7 @@ const CouncilFacultyPage = () => {
                     <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
                         <div className="lg:col-span-2">
                             <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Formato PROMETEO</h2>
-                            <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
+                            <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo.</h2>
                         </div>
                         <div className="lg:col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
                             <div>
@@ -261,7 +261,7 @@ const CouncilFacultyPage = () => {
                     <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
                         <div className="lg:col-span-2">
                             <h2 className="flex font-bold"><BsChatLeftTextFill className="mr-2 h-5 w-5" />Acta de consejo</h2>
-                            <h2 className="mt-4 text-wrap break-words">Descargue el formato en el cual se encuentran las solicitudes atendidas en el sistema Prometeo</h2>
+                            <h2 className="mt-4 text-wrap break-words">Descargue el formato Excel de las solicitudes que se encuantran en consejo.</h2>
                         </div>
                         <div className="lg:col-span-1 grid grid-cols-1 gap-4 justify-center items-center">
                             <div>

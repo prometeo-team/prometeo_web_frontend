@@ -46,7 +46,7 @@ function CardComponent({ title, icon, onCardClick  }) {
             </Row>
             <Row>
                 <Col span={24} className='flex flex-col items-center mt-3'>
-                    <div className="card-body">{title}</div>
+                    <div className="card-body break-words p-1">{title}</div>
                 </Col>
             </Row>
         </div>
