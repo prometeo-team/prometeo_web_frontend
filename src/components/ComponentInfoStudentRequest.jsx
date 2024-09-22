@@ -3,7 +3,7 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import './ComponentChat.css';
 import './ComponentInfoStudentRequest.css';
 
-function ComponentInfoSR() {
+function ComponentInfoSR({setbutton}) {
   const [requestData, setRequestData] = useState(null);
   const [statusData, setStatusData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -60,6 +60,7 @@ function ComponentInfoSR() {
           });
           const result = await response.json();
           setStatusData(result.data);
+          setbutton(result.data);
         } catch (error) {
           console.error("Error al obtener los datos del estado:", error);
         }
