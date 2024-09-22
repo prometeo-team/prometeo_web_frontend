@@ -13,10 +13,6 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import BulletList from '@tiptap/extension-bullet-list';
-import OrderedList from '@tiptap/extension-ordered-list';
-import ListItem from '@tiptap/extension-list-item';
-
 
 const ComponentInfoSR = () => {
   const [role, setRole] = useState(null);
@@ -26,12 +22,13 @@ const ComponentInfoSR = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
   const [htmlContent, setHtmlContent] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -293,18 +290,18 @@ const ComponentInfoSR = () => {
       Image,
       Table.configure({
         HTMLAttributes: {
-          class: 'my-custom-table', // Aplica una clase específica
+          class: 'my-custom-table', 
         },
       }),
       TableRow,
       TableCell,
       TableHeader,
     ],
-    content: '<p>Este es tu documento</p>', // Initialize with HTML
+    content: '<p>Este es tu documento</p>',
+    editable: isEditing,
     onUpdate: ({ editor }) => {
-      // Set the HTML content in state whenever the editor updates
       const html = editor.getHTML();
-      setHtmlContent(html); // Store HTML content in state
+      setHtmlContent(html);
     },
   });
 
@@ -373,7 +370,7 @@ const ComponentInfoSR = () => {
       },
     });
   };
-  
+
 
   useEffect(() => {
     const header = document.querySelector('.your-header-class');
@@ -503,7 +500,10 @@ const ComponentInfoSR = () => {
           <Button key="cancel" onClick={handleCancel2}>
             Cancelar
           </Button>,
-          <Button key="firmar" type="primary" onClick={handleFirmar}>
+          <Button key="edit" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? 'Dejar de editar' : 'Editar'}
+          </Button>,
+          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing}>
             Firmar
           </Button>,
         ]}
@@ -514,31 +514,31 @@ const ComponentInfoSR = () => {
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`px-2 py-1 rounded ${editor.isActive('bold') ? 'bg-gray-300' : 'bg-white'}`}
+            disabled={!isEditing}
           >
             <strong>Negrilla</strong>
           </button>
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={`px-2 py-1 rounded ${editor.isActive('italic') ? 'bg-gray-300' : 'bg-white'}`}
+            disabled={!isEditing}
           >
             <em>Italic</em>
           </button>
           <button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={`px-2 py-1 rounded ${editor.isActive('underline') ? 'bg-gray-300' : 'bg-white'}`}
+            disabled={!isEditing}
           >
             <u>U</u>
           </button>
         </div>
 
         <div className="border border-gray-300 rounded p-2 bg-gray-50" style={{ maxHeight: '480px', overflowY: 'auto' }}>
-          <EditorContent
-            style={{ border: 'none' }}
-            className='px-4'
-            editor={editor}
-          />
+          <EditorContent editor={editor} />
         </div>
       </Modal>
+
     </>
   );
 };
