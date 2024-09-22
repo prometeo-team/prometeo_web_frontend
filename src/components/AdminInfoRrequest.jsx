@@ -3,6 +3,20 @@ import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import './AdminInfoRrequest.css';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Bold from '@tiptap/extension-bold';
+import Italic from '@tiptap/extension-italic';
+import Image from '@tiptap/extension-image';
+import Underline from '@tiptap/extension-underline';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import BulletList from '@tiptap/extension-bullet-list';
+import OrderedList from '@tiptap/extension-ordered-list';
+import ListItem from '@tiptap/extension-list-item';
+
 
 const ComponentInfoSR = () => {
   const [role, setRole] = useState(null);
@@ -12,10 +26,12 @@ const ComponentInfoSR = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-  const [pdfUrl, setPdfUrl] = useState(''); // URL del PDF
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [htmlContent, setHtmlContent] = useState('');
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -37,21 +53,44 @@ const ComponentInfoSR = () => {
             .join('')
         );
         const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+          setRole('ROLE_ACADEMIC');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
+
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        const decodedToken = JSON.parse(jsonPayload);
         if (decodedToken.authorities.includes('ROLE_STUDENT')) {
-            setRole('ROLE_STUDENT');
-          } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
-            setRole('ROLE_ADMIN');
-          }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
-            setRole('ROLE_TEACHER');
-          }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
-            setRole('ROLE_ACADEMIC');
-          }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
-            setRole('ROLE_SUBACADEMIC');
-          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
-            setRole('ROLE_COORDINADORPRE');
-          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
-            setRole('ROLE_COORDINADORPOS');
-          }
+          setRole('ROLE_STUDENT');
+        } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+          setRole('ROLE_ADMIN');
+        } else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+          setRole('ROLE_TEACHER');
+        } else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+          setRole('ROLE_ACADEMIC');
+        } else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+          setRole('ROLE_SUBACADEMIC');
+        } else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+          setRole('ROLE_COORDINADORPRE');
+        } else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+          setRole('ROLE_COORDINADORPOS');
+        }
       } catch (error) {
         console.error('Error decoding token:', error);
       }
@@ -123,7 +162,8 @@ const ComponentInfoSR = () => {
   };
 
   const sendDocument = async (s3url) => {
-    const nameDoc = s3url.split("/")[4]; 
+    const user2 = sessionStorage.getItem('user');
+    const nameDoc = s3url.split("/")[4];
     console.log(nameDoc)
     try {
       const response = await fetch(s3url);
@@ -132,15 +172,16 @@ const ComponentInfoSR = () => {
       }
       const fileBlob = await response.blob();
       console.log(fileBlob);
-      const file = new File([fileBlob], nameDoc, {type: fileBlob.type});
+      const file = new File([fileBlob], nameDoc, { type: fileBlob.type });
       console.log(file);
       const formData = new FormData();
-      
-      formData.append('file', file);
-      formData.append("idRequest", id);
-      formData.append("userAdmin", username);
 
-      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, {        method: 'POST',
+      formData.append("idRequest", id);
+      formData.append("userAdmin", user2);
+      formData.append('file', file);
+
+      const uploadResponse = await fetch(`http://localhost:3030/api/request/firmDocumentMail`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -170,7 +211,6 @@ const ComponentInfoSR = () => {
         const result = await response.json();
 
         if (result.status === "200" && result.data) {
-          console.log(result.data);
           setPdfUrl(result.data);
 
         } else {
@@ -188,12 +228,15 @@ const ComponentInfoSR = () => {
     fetchStatuses();
   }, [id]);
 
+
+
   const handleOk = async () => {
+    const user2 = sessionStorage.getItem('user');
     if (selectedStatus !== initialStatus) {
       try {
 
 
-        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
+        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
 
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
@@ -236,10 +279,58 @@ const ComponentInfoSR = () => {
     }
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setIsFirmaModalVisible(false);
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Bold,
+      Italic,
+      Underline,
+      Image,
+      Table.configure({
+        HTMLAttributes: {
+          class: 'my-custom-table', // Aplica una clase específica
+        },
+      }),
+      TableRow,
+      TableCell,
+      TableHeader,
+    ],
+    content: '<p>Este es tu documento</p>', // Initialize with HTML
+    onUpdate: ({ editor }) => {
+      // Set the HTML content in state whenever the editor updates
+      const html = editor.getHTML();
+      setHtmlContent(html); // Store HTML content in state
+    },
+  });
+
+
+  const fetchHtmlContent = async () => {
+    try {
+      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/HTML?requestId=${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+
+      const result = await response.json();
+      if (result.status === "200") {
+        console.log(result.data);
+        setHtmlContent(result.data);
+
+        if (editor) {
+          editor.commands.setContent(result.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching HTML content:', error);
+    }
   };
+
+  useEffect(() => {
+    fetchHtmlContent();
+  }, [id, editor]);
 
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
@@ -249,10 +340,43 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
-  const handleFirmar = () => {
-    sendDocument(pdfUrl);
+  const handleFirmar = async () => {
+    sendDocument(pdfUrl);   // Mueve esta línea después de fetchDocument
     setIsFirmaModalVisible(false);
   };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel2 = () => {
+    const modal = Modal.confirm({
+      title: 'Confirmación',
+      content: '¿Está seguro de que desea cancelar?',
+      okText: 'OK',
+      cancelText: 'cancelar',
+      onOk: () => {
+        setIsFirmaModalVisible(false);
+        fetchHtmlContent(); // Ahora puedes llamar a la función aquí
+        setTimeout(() => {
+          modal.destroy();
+          onCancel(); // Llama a la función onCancel
+        }, 500);
+      },
+      onCancel: () => {
+        // Aquí puedes manejar lo que sucede al cancelar
+      },
+    });
+  };
+  
+
+  useEffect(() => {
+    const header = document.querySelector('.your-header-class');
+    if (header) {
+      header.style.border = 'none';
+    }
+  }, []);
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -344,10 +468,13 @@ const ComponentInfoSR = () => {
                   setIsModalVisible(true);
                 }
               }}
+              disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
             >
-              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'} <FaCheck className="ml-2 md:ml-4" />
+              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'}
+              <FaCheck className="ml-2 md:ml-4" />
             </Button>
           </Descriptions.Item>
+
         )}
       </Descriptions>
 
@@ -366,32 +493,47 @@ const ComponentInfoSR = () => {
         title="Firma del Documento"
         visible={isFirmaModalVisible}
         onOk={handleFirmar}
-        onCancel={handleCancel}
+        onCancel={handleCancel2}
         footer={[
-          <Button key="cancel" onClick={handleCancel}>
+          <Button key="cancel" onClick={handleCancel2}>
             Cancelar
           </Button>,
           <Button key="firmar" type="primary" onClick={handleFirmar}>
             Firmar
           </Button>,
         ]}
+        width={650}
+        style={{ marginTop: '-80px' }}
       >
-        <p>Por favor, revise el documento antes de firmarlo.</p>
-        {pdfUrl ? (
-          <div style={{ height: '600px', overflow: 'auto' }}>
-            <embed
-              src={pdfUrl}
-              type="application/pdf"
-              style={{ width: '100%', height: '100%' }}
-              title="Vista previa del PDF"
-            />
-          </div>
-        ) : (
-          <p>No se encontró el documento.</p>
-        )}
+        <div className="toolbar mb-2">
+          <button
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={`px-2 py-1 rounded ${editor.isActive('bold') ? 'bg-gray-300' : 'bg-white'}`}
+          >
+            <strong>Negrilla</strong>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={`px-2 py-1 rounded ${editor.isActive('italic') ? 'bg-gray-300' : 'bg-white'}`}
+          >
+            <em>Italic</em>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={`px-2 py-1 rounded ${editor.isActive('underline') ? 'bg-gray-300' : 'bg-white'}`}
+          >
+            <u>U</u>
+          </button>
+        </div>
+
+        <div className="border border-gray-300 rounded p-2 bg-gray-50" style={{ maxHeight: '480px', overflowY: 'auto' }}>
+          <EditorContent
+            style={{ border: 'none' }}
+            className='px-4'
+            editor={editor}
+          />
+        </div>
       </Modal>
-
-
     </>
   );
 };

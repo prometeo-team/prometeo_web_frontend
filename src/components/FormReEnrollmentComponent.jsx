@@ -4,14 +4,17 @@ import { LuUpload, LuDownload } from "react-icons/lu";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
 import { IoAlertCircleSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
-import ModalUploadComponent from './ModalUploadComponent';
+import { Link, useNavigate } from 'react-router-dom';
+import ModalLegalizationComponent from './ModalUploadRComponent';
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const FormReEnrollmentComponent = () => {
+    const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
     const [documents, setDocuments] = useState([]);
     const [studentInfo, setStudentInfo] = useState({});
@@ -19,12 +22,42 @@ const FormReEnrollmentComponent = () => {
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [modalIcon, setModalIcon] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [requestSuccessful, setRequestSuccessful] = useState(false);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
     const career = params.get('carrera');
+
+    const handleOpenModal = async () => {
+        setModalVisible(true);
+    };
+    
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        notification.info({
+            message: 'Importante',
+            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
+            placement: 'bottomRight',
+            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+        });
+    };
+    
+    const handleOpenModalCheck2 = (content, icon, success) => {
+        setModalVisibleCheck(true);
+        setModalContent(content);
+        setModalIcon(icon);
+        setRequestSuccessful(success);
+    };
+    
+    const handleCloseModalCheck2 = () => {
+        if (requestSuccessful) {
+            navigate('/student/crear-solicitud'); 
+        }
+        setModalVisibleCheck(false); 
+    };
 
     useEffect(() => {
         fetchStudentInfo();
@@ -52,20 +85,6 @@ const FormReEnrollmentComponent = () => {
         } else {
             console.error("El parámetro 'carrera' no está presente en la URL");
         }
-    };
-
-    const handleOpenModal = async () => {
-        setModalVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        notification.info({
-            message: 'Importante',
-            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
-            placement: 'bottomRight',
-            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
-        });
     };
 
     const handleDownload = async () => {
@@ -101,16 +120,6 @@ const FormReEnrollmentComponent = () => {
         }
     };
 
-    const handleOpenModalCheck2 = (content, icon) => {
-        setModalVisibleCheck(true);
-        setModalContent(content);
-        setModalIcon(icon);
-    };
-
-    const handleCloseModalCheck2 = () => {
-        setModalVisibleCheck(false);
-    };
-
     const handleCreateRequest = async () => {
         if (!career || !user) {
             console.error("Faltan parámetros necesarios");
@@ -130,7 +139,7 @@ const FormReEnrollmentComponent = () => {
     
         if (documents.length > 0) {
             documents.forEach((file) => {
-                formData.append("files", file);
+                formData.append("files", file.originalfile);
             });
         }
     
@@ -204,10 +213,11 @@ const FormReEnrollmentComponent = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                    <ModalUploadComponent
+                <ModalLegalizationComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
+                        title="Carta Reintegro - Formato .pdf*"
                     />
                 </div>
             </div>

@@ -1,5 +1,5 @@
-import  { useState, useEffect, useRef  } from 'react';
-import { Table, Space, Input, Select,Pagination, Button,Tag, Spin } from "antd";
+import { useState, useEffect, useRef } from 'react';
+import { Table, Space, Input, Select, Pagination, Button, Tag, Spin } from "antd";
 import UserCArdComponent from '../components/UserCardComponet';
 import NavbarTypeComponent from '../components/NavbarTypeComponent';
 import TableComponent from '../components/TableComponent2';
@@ -8,6 +8,7 @@ import { FaEye } from "react-icons/fa";
 import { HiSearchCircle } from "react-icons/hi";
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { TitleComponent } from "../components";
 import Loader from '../components/LoaderComponent.jsx';
 import '../App.css';
 
@@ -47,20 +48,20 @@ const InfoAdminRequestPage = () => {
 
   useEffect(() => {
     if (careerList.length > 0 && selectedCareer) {
-      obtenerDatos(page,searchQuery,selecteType,selectedCareer);
+      obtenerDatos(page, searchQuery, selecteType, selectedCareer);
     }
 
-  }, [page,searchQuery,selecteType,selectedCareer]);
+  }, [page, searchQuery, selecteType, selectedCareer]);
 
   useEffect(() => {
     if (careerList.length > 0 && selectedCareer) {
-      fetchGrafics(selecteType,selectedCareer);
+      fetchGrafics(selecteType, selectedCareer);
     }
 
-  }, [selecteType,selectedCareer]);
+  }, [selecteType, selectedCareer]);
 
-  const fetchGrafics = async (filter="",career2="") =>{
-    try{
+  const fetchGrafics = async (filter = "", career2 = "") => {
+    try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/request/requestMonthlyStatistics?requestType=${filter}&programName=${career2}`, {
         method: 'GET',
         headers: {
@@ -76,13 +77,13 @@ const InfoAdminRequestPage = () => {
       } else {
         console.error("Error en la respuesta:", result.message);
       }
-    } catch(error) {
+    } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
 
-  const obtenerDatos = async (currentPage = 1, query = "",caso="",career2="") => {
-    setIsTableLoading(true);  
+  const obtenerDatos = async (currentPage = 1, query = "", caso = "", career2 = "") => {
+    setIsTableLoading(true);
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
         method: 'GET',
@@ -91,7 +92,7 @@ const InfoAdminRequestPage = () => {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-      
+
       if (!response.ok) {
         throw new Error('Error al obtener datos');
       }
@@ -115,17 +116,17 @@ const InfoAdminRequestPage = () => {
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
-    } 
+    }
     finally {
       setIsTableLoading(false);
     }
   };
-  
+
   const obtenerCarreras = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/user/Admincareer?username=${user}`, {
         method: 'GET',
-        headers: {  
+        headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -136,15 +137,15 @@ const InfoAdminRequestPage = () => {
         const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
         console.log(carrerasSimuladas)
         setcareerList(items);
-        setcareerList([...items,{ value: 'Docentes', label: 'Docentes' }]);
-      }else {
-          console.error("Error en la respuesta:", result.message);
+        setcareerList([...items, { value: 'Docentes', label: 'Docentes' }]);
+      } else {
+        console.error("Error en la respuesta:", result.message);
       }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
-  
+
   const handleClickType = (option) => {
     // Destruir los gráficos actuales
     if (chart1Ref.current) chart1Ref.current.destroy();
@@ -165,14 +166,14 @@ const InfoAdminRequestPage = () => {
       selectedElement.classList.remove('inactive');
     }
 
-  setSelecteType(option === 'all' ? "" : option);
-  setPage(1);
+    setSelecteType(option === 'all' ? "" : option);
+    setPage(1);
 
   };
 
-  const handleCarreras =  (e) => {
+  const handleCarreras = (e) => {
     console.log(e);
-    career=e;
+    career = e;
     // Destruir los gráficos actuales
     if (chart1Ref.current) chart1Ref.current.destroy();
     if (chart2Ref.current) chart2Ref.current.destroy();
@@ -181,7 +182,7 @@ const InfoAdminRequestPage = () => {
     setPage(1);
   }
 
-  const handelChangePage = (e) =>{
+  const handelChangePage = (e) => {
     setPage(e);
   };
 
@@ -244,9 +245,9 @@ const InfoAdminRequestPage = () => {
       render: (_, record) => (
         <FaEye
           style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
-          onClick={() =>  record.tipo_solicitud === "Legalización de matrícula" ?
+          onClick={() => record.tipo_solicitud === "Legalización de matrícula" ?
             navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`)
-          :
+            :
             navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`)
           }
         />
@@ -257,21 +258,25 @@ const InfoAdminRequestPage = () => {
 
   return (
     <div className='w-full flex max-md:mr-0 h-screen scroll-container flex-col'>
-        <div className='w-full mt-0 float-right h-20'>
-          <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
+      <div className='w-full mt-0 float-right h-20'>
+        <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
+      </div>
+      <div>
+        <TitleComponent title={"Gestión de solicitudes"} />
+      </div>
+
+      <div className='w-full mt-6'>
+        <NavbarTypeComponent onClick={handleClickType} />
+      </div>
+      <div className='w-full mt-16'>
+        <div className='ml-8 max-md:ml-2 w-11/12 flex flex-row max-md:flex-col max-md:items-center'>
+          <CardGraficsComponent type="1" number={Pendiente.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico1" data={Pendiente} chartRef={chart1Ref} />
+          <CardGraficsComponent type="2" number={proceso.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico2" data={proceso} chartRef={chart2Ref} />
+          <CardGraficsComponent type="3" number={Fin.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico3" data={Fin} chartRef={chart3Ref} />
         </div>
-        <div className='w-full mt-6'>
-          <NavbarTypeComponent onClick={handleClickType}/>
-        </div>
-        <div className='w-full mt-16'>
-          <div className='ml-8 max-md:ml-2 w-11/12 flex flex-row max-md:flex-col max-md:items-center'>
-            <CardGraficsComponent type="1" number={Pendiente.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico1" data={Pendiente} chartRef={chart1Ref} />
-            <CardGraficsComponent type="2" number={proceso.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico2" data={proceso} chartRef={chart2Ref} />
-            <CardGraficsComponent type="3" number={Fin.reduce((acc, item) => acc + parseFloat(item.count), 0)} grafico="grafico3" data={Fin} chartRef={chart3Ref} />
-          </div>
-        </div>
-        <div className='w-full mt-16'>
-          <div className='ml-8 max-md:ml-3 mb-20 w-11/12'>
+      </div>
+      <div className='w-full mt-16'>
+        <div className='ml-8 max-md:ml-3 mb-20 w-11/12'>
           {isLoading ? (
             <div className="loader-container">
               <Loader className="h-12 w-12" />
@@ -294,17 +299,17 @@ const InfoAdminRequestPage = () => {
                 }}
               />
               <Select
-                className="h-11 ml-2" 
+                className="h-11 ml-2"
                 value={selectedCareer}
                 style={{ width: 250 }}
                 onChange={(value) => {
                   setSelectedCareer(value);
-                  handleCarreras(value); 
+                  handleCarreras(value);
                 }}
                 options={careerList}
                 placeholder="Selecciona una carrera"
               />
-              
+
               <div className="table-responsive" style={{ overflowX: 'auto', maxWidth: '100%' }}>
                 {isTableLoading ? (
                   <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -329,9 +334,9 @@ const InfoAdminRequestPage = () => {
                 />
               </div>
             </div>
-            )}
-          </div>
+          )}
         </div>
+      </div>
     </div>
   )
 }

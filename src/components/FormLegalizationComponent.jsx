@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LuUpload, LuDownload } from 'react-icons/lu';
 import { FaCheck } from 'react-icons/fa6';
 import { IoAlertCircleSharp } from 'react-icons/io5';
-import ModalLegalizationComponent from '../components/ModalLegalizationComponent';
+import ModalLegalizationComponent from '../components/ModalUploadRComponent.jsx';
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import Loader from './LoaderComponent.jsx';
@@ -22,6 +22,7 @@ const FormLegalizationComponent = ({ carrer }) => {
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [modalIcon, setModalIcon] = useState(null);
+    const [requestSuccessful, setRequestSuccessful] = useState(false);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -78,14 +79,18 @@ const FormLegalizationComponent = ({ carrer }) => {
         });
     };
 
-    const handleOpenModalCheck2 = (content, icon) => {
+    const handleOpenModalCheck2 = (content, icon, success) => {
         setModalVisibleCheck(true);
         setModalContent(content);
         setModalIcon(icon);
+        setRequestSuccessful(success);
     };
 
     const handleCloseModalCheck2 = () => {
-        setModalVisibleCheck(false);
+        if (requestSuccessful) {
+            navigate('/student/crear-solicitud'); 
+        }
+        setModalVisibleCheck(false); 
     };
 
     const fetchInfo = async () => {
@@ -137,13 +142,13 @@ const FormLegalizationComponent = ({ carrer }) => {
                 const result = await response.json();
                 if (response.ok) {
                     setModalVisibleCheck(true);
-                    handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
+                    handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />, true); // Indica éxito
                 } else {
                     console.error("Error en la respuesta:", result.message);
                 }
             } catch (error) {
                 console.error('Error al crear la solicitud:', error);
-                handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
+                handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />, false); // Indica fallo
             } finally {
                 setIsButtonLoading(false);
             }
@@ -442,6 +447,8 @@ const FormLegalizationComponent = ({ carrer }) => {
                                     visible={modalVisible}
                                     onClose={handleCloseModal}
                                     setDocuments={setDocuments}
+                                    title="Anexo de Afiliación EPS (Sin claves)" 
+                                    detail="Vigencia NO mayor a 30 días" 
                                 />
                             </div>
                         </div>
