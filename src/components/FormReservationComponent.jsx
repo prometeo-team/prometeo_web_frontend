@@ -10,6 +10,8 @@ import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const FormReservationComponent = () => {
     const navigate = useNavigate();
@@ -20,13 +22,42 @@ const FormReservationComponent = () => {
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [modalIcon, setModalIcon] = useState(null);
-
+    const [loading, setLoading] = useState(false);
+    const [requestSuccessful, setRequestSuccessful] = useState(false);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
     const urlObj = new URL(url);
     const params = new URLSearchParams(urlObj.search);
     const career = params.get('carrera');
+    
+    const handleOpenModal = async () => {
+        setModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+        notification.info({
+            message: 'Importante',
+            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
+            placement: 'bottomRight',
+            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+        });
+    };
+    
+    const handleOpenModalCheck2 = (content, icon, success) => {
+        setModalVisibleCheck(true);
+        setModalContent(content);
+        setModalIcon(icon);
+        setRequestSuccessful(success);
+    };
+
+    const handleCloseModalCheck2 = () => {
+        if (requestSuccessful) {
+            navigate('/student/crear-solicitud');
+        }
+        setModalVisibleCheck(false); 
+    };
 
     useEffect(() => {
         fetchStudentInfo();
@@ -54,20 +85,6 @@ const FormReservationComponent = () => {
         } else {
             console.error("El parámetro 'carrera' no está presente en la URL");
         }
-    };
-
-    const handleOpenModal = async () => {
-        setModalVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        notification.info({
-            message: 'Importante',
-            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
-            placement: 'bottomRight',
-            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
-        });
     };
 
     const handleDownload = async () => {
@@ -103,40 +120,32 @@ const FormReservationComponent = () => {
         }
     };
 
-    const handleOpenModalCheck2 = (content, icon) => {
-        setModalVisibleCheck(true);
-        setModalContent(content);
-        setModalIcon(icon);
-    };
-
-    const handleCloseModalCheck2 = () => {
-        navigate('/student/crear-solicitud');
-        setModalVisibleCheck(false);
-    };
 
     const handleCreateRequest = async () => {
         if (!career || !user) {
             console.error("Faltan parámetros necesarios");
             return;
         }
-    
+
+        setLoading(true); 
+
         const requestData = {
             userEntity: user,
-            requestTypeEntity: 'Reserva de Cupo',
+            requestTypeEntity: 'Activación de Cupo',
             programStudent: career,
         };
-    
+
         const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
-    
+
         const formData = new FormData();
         formData.append("request", requestJson);
-    
+
         if (documents.length > 0) {
             documents.forEach((file) => {
                 formData.append("files", file.originalfile);
             });
         }
-    
+
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
                 method: 'POST',
@@ -145,18 +154,21 @@ const FormReservationComponent = () => {
                 },
                 body: formData,
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Error al crear la solicitud');
             }
-    
+
             const data = await response.json();
             setRequestId(data.requestId);
-            handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
+            handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />, true); // Indica éxito
+
         } catch (error) {
             console.error('Error al crear la solicitud:', error);
-            handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
+            handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />, false); // Indica fallo
+        } finally {
+            setLoading(false); // Finalizar el loader
         }
     };
 
@@ -207,7 +219,7 @@ const FormReservationComponent = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                <ModalLegalizationComponent
+                    <ModalLegalizationComponent
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
@@ -239,15 +251,20 @@ const FormReservationComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* Columna para el botón */}
                             <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
                                 <button
                                     className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"
                                     onClick={handleCreateRequest}
-
+                                    disabled={loading} // Deshabilitar el botón mientras está cargando
                                 >
-                                    <span>Confirmar</span>
-                                    <FaCheck className="ml-2 h-7 w-7" />
+                                    {loading ? (
+                                        <Spin indicator={<LoadingOutlined spin />} size="large" />
+                                    ) : (
+                                        <>
+                                            <span>Confirmar</span>
+                                            <FaCheck className="ml-2 h-7 w-7" />
+                                        </>
+                                    )}
                                 </button>
                                 <ModalComponent
                                     visible={modalVisibleCheck}

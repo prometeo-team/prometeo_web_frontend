@@ -200,7 +200,7 @@ function RequestTypeComponent() {
                            handleCardClick(2);
                         }}
                      >
-                        <CardComponent title="Cancelación de créditos" icon="2" onCardClick={() => handleCardClick(2)} />
+                        <CardComponent title="Retiro de Créditos" icon="2" onCardClick={() => handleCardClick(2)} />
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
@@ -255,7 +255,7 @@ function RequestTypeComponent() {
                            handleCardClick(8);
                         }}
                      >
-                        <CardComponent title="Activación de cupo" icon="9" onCardClick={() => handleCardClick(8)} />
+                        <CardComponent title="Activación reserva de cupo" icon="9" onCardClick={() => handleCardClick(8)} />
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>

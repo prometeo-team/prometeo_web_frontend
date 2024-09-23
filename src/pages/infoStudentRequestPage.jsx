@@ -2,14 +2,18 @@ import { useState, useEffect } from 'react';
 import InfoSRComponent from '../components/ComponentInfoStudentRequest';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
-import { Button, Modal, List } from 'antd';
+import { Button, Modal, List, notification } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
+import { AiOutlineUpload } from "react-icons/ai";
 import { Link } from 'react-router-dom';
 import UserCArdComponent from '../components/UserCardComponet';
+import ModalMultiUpload from '../components/ModalMultiUpload';
 
 const InfoStudentRequestPage = () => {
     const [role, setRole] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [forPay, setForPay] = useState(false);
     const [documents, setDocuments] = useState([]); 
     const [loading, setLoading] = useState(false);
 
@@ -87,6 +91,141 @@ const InfoStudentRequestPage = () => {
         setIsModalOpen(false);
     };
 
+    const setbutton = (e) =>{
+        if(e['Pendiente Pago']==true && (tipo =='Adición de Créditos' || tipo =='Supletorios' || tipo =='Postulación a Grados' )){
+            setForPay(true);
+        }
+        console.log(e)
+    };
+
+    const handleCloseModal = () =>{
+        setModalVisible(false);
+    };
+
+    const fetchSave = async (document) => {
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        const id2 = params.get('id');
+        const tipo = params.get('tipo');
+        console.log(document);
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+        const formdata = new FormData();
+        
+        formdata.append("id_request", id2);
+
+        formdata.append("files", document[0].originalfile);
+        
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow"
+        };
+        
+        try {
+        const response = await  fetch(`${import.meta.env.VITE_API_URL}/documents/addDocumentsToRequest`, requestOptions)
+        const result = await response.json();
+            if (result.status === "200 OK") {
+                if(tipo == 'Supletorios'){
+                    fetchput2();
+                }
+                if(tipo == 'Adición de Créditos'){
+                    fetchput();
+                }
+                if(tipo == 'Postulación a Grados'){
+                    fetchput3();
+                }
+                console.log('guardado');
+            } else {
+                console.error("Error en la respuesta:", result.message);
+            }
+        } catch (error) {
+            console.error("Error al obtener los programas:", error);
+        }
+    };
+
+    const fetchput = async () =>{
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        const id2 = params.get('id');
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Pendiente Inscripción&username=${sessionStorage.getItem('user')}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+  
+          if (response2.ok) {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `El estado se ha cambiado a Pendiente Inscripción.`,
+            });
+            location.reload();
+          } else {
+            notification.error({
+              message: 'Error al actualizar el estado',
+              description: 'No se pudo actualizar el estado. Intente de nuevo.',
+            });
+          }
+    }
+
+    const fetchput2 = async () =>{
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        const id2 = params.get('id');
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Pendiente Firma&username=${sessionStorage.getItem('user')}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+  
+          if (response2.ok) {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `El estado se ha cambiado a Pendiente Firma.`,
+            });
+            location.reload();
+          } else {
+            notification.error({
+              message: 'Error al actualizar el estado',
+              description: 'No se pudo actualizar el estado. Intente de nuevo.',
+            });
+          }
+    }
+
+    const fetchput3 = async () =>{
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        const id2 = params.get('id');
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Finalizado&username=${sessionStorage.getItem('user')}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+  
+          if (response2.ok) {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `El estado se ha cambiado a Finalizado.`,
+            });
+            location.reload();
+          } else {
+            notification.error({
+              message: 'Error al actualizar el estado',
+              description: 'No se pudo actualizar el estado. Intente de nuevo.',
+            });
+          }
+    }
     return (
         <div className='mx-14 h-screen scroll-container mr-4 ml-4 max-md:mx-0'>
             <div className='w-full mt-0 float-right h-20'>
@@ -105,15 +244,23 @@ const InfoStudentRequestPage = () => {
                     </Button>
                 </div>
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-3">
-                    <InfoSRComponent />
+                    <InfoSRComponent setbutton={setbutton} />
                 </div>
                 {role == "ROLE_STUDENT" &&(
                 <div>
                     <Link to="/student/mis-solicitudes">
                         <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4' icon={<ArrowLeftOutlined />}>Volver</Button>
                     </Link>
+                    {forPay &&(
+                    <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4 ml-5' onClick={() => setModalVisible(true)} icon={<AiOutlineUpload />}>Comprobante de pago</Button>
+                    )}
                 </div>
                 )}
+                
+                <div>
+                    
+                </div>
+                
                 {role == "ROLE_TEACHER" &&(
                 <div>
                     <Link to="/teacher/mis-solicitudes">
@@ -122,7 +269,7 @@ const InfoStudentRequestPage = () => {
                 </div>
                 )}
             </div>
-
+           
             <Modal
                 title="Documentos Adjuntos"
                 open={isModalOpen}
@@ -157,7 +304,18 @@ const InfoStudentRequestPage = () => {
                     />
                 )}
             </Modal>
+            <div>
+            <ModalMultiUpload
+                visible={modalVisible}
+                onClose={handleCloseModal}
+                setDocuments={fetchSave}
+                title = {'Comprobante de pago'}
+                detail ={''}
+            />
+            </div>
         </div>
+        
+        
     );
 }
 

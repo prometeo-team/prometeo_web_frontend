@@ -56,7 +56,7 @@ function App() {
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
     { name: 'Grados', path: '/admin/grados-tabla' },
-    //{ name: 'Trazabilidad', path: '/admin/Traceability' },
+    { name: 'Trazabilidad', path: '/admin/Traceability' },
     { name: 'Configuración', path: '/admin/config' },
   ];
 
@@ -65,14 +65,14 @@ function App() {
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Consejo Facultad', path: '/admin/consejo-facultad' },
     { name: 'Grados', path: '/admin/grados-tabla' },
-//{ name: 'Trazabilidad', path: '/admin/Traceability' }
+    { name: 'Trazabilidad', path: '/admin/Traceability' }
   ];
 
   const menucareerS = [
     { name: 'Inicio', path: '/' },
     { name: 'Gestión Solicitudes', path: '/admin/dashboard' },
     { name: 'Grados', path: '/admin/grados-tabla' },
-    //{ name: 'Trazabilidad', path: '/admin/Traceability' },
+    { name: 'Trazabilidad', path: '/admin/Traceability' },
   ];
 
   const showNavbar = () => {

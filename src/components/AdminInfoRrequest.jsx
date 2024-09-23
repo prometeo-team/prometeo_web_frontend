@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 import './AdminInfoRrequest.css';
 
 const ComponentInfoSR = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,9 +17,9 @@ const ComponentInfoSR = () => {
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-  const [pdfUrl, setPdfUrl] = useState(''); // URL del PDF
-  const [isFirmarDisabled, setIsFirmarDisabled] = useState(true);
-
+  const [htmlContent, setHtmlContent] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
+  const [isEditing, setIsEditing] = useState(false);
+  const contentRef = useRef(null);
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -25,6 +27,7 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
+  const tipo = params.get('tipo');
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -42,41 +45,6 @@ const ComponentInfoSR = () => {
         if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
           setRole('ROLE_ACADEMIC');
         }
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
-    }
-  }, []);
-  
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split('')
-            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-        );
-        const decodedToken = JSON.parse(jsonPayload);
-        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
-            setRole('ROLE_STUDENT');
-          } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
-            setRole('ROLE_ADMIN');
-          }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
-            setRole('ROLE_TEACHER');
-          }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
-            setRole('ROLE_ACADEMIC');
-          }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
-            setRole('ROLE_SUBACADEMIC');
-          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
-            setRole('ROLE_COORDINADORPRE');
-          }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
-            setRole('ROLE_COORDINADORPOS');
-          }
       } catch (error) {
         console.error('Error decoding token:', error);
       }
@@ -147,29 +115,21 @@ const ComponentInfoSR = () => {
     }
   };
 
-  const sendDocument = async (s3url) => {
-    const nameDoc = s3url.split("/")[4]; 
-    console.log(nameDoc)
-    try {
-      const response = await fetch(s3url);
-      if (!response.ok) {
-        throw new Error('No se pudo descargar el archivo desde S3');
-      }
-      const fileBlob = await response.blob();
-      console.log(fileBlob);
-      const file = new File([fileBlob], nameDoc, {type: fileBlob.type});
-      console.log(file);
-      const formData = new FormData();
-      
-      formData.append('file', file);
-      formData.append("idRequest", id);
-      formData.append("userAdmin", username);
+  const sendDocument = async (html) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    const raw = JSON.stringify({
+      "htmlContent": html,
+      "requestId": id,
+      "userAdmin": sessionStorage.getItem('user')
+    });
 
-      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, {        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-        body: formData,
+    try {
+      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadPDF`, {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
       });
 
       if (!uploadResponse.ok) {
@@ -177,52 +137,29 @@ const ComponentInfoSR = () => {
       }
 
       console.log('Archivo subido exitosamente');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   useEffect(() => {
-    const fetchDocument = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/request/generate?requestId=${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
-        const result = await response.json();
-
-        if (result.status === "200" && result.data) {
-          setPdfUrl(result.data);
-
-        } else {
-          console.error('No se encontró el documento.');
-        }
-      } catch (error) {
-        console.error('Error al obtener el documento:', error);
-      }
-    };
-
-    fetchDocument();
-  }, [id]);
-
-  useEffect(() => {
     fetchStatuses();
   }, [id]);
 
   const handleOk = async () => {
+    const user2 = sessionStorage.getItem('user');
     if (selectedStatus !== initialStatus) {
       try {
-
-
-        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
-
+        let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
+        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+          putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
+        }
+        
         const response = await fetch(putUrl, {
           method: 'PUT',
           headers: {
@@ -236,6 +173,12 @@ const ComponentInfoSR = () => {
             message: 'Estado actualizado',
             description: `El estado se ha cambiado a ${selectedStatus}.`,
           });
+          if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `Correo enviado.`,
+            });
+          }
           setInitialStatus(selectedStatus);
           setInitialStatusValue(selectedStatus);
           fetchStatuses();
@@ -260,10 +203,29 @@ const ComponentInfoSR = () => {
     }
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setIsFirmaModalVisible(false);
+  const fetchHtmlContent = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      if (result.status === "200") {
+        setHtmlContent(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching HTML content:', error);
+    }
   };
+
+  useEffect(() => {
+    fetchHtmlContent();
+  }, [id]);
+
+
 
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
@@ -273,12 +235,39 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = () => {
+    const content = contentRef.current.innerHTML;
+    setHtmlContent(content);
+    setIsEditing(false);
+    setIsEditing(false);
+  };
+
+  const sanitizeHtml = (html) => {
+    // Crear un documento DOM a partir del HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Serializar de nuevo a HTML con etiquetas correctamente cerradas
+    return new XMLSerializer().serializeToString(doc);
+  };
+
   const handleFirmar = async () => {
-    await fetchDocument();  // Agrega esta línea
-    sendDocument(pdfUrl);   // Mueve esta línea después de fetchDocument
+    const sanitizedHtmlContent = sanitizeHtml(htmlContent);
+    sendDocument(sanitizedHtmlContent);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel2 = () => {
     setIsFirmaModalVisible(false);
   };
-  
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -335,7 +324,7 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
-        {selectedStatus === 'No Aprobado' ? (
+        {selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
@@ -359,23 +348,22 @@ const ComponentInfoSR = () => {
           </Descriptions.Item>
         ) : (
           <Descriptions.Item className="ml-4 w-full md:w-1/3">
-  <Button
-    type="primary"
-    className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
-    onClick={() => {
-      if (initialStatusValue.includes('Firma')) {
-        setIsFirmaModalVisible(true);
-      } else {
-        setIsModalVisible(true);
-      }
-    }}
-    disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
-  >
-    {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'} 
-    <FaCheck className="ml-2 md:ml-4" />
-  </Button>
-</Descriptions.Item>
-
+            <Button
+              type="primary"
+              className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
+              onClick={() => {
+                if (initialStatusValue.includes('Firma')) {
+                  setIsFirmaModalVisible(true);
+                } else {
+                  setIsModalVisible(true);
+                }
+              }}
+              disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
+            >
+              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'}
+              <FaCheck className="ml-2 md:ml-4" />
+            </Button>
+          </Descriptions.Item>
         )}
       </Descriptions>
 
@@ -394,32 +382,35 @@ const ComponentInfoSR = () => {
         title="Firma del Documento"
         visible={isFirmaModalVisible}
         onOk={handleFirmar}
-        onCancel={handleCancel}
+        onCancel={handleCancel2}
+        width={700} 
         footer={[
-          <Button key="cancel" onClick={handleCancel}>
+          <Button key="cancel" onClick={handleCancel2}>
             Cancelar
           </Button>,
-          <Button key="firmar" type="primary" onClick={handleFirmar}>
+          <Button key="edit" onClick={toggleEdit}>
+            {isEditing ? 'Dejar de editar' : 'Editar'}
+          </Button>,
+          <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
+            Guardar
+          </Button>,
+          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing} >
             Firmar
           </Button>,
         ]}
       >
-        <p>Por favor, revise el documento antes de firmarlo.</p>
-        {pdfUrl ? (
-          <div style={{ height: '600px', overflow: 'auto' }}>
-            <embed
-              src={pdfUrl}
-              type="application/pdf"
-              style={{ width: '100%', height: '100%' }}
-              title="Vista previa del PDF"
-            />
-          </div>
-        ) : (
-          <p>No se encontró el documento.</p>
-        )}
+        <div
+          contentEditable={isEditing}
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+          style={{
+            border: isEditing ? '1px solid gray' : 'none',
+            padding: '10px',
+            height: '600px',
+            overflowY: 'auto',
+          }}
+        />
       </Modal>
-
-
     </>
   );
 };
