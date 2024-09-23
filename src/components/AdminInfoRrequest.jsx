@@ -126,7 +126,7 @@ const ComponentInfoSR = () => {
     });
 
     try {
-      const uploadResponse = await fetch(`http://localhost:3030/api/request/uploadPDF`, {
+      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadPDF`, {
         method: 'POST',
         headers: myHeaders,
         body: raw
