@@ -124,7 +124,7 @@ function UserCardComponent({ number }) {
             });
             const result = await response.json();
             if (response.status === 200) {
-               console.log(result.message);
+                return true;
                 
             } else {
                 console.error("Error en la respuesta:", result.message);
@@ -148,30 +148,40 @@ function UserCardComponent({ number }) {
             setNotifications(notifications.filter(notification => notification.id !== id));
             if(request===-1){
                 if(role=='ROLE_STUDENT'){
-                    navigate(`/student/crear-solicitud`);
-                    notification.info({
-                        message: 'Importante',
-                        description: 'Se ha habilitado la postulación a grados".',
-                        placement: 'bottomRight',
-                        icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
-                    })
+                    if(fetchView(id)){
+                    
+                        notification.info({
+                            message: 'Importante',
+                            description: 'Se ha habilitado la postulación a grados".',
+                            placement: 'bottomRight',
+                            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
+                        });
+                        navigate(`/student/crear-solicitud`);
+                    }
                 }
             }else{
                 var type = await  fetchRequest(request);
                 if(role=='ROLE_STUDENT'){
-                    navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                    if(fetchView(id)){
+                        navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
+                    }
                 }else if(role=='ROLE_ADMIN' || role=='ROLE_ACADEMIC' || role=='ROLE_SUBACADEMIC' || role=='ROLE_COORDINADORPRE' || role=='ROLE_COORDINADORPOS'){
                     if(type=='Legalización de matrícula'){
-                        navigate(`/admin/legalizacion-solicitud?id=${request}&tipo=${type}`);
+                        if(fetchView(id)){
+                            navigate(`/admin/legalizacion-solicitud?id=${request}&tipo=${type}`);
+                        }
                     }else{
-                        navigate(`/admin/solicitud?id=${request}&tipo=${type}`);
+                        if(fetchView(id)){
+                            navigate(`/admin/solicitud?id=${request}&tipo=${type}`);
+                        }
                     }
                 }else if(role=='ROLE_TEACHER'){
-                    navigate(`/teacher/mi-solicitud?id=${request}&tipo=${type}`);
-                    
+                    if(fetchView(id)){
+                        navigate(`/teacher/mi-solicitud?id=${request}&tipo=${type}`);
+                    }
                 }
             }
-            fetchView(id);
+            
         } catch (error) {
             console.error("Error al manejar la notificación:", error);
         }
