@@ -24,7 +24,7 @@ const ModalComponent = ({ content, icon, visible, onClose, iconColorClass }) => 
   return (
     <>
       {visible && ( 
-        <div className="modal-backdrop">
+        <div >
           <Modal
             visible={visible}
             onOk={handleOk}
