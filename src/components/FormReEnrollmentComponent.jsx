@@ -135,7 +135,7 @@ const FormActivationComponent = () => {
     useEffect(() => {
         const fetchDocument = async () => {
             try {
-                const response = await fetch(`http://localhost:3030/api/template/getTemplateDocumentWord?username=${user}&requestType=Reintegro&career=${career}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/template/getTemplateDocumentWord?username=${user}&requestType=Reintegro&career=${career}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
