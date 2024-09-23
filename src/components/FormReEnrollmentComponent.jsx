@@ -9,7 +9,7 @@ import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
-
+ 
 const FormActivationComponent = () => {
     const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
