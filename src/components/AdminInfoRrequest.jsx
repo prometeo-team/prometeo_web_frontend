@@ -2,9 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 import './AdminInfoRrequest.css';
 
 const ComponentInfoSR = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +27,7 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
+  const tipo = params.get('tipo');
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -134,6 +137,7 @@ const ComponentInfoSR = () => {
       }
 
       console.log('Archivo subido exitosamente');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -151,6 +155,11 @@ const ComponentInfoSR = () => {
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
+
+        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+          putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
+        }
+        
         const response = await fetch(putUrl, {
           method: 'PUT',
           headers: {
@@ -210,6 +219,8 @@ const ComponentInfoSR = () => {
     fetchHtmlContent();
   }, [id]);
 
+
+
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
   };
@@ -226,16 +237,18 @@ const ComponentInfoSR = () => {
     const content = contentRef.current.innerHTML;
     setHtmlContent(content);
     setIsEditing(false);
+    setIsEditing(false);
   };
+
   const sanitizeHtml = (html) => {
     // Crear un documento DOM a partir del HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-  
+
     // Serializar de nuevo a HTML con etiquetas correctamente cerradas
     return new XMLSerializer().serializeToString(doc);
   };
-  
+
   const handleFirmar = async () => {
     const sanitizedHtmlContent = sanitizeHtml(htmlContent);
     sendDocument(sanitizedHtmlContent);
@@ -305,7 +318,7 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
-        {selectedStatus === 'No Aprobado' ? (
+        {selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
@@ -364,6 +377,7 @@ const ComponentInfoSR = () => {
         visible={isFirmaModalVisible}
         onOk={handleFirmar}
         onCancel={handleCancel2}
+        width={700} 
         footer={[
           <Button key="cancel" onClick={handleCancel2}>
             Cancelar
@@ -371,16 +385,14 @@ const ComponentInfoSR = () => {
           <Button key="edit" onClick={toggleEdit}>
             {isEditing ? 'Dejar de editar' : 'Editar'}
           </Button>,
-          <Button key="firmar" type="primary" onClick={handleSave} disabled={!isEditing}>
+          <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
             Guardar
           </Button>,
-          <Button key="send" type="primary" onClick={handleFirmar}>
+          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing} >
             Firmar
-          </Button>
+          </Button>,
         ]}
-        width={800}
       >
-        {/* Editable Content */}
         <div
           contentEditable={isEditing}
           ref={contentRef}
@@ -388,8 +400,8 @@ const ComponentInfoSR = () => {
           style={{
             border: isEditing ? '1px solid gray' : 'none',
             padding: '10px',
-            minHeight: '200px',
-            overflowY: 'auto'
+            height: '600px',
+            overflowY: 'auto',
           }}
         />
       </Modal>

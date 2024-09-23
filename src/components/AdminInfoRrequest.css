@@ -3,43 +3,4 @@
 }
 
 
-.ProseMirror table {
-    border-collapse: collapse;
-    width: 100%;
-}
 
-.ProseMirror th,
-.ProseMirror td {
-    border: 1px solid #ccc;
-    /* Cambia el color según sea necesario */
-    padding: 8px;
-    text-align: left;
-}
-
-.ProseMirror ul {
-    list-style-type: disc;
-    /* Para listas con viñetas */
-}
-
-.ProseMirror ol {
-    list-style-type: decimal;
-    /* Para listas numeradas */
-}
-
-
-.EditorContent .your-header-class {
-    border: none !important;
-  }
-  
-  * {
-    border: none;
-  }
-
-  .header-class {
-    border: 1px solid transparent;
-  }
-  
-  .container {
-    border: none !important;
-  }
-  
