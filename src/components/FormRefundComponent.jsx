@@ -105,7 +105,7 @@ const FormActivationComponent = () => {
         // Append the generated PDF file
         if (pdfFile) {
             formData.append("files", pdfFile);
-        }
+        } 
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
