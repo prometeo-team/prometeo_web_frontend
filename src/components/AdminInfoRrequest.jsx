@@ -2,9 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 import './AdminInfoRrequest.css';
 
 const ComponentInfoSR = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,6 +136,7 @@ const ComponentInfoSR = () => {
       }
 
       console.log('Archivo subido exitosamente');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -210,6 +213,8 @@ const ComponentInfoSR = () => {
     fetchHtmlContent();
   }, [id]);
 
+
+
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
   };
@@ -226,16 +231,18 @@ const ComponentInfoSR = () => {
     const content = contentRef.current.innerHTML;
     setHtmlContent(content);
     setIsEditing(false);
+    setIsEditing(false);
   };
+
   const sanitizeHtml = (html) => {
     // Crear un documento DOM a partir del HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-  
+
     // Serializar de nuevo a HTML con etiquetas correctamente cerradas
     return new XMLSerializer().serializeToString(doc);
   };
-  
+
   const handleFirmar = async () => {
     const sanitizedHtmlContent = sanitizeHtml(htmlContent);
     sendDocument(sanitizedHtmlContent);
@@ -364,6 +371,7 @@ const ComponentInfoSR = () => {
         visible={isFirmaModalVisible}
         onOk={handleFirmar}
         onCancel={handleCancel2}
+        width={700} 
         footer={[
           <Button key="cancel" onClick={handleCancel2}>
             Cancelar
@@ -371,16 +379,14 @@ const ComponentInfoSR = () => {
           <Button key="edit" onClick={toggleEdit}>
             {isEditing ? 'Dejar de editar' : 'Editar'}
           </Button>,
-          <Button key="firmar" type="primary" onClick={handleSave} disabled={!isEditing}>
+          <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
             Guardar
           </Button>,
-          <Button key="send" type="primary" onClick={handleFirmar}>
+          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing} >
             Firmar
-          </Button>
+          </Button>,
         ]}
-        width={800}
       >
-        {/* Editable Content */}
         <div
           contentEditable={isEditing}
           ref={contentRef}
@@ -388,8 +394,8 @@ const ComponentInfoSR = () => {
           style={{
             border: isEditing ? '1px solid gray' : 'none',
             padding: '10px',
-            minHeight: '200px',
-            overflowY: 'auto'
+            height: '600px',
+            overflowY: 'auto',
           }}
         />
       </Modal>
