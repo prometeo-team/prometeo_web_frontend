@@ -1,20 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 import './AdminInfoRrequest.css';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
-import Image from '@tiptap/extension-image';
-import Underline from '@tiptap/extension-underline';
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
 
 const ComponentInfoSR = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,10 +17,9 @@ const ComponentInfoSR = () => {
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
-  const [pdfUrl, setPdfUrl] = useState('');
-  const [htmlContent, setHtmlContent] = useState('');
+  const [htmlContent, setHtmlContent] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
   const [isEditing, setIsEditing] = useState(false);
-
+  const contentRef = useRef(null);
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -53,41 +44,6 @@ const ComponentInfoSR = () => {
         const decodedToken = JSON.parse(jsonPayload);
         if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
           setRole('ROLE_ACADEMIC');
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
-    }
-  }, []);
-
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split('')
-            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-        );
-        const decodedToken = JSON.parse(jsonPayload);
-        if (decodedToken.authorities.includes('ROLE_STUDENT')) {
-          setRole('ROLE_STUDENT');
-        } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
-          setRole('ROLE_ADMIN');
-        } else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
-          setRole('ROLE_TEACHER');
-        } else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
-          setRole('ROLE_ACADEMIC');
-        } else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
-          setRole('ROLE_SUBACADEMIC');
-        } else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
-          setRole('ROLE_COORDINADORPRE');
-        } else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
-          setRole('ROLE_COORDINADORPOS');
         }
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -159,31 +115,21 @@ const ComponentInfoSR = () => {
     }
   };
 
-  const sendDocument = async (s3url) => {
-    const user2 = sessionStorage.getItem('user');
-    const nameDoc = s3url.split("/")[4];
-    console.log(nameDoc)
+  const sendDocument = async (html) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    const raw = JSON.stringify({
+      "htmlContent": html,
+      "requestId": id,
+      "userAdmin": sessionStorage.getItem('user')
+    });
+
     try {
-      const response = await fetch(s3url);
-      if (!response.ok) {
-        throw new Error('No se pudo descargar el archivo desde S3');
-      }
-      const fileBlob = await response.blob();
-      console.log(fileBlob);
-      const file = new File([fileBlob], nameDoc, { type: fileBlob.type });
-      console.log(file);
-      const formData = new FormData();
-
-      formData.append("idRequest", id);
-      formData.append("userAdmin", user2);
-      formData.append('file', file);
-
-      const uploadResponse = await fetch(`http://localhost:3030/api/request/firmDocumentMail`, {
+      const uploadResponse = await fetch(`http://localhost:3030/api/request/uploadPDF`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-        body: formData,
+        headers: myHeaders,
+        body: raw
       });
 
       if (!uploadResponse.ok) {
@@ -191,51 +137,21 @@ const ComponentInfoSR = () => {
       }
 
       console.log('Archivo subido exitosamente');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   useEffect(() => {
-    const fetchDocument = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/request/generate?requestId=${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
-        const result = await response.json();
-
-        if (result.status === "200" && result.data) {
-          setPdfUrl(result.data);
-
-        } else {
-          console.error('No se encontró el documento.');
-        }
-      } catch (error) {
-        console.error('Error al obtener el documento:', error);
-      }
-    };
-
-    fetchDocument();
-  }, [id]);
-
-  useEffect(() => {
     fetchStatuses();
   }, [id]);
-
-
 
   const handleOk = async () => {
     const user2 = sessionStorage.getItem('user');
     if (selectedStatus !== initialStatus) {
       try {
-
-
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
-
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
@@ -243,7 +159,7 @@ const ComponentInfoSR = () => {
         if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
-
+        
         const response = await fetch(putUrl, {
           method: 'PUT',
           headers: {
@@ -281,49 +197,18 @@ const ComponentInfoSR = () => {
     }
   };
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Bold,
-      Italic,
-      Underline,
-      Image,
-      Table.configure({
-        HTMLAttributes: {
-          class: 'my-custom-table', 
-        },
-      }),
-      TableRow,
-      TableCell,
-      TableHeader,
-    ],
-    content: '<p>Este es tu documento</p>',
-    editable: isEditing,
-    onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      setHtmlContent(html);
-    },
-  });
-
-
   const fetchHtmlContent = async () => {
     try {
-      const response = await fetch(`https://prometeo-backend-e8g5d5gydzgqezd3.eastus-01.azurewebsites.net/api/request/HTML?requestId=${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-
       const result = await response.json();
       if (result.status === "200") {
-        console.log(result.data);
         setHtmlContent(result.data);
-
-        if (editor) {
-          editor.commands.setContent(result.data);
-        }
       }
     } catch (error) {
       console.error('Error fetching HTML content:', error);
@@ -332,7 +217,9 @@ const ComponentInfoSR = () => {
 
   useEffect(() => {
     fetchHtmlContent();
-  }, [id, editor]);
+  }, [id]);
+
+
 
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
@@ -342,9 +229,29 @@ const ComponentInfoSR = () => {
     setAdditionalInfo(e.target.value);
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = () => {
+    const content = contentRef.current.innerHTML;
+    setHtmlContent(content);
+    setIsEditing(false);
+    setIsEditing(false);
+  };
+
+  const sanitizeHtml = (html) => {
+    // Crear un documento DOM a partir del HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Serializar de nuevo a HTML con etiquetas correctamente cerradas
+    return new XMLSerializer().serializeToString(doc);
+  };
+
   const handleFirmar = async () => {
-    sendDocument(pdfUrl);   // Mueve esta línea después de fetchDocument
-    setIsFirmaModalVisible(false);
+    const sanitizedHtmlContent = sanitizeHtml(htmlContent);
+    sendDocument(sanitizedHtmlContent);
   };
 
   const handleCancel = () => {
@@ -352,33 +259,8 @@ const ComponentInfoSR = () => {
   };
 
   const handleCancel2 = () => {
-    const modal = Modal.confirm({
-      title: 'Confirmación',
-      content: '¿Está seguro de que desea cancelar?',
-      okText: 'OK',
-      cancelText: 'cancelar',
-      onOk: () => {
-        setIsFirmaModalVisible(false);
-        fetchHtmlContent(); // Ahora puedes llamar a la función aquí
-        setTimeout(() => {
-          modal.destroy();
-          onCancel(); // Llama a la función onCancel
-        }, 500);
-      },
-      onCancel: () => {
-        // Aquí puedes manejar lo que sucede al cancelar
-      },
-    });
+    setIsFirmaModalVisible(false);
   };
-
-
-  useEffect(() => {
-    const header = document.querySelector('.your-header-class');
-    if (header) {
-      header.style.border = 'none';
-    }
-  }, []);
-
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -476,7 +358,6 @@ const ComponentInfoSR = () => {
               <FaCheck className="ml-2 md:ml-4" />
             </Button>
           </Descriptions.Item>
-
         )}
       </Descriptions>
 
@@ -496,49 +377,34 @@ const ComponentInfoSR = () => {
         visible={isFirmaModalVisible}
         onOk={handleFirmar}
         onCancel={handleCancel2}
+        width={700} 
         footer={[
           <Button key="cancel" onClick={handleCancel2}>
             Cancelar
           </Button>,
-          <Button key="edit" onClick={() => setIsEditing(!isEditing)}>
+          <Button key="edit" onClick={toggleEdit}>
             {isEditing ? 'Dejar de editar' : 'Editar'}
           </Button>,
-          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing}>
+          <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
+            Guardar
+          </Button>,
+          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing} >
             Firmar
           </Button>,
         ]}
-        width={650}
-        style={{ marginTop: '-80px' }}
       >
-        <div className="toolbar mb-2">
-          <button
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`px-2 py-1 rounded ${editor.isActive('bold') ? 'bg-gray-300' : 'bg-white'}`}
-            disabled={!isEditing}
-          >
-            <strong>Negrilla</strong>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`px-2 py-1 rounded ${editor.isActive('italic') ? 'bg-gray-300' : 'bg-white'}`}
-            disabled={!isEditing}
-          >
-            <em>Italic</em>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={`px-2 py-1 rounded ${editor.isActive('underline') ? 'bg-gray-300' : 'bg-white'}`}
-            disabled={!isEditing}
-          >
-            <u>U</u>
-          </button>
-        </div>
-
-        <div className="border border-gray-300 rounded p-2 bg-gray-50" style={{ maxHeight: '480px', overflowY: 'auto' }}>
-          <EditorContent editor={editor} />
-        </div>
+        <div
+          contentEditable={isEditing}
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+          style={{
+            border: isEditing ? '1px solid gray' : 'none',
+            padding: '10px',
+            height: '600px',
+            overflowY: 'auto',
+          }}
+        />
       </Modal>
-
     </>
   );
 };
