@@ -173,6 +173,12 @@ const ComponentInfoSR = () => {
             message: 'Estado actualizado',
             description: `El estado se ha cambiado a ${selectedStatus}.`,
           });
+          if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `Correo enviado.`,
+            });
+          }
           setInitialStatus(selectedStatus);
           setInitialStatusValue(selectedStatus);
           fetchStatuses();

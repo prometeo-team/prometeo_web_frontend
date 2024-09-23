@@ -92,7 +92,7 @@ const InfoStudentRequestPage = () => {
     };
 
     const setbutton = (e) =>{
-        if(e['Pendiente Pago']==true && (tipo =='Adición de Créditos' || tipo =='Supletorios')){
+        if(e['Pendiente Pago']==true && (tipo =='Adición de Créditos' || tipo =='Supletorios' || tipo =='Postulación a Grados' )){
             setForPay(true);
         }
         console.log(e)
@@ -134,6 +134,9 @@ const InfoStudentRequestPage = () => {
                 if(tipo == 'Adición de Créditos'){
                     fetchput();
                 }
+                if(tipo == 'Postulación a Grados'){
+                    fetchput3();
+                }
                 console.log('guardado');
             } else {
                 console.error("Error en la respuesta:", result.message);
@@ -159,9 +162,9 @@ const InfoStudentRequestPage = () => {
           if (response2.ok) {
             notification.success({
               message: 'Estado actualizado',
-              description: `El estado se ha cambiado a Finalizado.`,
+              description: `El estado se ha cambiado a Pendiente Inscripción.`,
             });
-            setTimeout(location.reload(),1000);
+            location.reload();
           } else {
             notification.error({
               message: 'Error al actualizar el estado',
@@ -186,9 +189,9 @@ const InfoStudentRequestPage = () => {
           if (response2.ok) {
             notification.success({
               message: 'Estado actualizado',
-              description: `El estado se ha cambiado a Finalizado.`,
+              description: `El estado se ha cambiado a Pendiente Firma.`,
             });
-            setTimeout(location.reload(),1000);
+            location.reload();
           } else {
             notification.error({
               message: 'Error al actualizar el estado',
@@ -197,6 +200,32 @@ const InfoStudentRequestPage = () => {
           }
     }
 
+    const fetchput3 = async () =>{
+        const url = window.location.href;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        const id2 = params.get('id');
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Finalizado&username=${sessionStorage.getItem('user')}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+          });
+  
+          if (response2.ok) {
+            notification.success({
+              message: 'Estado actualizado',
+              description: `El estado se ha cambiado a Finalizado.`,
+            });
+            location.reload();
+          } else {
+            notification.error({
+              message: 'Error al actualizar el estado',
+              description: 'No se pudo actualizar el estado. Intente de nuevo.',
+            });
+          }
+    }
     return (
         <div className='mx-14 h-screen scroll-container mr-4 ml-4 max-md:mx-0'>
             <div className='w-full mt-0 float-right h-20'>

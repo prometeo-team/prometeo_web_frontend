@@ -14,7 +14,7 @@ const registrationCancelPage = () => {
                 <TitleComponent title="Solicitud Cancelación" />
             </div>
             <div>
-                <FormAddition_CancelComponent type="Cancelación de creditos" />
+                <FormAddition_CancelComponent type="Retiro de Créditos" />
             </div>
         </div>
 
