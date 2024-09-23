@@ -85,7 +85,7 @@ const InfoAdminRequestPage = () => {
   const obtenerDatos = async (currentPage = 1, query = "", caso = "", career2 = "") => {
     setIsTableLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&search_query=${query}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/getAllRequest?page=${currentPage}&carrer=${career2}&nameType=${caso}&searchQuery=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

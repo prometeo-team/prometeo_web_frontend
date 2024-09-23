@@ -27,10 +27,11 @@ const FormAddition_CancelComponent = ({type}) => {
   const navigate = useNavigate();
 
   if(type=="Adición de creditos"){
-    text =`*la cantidad máxima que puede tener de créditos es 20 para más comuníquese con la secretaria de su programa`;
+    text =`*El estudiante podrá sobre acreditarse hasta por un 20% adicional a la carga máxima de créditos establecida para el periodo. `;
     txtcredits = `Cantidad de créditos : ${credits}`;
   }else if(type == "Cancelación de creditos"){
-    text ='';
+    text =`*El estudiante podrá presentar una solicitud de retiro de uno o más créditos antes de transcurrido el 10% del periodo académico en curso. La cancelación de asignaturas
+            no genera reembolso alguno.`;
     txtcredits = '';
   }
   useEffect(() => {
@@ -418,7 +419,7 @@ const FormAddition_CancelComponent = ({type}) => {
             {type}
           </h2>
           <h3 className="text-base font-semibold text-black truncate">{txtcredits}</h3>
-          <h3 className="text-base font-semibold text-red-500 truncate">{text}</h3>
+          <h3 className="text-base text-wrap font-semibold text-red-500 truncate">{text}</h3>
         </div>
         <div className="flex w-full flex-col">
           <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">

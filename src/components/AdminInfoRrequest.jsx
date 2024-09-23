@@ -27,6 +27,7 @@ const ComponentInfoSR = () => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
+  const tipo = params.get('tipo');
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -154,6 +155,11 @@ const ComponentInfoSR = () => {
         if (selectedStatus === 'No valida') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
+
+        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+          putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
+        }
+        
         const response = await fetch(putUrl, {
           method: 'PUT',
           headers: {
@@ -312,7 +318,7 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
-        {selectedStatus === 'No Aprobado' ? (
+        {selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">

@@ -6,7 +6,7 @@ import { HiSearchCircle, HiPlus } from "react-icons/hi";
 import { LoadingOutlined } from '@ant-design/icons';
 import "./TableComponent.css";
 
-function TraceabilityTableComponent({ dataSource, columns, parameterAction, careers, selectedDocuments, select, degree }) {
+function TraceabilityTableComponent({ dataSource, columns, careers, selectedDocuments, select }) {
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
     key: index,
