@@ -57,7 +57,7 @@ function degreeTablePage() {
     }
   
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}requestDetail/getAdminRecord?id_requestDetail=${caso}&userAdmin`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/getAdminRecord?id_requestDetail=${caso}&userAdmin`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
