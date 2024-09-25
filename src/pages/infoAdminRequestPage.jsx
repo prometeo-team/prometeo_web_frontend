@@ -14,6 +14,11 @@ import '../App.css';
 
 const user = sessionStorage.getItem('user');
 var career;
+const url = window.location.href;
+const urlObj = new URL(url);
+const params = new URLSearchParams(urlObj.search);
+const flag = params.get('flag');
+console.log(flag);
 
 const { Search } = Input;
 
@@ -39,16 +44,28 @@ const InfoAdminRequestPage = () => {
   useEffect(() => {
     obtenerCarreras(); // Llamar a la función asíncrona
   }, []);
-
+ 
   useEffect(() => {
-    if (careerList.length > 0) {
-      setSelectedCareer(careerList[0].label); // Asegúrate de que sea el formato correcto para el Select
+    
+  }, [flag]);
+  
+  useEffect(() => {
+    if (careerList.length > 0 ) {
+      setSelectedCareer(careerList[0].label); 
     }
   }, [careerList]);
 
   useEffect(() => {
-    if (careerList.length > 0 && selectedCareer) {
-      obtenerDatos(page, searchQuery, selecteType, selectedCareer);
+    if (careerList.length > 0 && selectedCareer ) {
+      if (flag === 'yes') {
+        setPage(Number(sessionStorage.getItem('page'))||1);
+        setSearchQuery(sessionStorage.getItem('query') || "");
+        setSelecteType(sessionStorage.getItem('type') || "");
+        setSelectedCareer(sessionStorage.getItem('career') || "");
+        obtenerDatos(sessionStorage.getItem('page'), sessionStorage.getItem('query'), sessionStorage.getItem('type'), sessionStorage.getItem('career'));
+      }else{
+        obtenerDatos(page, searchQuery, selecteType, selectedCareer);
+      }
     }
 
   }, [page, searchQuery, selecteType, selectedCareer]);
@@ -135,7 +152,6 @@ const InfoAdminRequestPage = () => {
       if (response.status === 200) {
         const carrerasSimuladas = result.data.career;
         const items = carrerasSimuladas.map(item => ({ value: item, label: item }));
-        console.log(carrerasSimuladas)
         setcareerList(items);
         setcareerList([...items, { value: 'Docentes', label: 'Docentes' }]);
       } else {
@@ -245,11 +261,18 @@ const InfoAdminRequestPage = () => {
       render: (_, record) => (
         <FaEye
           style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
-          onClick={() => record.tipo_solicitud === "Legalización de matrícula" ?
-            navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`)
-            :
-            navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`)
-          }
+          onClick={() => {
+            sessionStorage.setItem('page', page);
+            sessionStorage.setItem('query', searchQuery);
+            sessionStorage.setItem('type', selecteType);
+            sessionStorage.setItem('career', selectedCareer);
+            sessionStorage.setItem('urlAnt', 'dash');
+            if (record.tipo_solicitud === "Legalización de matrícula") {
+              navigate(`/admin/legalizacion-solicitud?id=${record.id_solicitud}`);
+            } else {
+              navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
+            }
+          }}
         />
       ),
     }
