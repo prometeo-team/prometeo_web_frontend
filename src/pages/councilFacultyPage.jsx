@@ -37,7 +37,9 @@ const CouncilFacultyPage = () => {
                 const decodedToken = JSON.parse(jsonPayload);
                 if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
                     setRole('ROLE_ACADEMIC');
-                }
+                }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+                    setRole('ROLE_DECANO');
+                  }
             } catch (error) {
                 console.error('Error decoding token:', error);
             }
@@ -117,7 +119,10 @@ const CouncilFacultyPage = () => {
             render: (_, record) => (
                 <FaEye
                     style={{ cursor: "pointer", color: "#97B749", fontSize: "20px" }}
-                    onClick={() => navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`)}
+                    onClick={() => {
+                        sessionStorage.setItem('urlAnt', 'consejo');
+                        navigate(`/admin/solicitud?id=${record.id_solicitud}&tipo=${record.tipo_solicitud}`);
+                        }}
                 />
             ),
         }
@@ -273,7 +278,7 @@ const CouncilFacultyPage = () => {
                     </div>
                 </div>
             </div>
-            {role === 'ROLE_ACADEMIC' && (
+            {role === 'ROLE_ACADEMIC' || role === 'ROLE_DECANO' && (
                 <div className="flex justify-center items-center w-full mb-4">
                     <Button
                         onClick={handleClick}

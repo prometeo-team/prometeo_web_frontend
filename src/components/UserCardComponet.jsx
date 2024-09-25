@@ -49,6 +49,8 @@ function UserCardComponent({ number }) {
                     setRole('ROLE_COORDINADORPRE');
                   }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
                     setRole('ROLE_COORDINADORPOS');
+                  }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+                    setRole('ROLE_DECANO');
                   }
             } catch (error) {
                 console.error('Error decoding token:', error.message);
@@ -165,7 +167,7 @@ function UserCardComponent({ number }) {
                     if(fetchView(id)){
                         navigate(`/student/mi-solicitud?id=${request}&tipo=${type}`);
                     }
-                }else if(role=='ROLE_ADMIN' || role=='ROLE_ACADEMIC' || role=='ROLE_SUBACADEMIC' || role=='ROLE_COORDINADORPRE' || role=='ROLE_COORDINADORPOS'){
+                }else if(role=='ROLE_ADMIN' || role=='ROLE_ACADEMIC' || role=='ROLE_DECANO' || role=='ROLE_SUBACADEMIC' || role=='ROLE_COORDINADORPRE' || role=='ROLE_COORDINADORPOS'){
                     if(type=='Legalización de matrícula'){
                         if(fetchView(id)){
                             navigate(`/admin/legalizacion-solicitud?id=${request}&tipo=${type}`);
