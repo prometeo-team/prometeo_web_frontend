@@ -64,49 +64,97 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
     console.log(file);
     setFileName1(file[0].fileName);
     setPdf1(file[0].pdf);
-    setOriginalfile1(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Diploma o Convalidación).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile1(newfile);
   };
 
   const handleFileChange2 = (file) => {
     setFileName2(file[0].fileName);
     setPdf2(file[0].pdf);
-    setOriginalfile2(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Acta de grado).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile2(newfile);
   };
 
   const handleFileChange3 = (file) => {
     setFileName3(file[0].fileName);
     setPdf3(file[0].pdf);
-    setOriginalfile3(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Documento de Identidad).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile3(newfile);
   };
 
   const handleFileChange4 = (file) => {
     setFileName4(file[0].fileName);
     setPdf4(file[0].pdf);
-    setOriginalfile4(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(SABER 11).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile4(newfile);
   };
 
   const handleFileChange5 = (file) => {
     setFileName5(file[0].fileName);
     setPdf5(file[0].pdf);
-    setOriginalfile5(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Afiliación EPS).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile5(newfile);
   };
 
   const handleFileChange6 = (file) => {
     setFileName6(file[0].fileName);
     setPdf6(file[0].pdf);
-    setOriginalfile6(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(SABER PRO).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile6(newfile);
   };
 
   const handleFileChange7 = (file) => {
     setFileName7(file[0].fileName);
     setPdf7(file[0].pdf);
-    setOriginalfile7(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(VISA).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile7(newfile);
   };
 
   const handleFileChange8 = (file) => {
     setFileName8(file[0].fileName);
     setPdf8(file[0].pdf);
-    setOriginalfile8(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Formato solicitud de grado).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile8(newfile);
   };
 
   const handleDelete1 = () => {
@@ -279,7 +327,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       clickClassNameP=".input-field7"
                       clickClassName="input-field7"
                       label="Fotocopia de VISA vigente"
-                      detail="Unicamente para estudiantes Extranjeros, para Venezolanos PEP o PPT"
+                      detail="Unicamente para estudiantes Extranjeros, PEP o PPT únicamente para estudiantes extranjeros de Nacionalidad Venezolana"
                       isRequired={false}
                     />
                   </div>
