@@ -49,35 +49,64 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
   };
 
   const handleFileChange1 = (file) => {
-    console.log("file1");
     console.log(file[0].fileName);
     setFileName1(file[0].fileName);
     setPdf1(file[0].pdf);
-    setOriginalfile1(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Documento de Identidad).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile1(newfile);
   };
 
   const handleFileChange2 = (file) => {
     setFileName2(file[0].fileName);
     setPdf2(file[0].pdf);
-    setOriginalfile2(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Acta Trabajo de Grado).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile2(newfile);
   };
 
   const handleFileChange3 = (file) => {
     setFileName3(file[0].fileName);
     setPdf3(file[0].pdf);
-    setOriginalfile3(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Diploma y Acta de Pregrado).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile3(newfile);
   };
 
   const handleFileChange4 = (file) => {
     setFileName4(file[0].fileName);
     setPdf4(file[0].pdf);
-    setOriginalfile4(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(VISA).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile1(newfile);
   };
 
   const handleFileChange5 = (file) => {
     setFileName5(file[0].fileName);
     setPdf5(file[0].pdf);
-    setOriginalfile5(file[0].originalfile);
+    var name = file[0].fileName;
+    console.log(name);
+    name = name.split(".pdf")[0];
+    name = name+"(Formato solicitud de grado).pdf";
+    const originalFile2 = file[0].originalfile;
+    const newfile = new File([originalFile2], name, { type: originalFile2.type })
+    setOriginalfile5(newfile);
   };
 
 

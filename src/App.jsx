@@ -117,6 +117,8 @@ function App() {
           setRole('ROLE_COORDINADORPRE');
         }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
           setRole('ROLE_COORDINADORPOS');
+        }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+          setRole('ROLE_DECANO');
         }
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -130,7 +132,7 @@ function App() {
       return menuStudent;
     }else if (role === "ROLE_TEACHER") {
       return menuTeacher;
-    }else if (role === "ROLE_ACADEMIC" || role === "ROLE_SUBACADEMIC") {
+    }else if (role === "ROLE_ACADEMIC" || role === "ROLE_SUBACADEMIC" || role === "ROLE_DECANO") {
       return menuManagement;
     }else if(role === "ROLE_COORDINADORPRE" || role === "ROLE_COORDINADORPOS"){
       return menucoordinador;
@@ -229,32 +231,32 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/admin/dashboard" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <InfoAdminRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/Traceability" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <TraceabilityPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-tabla" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <CouncilTablePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/consejo-facultad" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <CouncilFacultyPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/solicitud" element={
-          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <InfoAdminSRequestPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/grados-tabla" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_ADMIN","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_ADMIN","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <DegreeTablePage />
           </ProtectedRoute>
         } />
@@ -294,17 +296,17 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/admin/config" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_DECANO"]}>
             <ConfigDatePage />
           </ProtectedRoute>
         } />
         <Route path="/admin/historial-consejo" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <HistoryCouncil />
           </ProtectedRoute>
         } />
         <Route path="/admin/legalizacion-solicitud" element={
-          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_ADMIN","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS"]}>
+          <ProtectedRoute allowedRoles={["ROLE_ACADEMIC","ROLE_SUBACADEMIC","ROLE_ADMIN","ROLE_COORDINADORPRE","ROLE_COORDINADORPOS","ROLE_DECANO"]}>
             <LegalizationRequestAdmin />
           </ProtectedRoute>
         } />

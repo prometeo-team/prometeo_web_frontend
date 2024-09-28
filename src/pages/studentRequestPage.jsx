@@ -89,6 +89,8 @@ const StudentRequestPage = () => {
           setRole('ROLE_COORDINADORPRE');
         }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
           setRole('ROLE_COORDINADORPOS');
+        }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+          setRole('ROLE_DECANO');
         }
       } catch (error) {
         console.error('Error decoding token:', error);

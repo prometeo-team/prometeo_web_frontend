@@ -82,7 +82,11 @@ const InfoStudentRequestPage = () => {
     };
 
     const handleBack = () => {
-        navigate(-1);
+        if(sessionStorage.getItem('urlAnt') == 'consejo'){
+            navigate('/admin/consejo-facultad');
+        }else if(sessionStorage.getItem('urlAnt') == 'dash'){
+            navigate('/admin/dashboard?flag=yes');
+        }
     };
 
     return (

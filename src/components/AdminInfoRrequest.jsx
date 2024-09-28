@@ -44,6 +44,8 @@ const ComponentInfoSR = () => {
         const decodedToken = JSON.parse(jsonPayload);
         if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
           setRole('ROLE_ACADEMIC');
+        }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+          setRole('ROLE_DECANO');
         }
       } catch (error) {
         console.error('Error decoding token:', error);

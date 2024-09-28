@@ -70,7 +70,7 @@ const InfoLegalizationAdmin = () => {
                     <InfoSRComponent />
                 </div>
                 <div>
-                    <Link to="/admin/dashboard">
+                    <Link to="/admin/dashboard?flag=true">
                         <Button type="primary" className='mb-2 shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4' icon={<ArrowLeftOutlined />}>Volver</Button>
                     </Link>
                 </div>
