@@ -3,7 +3,7 @@ import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
-import {Spin}  from "antd";
+import { Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import './AdminInfoRrequest.css';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
@@ -17,7 +17,7 @@ import { SpecialZoomLevel } from '@react-pdf-viewer/core';
 import { GlobalWorkerOptions } from 'pdfjs-dist';
 
 // Establece la ruta del worker
-GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`; 
+GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`;
 
 
 const ComponentInfoSR = () => {
@@ -76,7 +76,7 @@ const ComponentInfoSR = () => {
         const decodedToken = JSON.parse(jsonPayload);
         if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
           setRole('ROLE_ACADEMIC');
-        }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+        } else if (decodedToken.authorities.includes('ROLE_DECANO')) {
           setRole('ROLE_DECANO');
         }
       } catch (error) {
@@ -138,7 +138,7 @@ const ComponentInfoSR = () => {
       const result = await response.json();
       const { data: statusData } = result.data;
       console.log(statusData[0]);
-      if(statusData[0]=="Pendiente Firma"){
+      if (statusData[0] == "Pendiente Firma") {
         documentToFirm();
       }
       setStatuses(statusData);
@@ -185,7 +185,7 @@ const ComponentInfoSR = () => {
   const changeStatus = async (status) => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
-    
+
     try {
       const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${status}&username=${sessionStorage.getItem('user')}`, {
         method: 'PUT',
@@ -213,7 +213,7 @@ const ComponentInfoSR = () => {
         },
       });
       const result = await response.json();
-      if(response.ok){
+      if (response.ok) {
         setPdfUrl(result.data[0].url);
         setPdfName(result.data[0].url.split('/')[3]);
       }
@@ -238,7 +238,7 @@ const ComponentInfoSR = () => {
         if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
-        
+
         const response = await fetch(putUrl, {
           method: 'PUT',
           headers: {
@@ -322,22 +322,22 @@ const ComponentInfoSR = () => {
         body: formdata,
         redirect: "follow"
       };
-      const response2 = await  fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions)
+      const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions)
       const result = await response2.json();
-        if (response2.ok) {
-          setIsFirmaModalVisible(false);
-          if(tipo=="Reserva de Cupo" || tipo=="Reembolso"|| tipo=="Activación de Cupo"){
-            changeStatus('En Finanzas');
-          }else{
-            changeStatus('Finalizado');
-          }
+      if (response2.ok) {
+        setIsFirmaModalVisible(false);
+        if (tipo == "Reserva de Cupo" || tipo == "Reembolso" || tipo == "Activación de Cupo") {
+          changeStatus('En Finanzas');
         } else {
-          console.error("Error en la respuesta:", result.message);
+          changeStatus('Finalizado');
         }
+      } else {
+        console.error("Error en la respuesta:", result.message);
+      }
     } catch (error) {
-        console.error("Error al obtener los programas:", error);
+      console.error("Error al obtener los programas:", error);
     }
-    
+
   };
 
   const handleSelectChange = (value) => {
@@ -360,7 +360,7 @@ const ComponentInfoSR = () => {
     console.log(sanitizedHtmlContent);
     setHtmlContent(content);
     sendDocument(sanitizedHtmlContent);
-    
+
   };
 
   const sanitizeHtml = (html) => {
@@ -387,7 +387,7 @@ const ComponentInfoSR = () => {
     return <div>Loading...</div>;
   }
 
- 
+
   return (
     <>
       <Descriptions
@@ -440,7 +440,31 @@ const ComponentInfoSR = () => {
             </select>
           </div>
         </Descriptions.Item>
-        {selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') ? (
+
+        {(selectedStatus === 'No Aprobado' &&
+          (tipo === 'Reintegro' || tipo === 'Reembolos' || tipo === 'Activación de Cupo' || tipo === 'Reserva de Cupo')) ? (
+          <Descriptions.Item className="ml-4 w-full md:w-2/3">
+            <div className="flex flex-col items-start justify-between w-full">
+              <Button
+                type="primary"
+                className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
+                onClick={() => {
+                  if (selectedStatus === 'No Aprobado') {
+                    setIsEditModalVisible(true);
+                  } else if (initialStatusValue.includes('Firma')) {
+                    setIsFirmaModalVisible(true);
+                  } else {
+                    setIsModalVisible(true);
+                  }
+                }}
+                disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
+              >
+                {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'}
+                <FaCheck className="ml-2 md:ml-4" />
+              </Button>
+            </div>
+          </Descriptions.Item>
+        ) : (selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos')) ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
@@ -472,7 +496,7 @@ const ComponentInfoSR = () => {
                   setIsEditModalVisible(true);
                 } else if (initialStatusValue.includes('Firma')) {
                   setIsFirmaModalVisible(true);
-                }else {
+                } else {
                   setIsModalVisible(true);
                 }
               }}
@@ -483,6 +507,7 @@ const ComponentInfoSR = () => {
             </Button>
           </Descriptions.Item>
         )}
+
       </Descriptions>
 
       <Modal
@@ -501,27 +526,27 @@ const ComponentInfoSR = () => {
         visible={isEditModalVisible}
         onOk={handleSave}
         onCancel={handleCancel2}
-        width={800} 
+        width={800}
         footer={[
-          !loading  && (
-          <Button key="cancel" onClick={handleCancel2}>
-            Cancelar
-          </Button>
+          !loading && (
+            <Button key="cancel" onClick={handleCancel2}>
+              Cancelar
+            </Button>
           ),
-           !loading  && (
-          <Button key="edit" onClick={toggleEdit}>
-            {isEditing ? 'Dejar de editar' : 'Editar'}
-          </Button>
+          !loading && (
+            <Button key="edit" onClick={toggleEdit}>
+              {isEditing ? 'Dejar de editar' : 'Editar'}
+            </Button>
           ),
-           !loading  && (
-          <Button key="save" type="primary" onClick={handleSave}>
-            Guardar
-          </Button>
+          !loading && (
+            <Button key="save" type="primary" onClick={handleSave}>
+              Guardar
+            </Button>
           ),
-          loading  && (
+          loading && (
             <div className="loader-container">
               <Spin indicator={<LoadingOutlined spin />} size="large" />
-          </div>
+            </div>
           )
         ]}
       >
@@ -557,7 +582,7 @@ const ComponentInfoSR = () => {
         <p>Por favor, revise el documento antes de firmarlo.</p>
         {pdfUrl ? (
           <div style={{ height: '700px', overflow: 'auto' }}>
-             <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]}/>
+            <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
           </div>
         ) : (
           <p>No se encontró el documento.</p>
