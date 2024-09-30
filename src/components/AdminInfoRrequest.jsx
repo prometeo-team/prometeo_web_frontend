@@ -300,6 +300,24 @@ const ComponentInfoSR = () => {
     }
   };
 
+  const fetchHtml2Content = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}&userAdmin=${sessionStorage.getItem('user')}&flag${true}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      if (result.status === "200") {
+        setHtmlContent(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching HTML content:', error);
+    }
+  };
+
   useEffect(() => {
     fetchHtmlContent();
   }, [id]);
