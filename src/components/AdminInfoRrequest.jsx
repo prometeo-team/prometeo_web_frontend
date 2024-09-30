@@ -284,7 +284,7 @@ const ComponentInfoSR = () => {
 
   const fetchHtmlContent = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}&userAdmin=${sessionStorage.getItem('user')}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -501,7 +501,7 @@ const ComponentInfoSR = () => {
         visible={isEditModalVisible}
         onOk={handleSave}
         onCancel={handleCancel2}
-        width={700} 
+        width={800} 
         footer={[
           !loading  && (
           <Button key="cancel" onClick={handleCancel2}>
@@ -543,7 +543,8 @@ const ComponentInfoSR = () => {
         visible={isFirmaModalVisible}
         onOk={firmDocument}
         onCancel={handleCancel3}
-        className='w-14'
+        className='w-14 -mt-16'
+        width={1000}
         footer={[
           <Button key="cancel" onClick={handleCancel3}>
             Cancelar
