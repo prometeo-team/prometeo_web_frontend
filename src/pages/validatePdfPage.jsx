@@ -28,7 +28,7 @@ const ValidatePdfPage = () => {
         formData.append("file", file);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/validate/document/${requestId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}validate/document/${requestId}`, {
                 method: 'POST',
                 body: formData
             });
@@ -66,8 +66,7 @@ const ValidatePdfPage = () => {
                         </div>
                     ) : (
                         <>
-                            <h2 className="modal-header">Anexo de Afiliación EPS (Sin claves)</h2>
-                            <p className="modal-subtitle">Vigencia NO mayor a 30 días</p>
+                            <h2 className="modal-header">Validacion de documentos </h2>
                             <form onSubmit={handleSubmit} className="modal-form">
                                 <div className="file-upload-area">
                                     <input
