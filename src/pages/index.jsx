@@ -24,6 +24,7 @@ import HistoryCouncil from "./HistoryCouncil"
 import Error404Page from "./Error404Page";
 import LegalizationRequestAdmin from "./infoLegalizationAdmin"
 import TraceabilityPage from "./TraceabilityPage"
+import ValidatePdfPage from './validatePdfPage';
 
 export {
     HomePage,
@@ -52,4 +53,6 @@ export {
     Error404Page,
     LegalizationRequestAdmin,
     TraceabilityPage,
+    ValidatePdfPage
+    
 }
