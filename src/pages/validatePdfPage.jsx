@@ -28,7 +28,7 @@ const ValidatePdfPage = () => {
         formData.append("file", file);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}validate/document/${requestId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/validate/document/${requestId}`, {
                 method: 'POST',
                 body: formData
             });
