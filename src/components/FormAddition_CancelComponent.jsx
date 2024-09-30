@@ -24,6 +24,7 @@ const FormAddition_CancelComponent = ({type}) => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isButtonVisible2, setIsButtonVisible2] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [rule, setRule] = useState(0);
   const navigate = useNavigate();
 
   if(type=="Adición de creditos"){
@@ -59,6 +60,7 @@ const FormAddition_CancelComponent = ({type}) => {
             adicion();
           }else if(proceses=="Retiro de Créditos"){
             cancelacion();
+            console.log('si');
           }
         }else {
           console.error("Error en la respuesta:", result.message);
@@ -98,6 +100,10 @@ const FormAddition_CancelComponent = ({type}) => {
       if (response.status===200 ) {
         credits = parseInt(result.data.totalEnrolledCredits);
         const carearrsubjects = result.data.subjects.map(program => ({ key: program.credits, value: program.id, label: program.name }));
+        const semesterCredits = result.data.totalSemesterCredits;
+        const limite = Math.floor((semesterCredits * 0.2) + semesterCredits);
+        console.log(limite);
+        setRule(limite);
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
@@ -195,7 +201,7 @@ const FormAddition_CancelComponent = ({type}) => {
         const id = option.target.id;
         const id_subject = option.selectedOption.value;
         const label = option.selectedOption.label;
-        if(credits+selectedCredits<=20){
+        if(credits+selectedCredits<=rule){
           const index = newCredits.findIndex(credit => credit.id === id);
           if (index!=-1) {
             credits= credits-newCredits[index].credits;
@@ -211,7 +217,7 @@ const FormAddition_CancelComponent = ({type}) => {
             credits=credits+selectedCredits;
             setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject, subject_name: label}]);
           }
-            setIsButtonVisible(credits<20);
+            setIsButtonVisible(credits<rule);
         }
         
       } else {
@@ -258,7 +264,7 @@ const FormAddition_CancelComponent = ({type}) => {
         const BMateria =newCredits[indexC].id_subject;
         const indexM = materias.findIndex(subject => subject.value === BMateria);
         materias[indexM].disabled=true;
-        const creditLimit = 20 - credits;
+        const creditLimit = rule - credits;
         
         setMaterias(prevMaterias =>
           prevMaterias.map(materia =>
@@ -299,7 +305,7 @@ const FormAddition_CancelComponent = ({type}) => {
           const id2 = `subject${subjects.length-2}`;
           const index2 = newCredits.findIndex(credit => credit.id === id2);
           console.log("creditos: "+(credits-newCredits[index2].credits))
-          const creditLimit = 20 - (credits - newCredits[index2].credits);
+          const creditLimit = rule - (credits - newCredits[index2].credits);
           console.log("limite: "+creditLimit)
               setMaterias(prevMaterias =>
                 prevMaterias.map(materia =>

@@ -28,7 +28,8 @@ import {
   HistoryCouncil,
   Error404Page,
   LegalizationRequestAdmin,
-  TraceabilityPage
+  TraceabilityPage, 
+  ValidatePdfPage
 } from './pages';
 import { NavbarComponent } from './components';
 
@@ -310,6 +311,8 @@ function App() {
             <LegalizationRequestAdmin />
           </ProtectedRoute>
         } />
+        <Route path="/validatePdf/:requestId" element={<ValidatePdfPage />} />
+
         <Route path="*" element={<Error404Page />} />
       </Routes>
     </div>

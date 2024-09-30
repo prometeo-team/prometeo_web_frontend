@@ -3,7 +3,22 @@ import { Descriptions, Button, Modal, notification } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import {Spin}  from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import './AdminInfoRrequest.css';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { SpecialZoomLevel } from '@react-pdf-viewer/core';
+
+
+// Importa GlobalWorkerOptions desde pdfjs-dist
+import { GlobalWorkerOptions } from 'pdfjs-dist';
+
+// Establece la ruta del worker
+GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`; 
+
 
 const ComponentInfoSR = () => {
   const navigate = useNavigate();
@@ -14,12 +29,16 @@ const ComponentInfoSR = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [loading, setLoading] = useState(false);
   const [htmlContent, setHtmlContent] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
   const [isEditing, setIsEditing] = useState(false);
   const contentRef = useRef(null);
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfName, setPdfName] = useState(''); // URL del PDF
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -28,6 +47,19 @@ const ComponentInfoSR = () => {
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
   const tipo = params.get('tipo');
+
+  const defaultLayoutPluginInstance = defaultLayoutPlugin({
+    toolbarPlugin: {
+      fullScreenPlugin: {
+        onEnterFullScreen: (zoom) => {
+          zoom(SpecialZoomLevel.PageFit);
+        },
+        onExitFullScreen: (zoom) => {
+          zoom(SpecialZoomLevel.PageFit);
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -105,6 +137,10 @@ const ComponentInfoSR = () => {
       });
       const result = await response.json();
       const { data: statusData } = result.data;
+      console.log(statusData[0]);
+      if(statusData[0]=="Pendiente Firma"){
+        documentToFirm();
+      }
       setStatuses(statusData);
       if (statusData.length > 0) {
         const initial = statusData[0];
@@ -139,9 +175,50 @@ const ComponentInfoSR = () => {
       }
 
       console.log('Archivo subido exitosamente');
-      navigate('/admin/dashboard');
+      setIsEditModalVisible(false);
+      changeStatus('Pendiente Firma');
     } catch (error) {
       console.error('Error:', error);
+    }
+  };
+
+  const changeStatus = async (status) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+    
+    try {
+      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${status}&username=${sessionStorage.getItem('user')}`, {
+        method: 'PUT',
+        headers: myHeaders,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('No se pudo subir el archivo');
+      }
+
+      console.log('Estatus actualizado');
+      window.location.reload();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const documentToFirm = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/documents/getByIdRequest?id_request=${id}&firma=true`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const result = await response.json();
+      if(response.ok){
+        setPdfUrl(result.data[0].url);
+        setPdfName(result.data[0].url.split('/')[3]);
+      }
+    } catch (error) {
+      console.error("Error al obtener los estados:", error);
     }
   };
 
@@ -228,6 +305,40 @@ const ComponentInfoSR = () => {
   }, [id]);
 
 
+  const firmDocument = async () => {
+    try {
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+      const file = new File([blob], pdfName, { type: 'application/pdf' });
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+      const formdata = new FormData();
+      formdata.append("idRequest", id);
+      formdata.append("userAdmin", sessionStorage.getItem('user'));
+      formdata.append("file", file);
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow"
+      };
+      const response2 = await  fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions)
+      const result = await response2.json();
+        if (response2.ok) {
+          setIsFirmaModalVisible(false);
+          if(tipo=="Reserva de Cupo" || tipo=="Reembolso"|| tipo=="Activación de Cupo"){
+            changeStatus('En Finanzas');
+          }else{
+            changeStatus('Finalizado');
+          }
+        } else {
+          console.error("Error en la respuesta:", result.message);
+        }
+    } catch (error) {
+        console.error("Error al obtener los programas:", error);
+    }
+    
+  };
 
   const handleSelectChange = (value) => {
     setSelectedStatus(value);
@@ -242,10 +353,14 @@ const ComponentInfoSR = () => {
   };
 
   const handleSave = () => {
+    setLoading(true);
+    setIsEditing(false);
     const content = contentRef.current.innerHTML;
+    const sanitizedHtmlContent = sanitizeHtml(content);
+    console.log(sanitizedHtmlContent);
     setHtmlContent(content);
-    setIsEditing(false);
-    setIsEditing(false);
+    sendDocument(sanitizedHtmlContent);
+    
   };
 
   const sanitizeHtml = (html) => {
@@ -257,16 +372,14 @@ const ComponentInfoSR = () => {
     return new XMLSerializer().serializeToString(doc);
   };
 
-  const handleFirmar = async () => {
-    const sanitizedHtmlContent = sanitizeHtml(htmlContent);
-    sendDocument(sanitizedHtmlContent);
-  };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
   const handleCancel2 = () => {
+    setIsEditModalVisible(false);
+  };
+  const handleCancel3 = () => {
     setIsFirmaModalVisible(false);
   };
 
@@ -274,6 +387,7 @@ const ComponentInfoSR = () => {
     return <div>Loading...</div>;
   }
 
+ 
   return (
     <>
       <Descriptions
@@ -354,9 +468,11 @@ const ComponentInfoSR = () => {
               type="primary"
               className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
               onClick={() => {
-                if (initialStatusValue.includes('Firma')) {
+                if (selectedStatus == 'En Elaboración') {
+                  setIsEditModalVisible(true);
+                } else if (initialStatusValue.includes('Firma')) {
                   setIsFirmaModalVisible(true);
-                } else {
+                }else {
                   setIsModalVisible(true);
                 }
               }}
@@ -382,23 +498,31 @@ const ComponentInfoSR = () => {
 
       <Modal
         title="Firma del Documento"
-        visible={isFirmaModalVisible}
-        onOk={handleFirmar}
+        visible={isEditModalVisible}
+        onOk={handleSave}
         onCancel={handleCancel2}
         width={700} 
         footer={[
+          !loading  && (
           <Button key="cancel" onClick={handleCancel2}>
             Cancelar
-          </Button>,
+          </Button>
+          ),
+           !loading  && (
           <Button key="edit" onClick={toggleEdit}>
             {isEditing ? 'Dejar de editar' : 'Editar'}
-          </Button>,
-          <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
+          </Button>
+          ),
+           !loading  && (
+          <Button key="save" type="primary" onClick={handleSave}>
             Guardar
-          </Button>,
-          <Button key="firmar" type="primary" onClick={handleFirmar} disabled={isEditing} >
-            Firmar
-          </Button>,
+          </Button>
+          ),
+          loading  && (
+            <div className="loader-container">
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </div>
+          )
         ]}
       >
         <div
@@ -412,6 +536,31 @@ const ComponentInfoSR = () => {
             overflowY: 'auto',
           }}
         />
+      </Modal>
+
+      <Modal
+        title="Firma del Documento"
+        visible={isFirmaModalVisible}
+        onOk={firmDocument}
+        onCancel={handleCancel3}
+        className='w-14'
+        footer={[
+          <Button key="cancel" onClick={handleCancel3}>
+            Cancelar
+          </Button>,
+          <Button key="firmar" type="primary" onClick={firmDocument}>
+            Firmar
+          </Button>,
+        ]}
+      >
+        <p>Por favor, revise el documento antes de firmarlo.</p>
+        {pdfUrl ? (
+          <div style={{ height: '700px', overflow: 'auto' }}>
+             <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]}/>
+          </div>
+        ) : (
+          <p>No se encontró el documento.</p>
+        )}
       </Modal>
     </>
   );

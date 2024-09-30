@@ -289,7 +289,8 @@ const InfoStudentRequestPage = () => {
                         dataSource={documents.filter(doc => 
                             !doc.url.includes('__Ingles') &&
                             !doc.url.includes('__Biblioteca') &&
-                            !doc.url.includes('__Finanzas')
+                            !doc.url.includes('__Finanzas') &&
+                            !doc.url.includes('__OnlyAdmin')
                         )}
                         renderItem={item => {
                             let fileName = item.url.split('/').pop();
