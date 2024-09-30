@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button, notification, Tooltip, Modal } from 'antd';
+import { useState, useEffect, useRef } from 'react';
+import { Button, Modal } from 'antd';
 import { IoIosArrowBack } from "react-icons/io";
-import { FaCheck } from "react-icons/fa6";
-import { IoAlertCircleSharp } from "react-icons/io5";
 import InputComponent from '../components/InputComponent';
 import ModalComponent from './ModalComponent';
 import { IoMdCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import html2pdf from 'html2pdf.js';
- 
+
 const FormActivationComponent = () => {
     const navigate = useNavigate();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [documents, setDocuments] = useState([]);
     const [studentInfo, setStudentInfo] = useState({});
-    const [requestId, setRequestId] = useState(null);
     const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [modalIcon, setModalIcon] = useState(null);
@@ -24,7 +17,6 @@ const FormActivationComponent = () => {
     const [isEditing, setIsEditing] = useState(false);
     const contentRef = useRef(null);
     const [htmlContent, setHtmlContent] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
-    const [downloadedFile, setDownloadedFile] = useState(null);
 
     const user = sessionStorage.getItem('user');
     const url = window.location.href;
@@ -60,20 +52,6 @@ const FormActivationComponent = () => {
         }
     };
 
-    const handleOpenModal = async () => {
-        setModalVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        notification.info({
-            message: 'Importante',
-            description: 'Recuerda que para poder modificar o eliminar el archivo, haz clic en el botón "Subir carta".',
-            placement: 'bottomRight',
-            icon: <IoAlertCircleSharp className="font-color w-8 h-8" />,
-        });
-    };
-
     const handleOpenModalCheck2 = (content, icon) => {
         setModalVisibleCheck(true);
         setModalContent(content);
@@ -85,30 +63,34 @@ const FormActivationComponent = () => {
         setModalVisibleCheck(false);
     };
 
-    const handleCreateRequest = async (pdfFile) => {
-        if (!career || !user) {
-            console.error("Faltan parámetros necesarios");
-            return;
-        }
 
-        const requestData = {
+    const sanitizeHtml = (html) => {
+        // Crear un documento DOM a partir del HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Serializar de nuevo a HTML con etiquetas correctamente cerradas
+        return new XMLSerializer().serializeToString(doc);
+    };
+
+    const handleCreateRequest = async () => {
+        console.log(htmlContent);
+        // Asegúrate de que htmlContent sea una cadena
+        const sanitizedContent = sanitizeHtml(htmlContent);
+        console.log(sanitizedContent)
+
+        const requestJson = new Blob([JSON.stringify({
             userEntity: user,
             requestTypeEntity: 'Reintegro',
             programStudent: career,
-        };
-
-        const requestJson = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+            html: htmlContent
+        })], { type: 'application/json' });
 
         const formData = new FormData();
         formData.append("request", requestJson);
 
-        // Append the generated PDF file
-        if (pdfFile) {
-            formData.append("files", pdfFile);
-        }
-
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
+            const response = await fetch(`http://localhost:3030/api/request/uploadAndCreateRequest`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -121,16 +103,12 @@ const FormActivationComponent = () => {
                 throw new Error(errorData.message || 'Error al crear la solicitud');
             }
 
-            const data = await response.json();
-            setRequestId(data.requestId);
             handleOpenModalCheck2('Solicitud creada correctamente', <IoMdCheckmarkCircle />);
         } catch (error) {
             console.error('Error al crear la solicitud:', error);
             handleOpenModalCheck2('No se pudo crear la solicitud.', <IoMdCloseCircle />);
         }
     };
-
-
 
     useEffect(() => {
         const fetchDocument = async () => {
@@ -175,51 +153,6 @@ const FormActivationComponent = () => {
         setHtmlContent(newHtmlContent);
         setIsEditing(false);
     };
-
-
-    const sanitizeHTML = (htmlContent) => {
-        // Reemplazar etiquetas mal formadas
-        return htmlContent
-            .replace(/<br>/g, '<br />')                // Corregir <br>
-            .replace(/<link([^>]+)>/g, '<link$1 />')   // Corregir <link>
-            .replace(/<meta([^>]+)>/g, '<meta$1 />');  // Corregir <meta>
-    };
-
-    const handleSend = async () => {
-        if (!user || !career || !htmlContent) {
-            console.error("Faltan datos necesarios para generar el PDF.");
-            return;
-        }
-
-        const sanitizedContent = sanitizeHTML(htmlContent);
-
-        // Create a temporary element to generate the PDF
-        const element = document.createElement('div');
-        element.innerHTML = sanitizedContent;
-
-        const pdfOptions = {
-            margin: 1,
-            filename: `${studentInfo.name}_${studentInfo.last_name}_Carta.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-
-        // Generate PDF and prepare it for uploading
-        html2pdf().from(element).set(pdfOptions).toPdf().get('pdf').then(async (pdf) => {
-            const pdfBlob = await pdf.output('blob');
-            const pdfFile = new File([pdfBlob], pdfOptions.filename, { type: 'application/pdf' });
-
-            // Set the downloaded file state
-            setDownloadedFile(pdfFile);
-
-            // Now you can call handleCreateRequest with the created PDF
-            handleCreateRequest(pdfFile);
-        });
-    };
-
-
-
 
     return (
         <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
@@ -295,7 +228,8 @@ const FormActivationComponent = () => {
                 <Modal
                     title="Vista previa del documento"
                     visible={isModalVisible}
-                    onCancel={handleCancel}
+                    onCancel={handleCancel} 
+                    className="bg-white"
                     width={700}
                     footer={[
                         <Button key="cancel" onClick={handleCancel}>
@@ -307,7 +241,7 @@ const FormActivationComponent = () => {
                         <Button key="save" type="primary" onClick={handleSave} disabled={!isEditing}>
                             Guardar
                         </Button>,
-                        <Button key="firmar" type="primary" onClick={handleSend} disabled={isEditing} >
+                        <Button key="firmar" type="primary" onClick={handleCreateRequest} disabled={isEditing} >
                             Enviar
                         </Button>,
                     ]}
@@ -331,87 +265,14 @@ const FormActivationComponent = () => {
                 <div className="w-full border-t border-black truncate"></div>
             </div>
             <div>
-                <h2 className="text-xl font-bold text-black truncate mt-5 mb-5">Documento
-                    <Tooltip title="Para poder modificar o eliminar uno o varios archivos documentos, haz clic en el botón 'Subir archivos'">
-                        <QuestionCircleOutlined className="font-color ml-2" />
-                    </Tooltip>
-                </h2>
-                <div className="grid grid-cols-4 gap-4">
-                    {downloadedFile ? (
-                        // Mostrar el archivo descargado si existe
-                        <React.Fragment>
-                            <div className="col-span-4 md:col-span-3 mb-4">
-                                <div className="border bg-gray-200 rounded-md p-2 mb-2 overflow-hidden">
-                                    <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                        {downloadedFile.name.length > 20 ? `${downloadedFile.name.slice(0, 20)}...pdf` : downloadedFile.name}
-                                    </div>
-                                    <div>
-                                        <a href={downloadedFile.url} target="_blank" rel="noopener noreferrer" className='font-color font-bold'>
-                                            Ver documento
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
-                                <button
-                                    className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"
-                                    onClick={handleCreateRequest}
-                                >
-                                    <span>Confirmar</span>
-                                    <FaCheck className="ml-2 h-7 w-7" />
-                                </button>
-                                <ModalComponent
-                                    visible={modalVisibleCheck}
-                                    onClose={handleCloseModalCheck2}
-                                    content={modalContent}
-                                    icon={modalIcon}
-                                />
-                            </div>
-                        </React.Fragment>
-                    ) : (
 
-                        documents.slice(0, 6).map((document, index) => (
-                            <React.Fragment key={index}>
-                                <div className="col-span-4 md:col-span-3 mb-4">
-                                    <div className="border bg-gray-200 rounded-md p-2 mb-2 overflow-hidden">
-                                        <div className="truncate" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                            {document.name.length > 20 ? `${document.name.slice(0, 20)}...pdf` : document.name}
-                                        </div>
-                                        <div>
-                                            <a href={document.url} target="_blank" rel="noopener noreferrer" className='font-color font-bold'>
-                                                Ver documento
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
-                                    <div className="col-span-4 md:col-span-1 flex items-center justify-center mb-5">
-                                        <button
-                                            className="w-full h-12 text-white rounded-lg shadow-md color-button font-bold text-lg flex justify-center items-center p-4"
-                                            onClick={() => handleCreateRequest(downloadedFile)} // Updated line
-                                        >
-                                            <span>Confirmar</span>
-                                            <FaCheck className="ml-2 h-7 w-7" />
-                                        </button>
-                                        <ModalComponent
-                                            visible={modalVisibleCheck}
-                                            onClose={handleCloseModalCheck2}
-                                            content={modalContent}
-                                            icon={modalIcon}
-                                        />
-                                    </div>
+                <ModalComponent
+                    visible={modalVisibleCheck}
+                    onClose={handleCloseModalCheck2}
+                    content={modalContent}
+                    icon={modalIcon}
+                />
 
-                                    <ModalComponent
-                                        visible={modalVisibleCheck}
-                                        onClose={handleCloseModalCheck2}
-                                        content={modalContent}
-                                        icon={modalIcon}
-                                    />
-                                </div>
-                            </React.Fragment>
-                        ))
-                    )}
-                </div>
             </div>
         </div>
     );
