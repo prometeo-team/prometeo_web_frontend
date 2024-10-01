@@ -57,12 +57,23 @@ const InfoAdminRequestPage = () => {
 
   useEffect(() => {
     if (careerList.length > 0 && selectedCareer ) {
-      if (flag === 'yes') {
+      if (
+        flag === 'yes' &&
+        sessionStorage.getItem('page') !== null &&
+        sessionStorage.getItem('query') !== null &&
+        sessionStorage.getItem('type') !== null &&
+        sessionStorage.getItem('career') !== null
+      ) {
         setPage(Number(sessionStorage.getItem('page'))||1);
         setSearchQuery(sessionStorage.getItem('query') || "");
         setSelecteType(sessionStorage.getItem('type') || "");
         setSelectedCareer(sessionStorage.getItem('career') || "");
         obtenerDatos(sessionStorage.getItem('page'), sessionStorage.getItem('query'), sessionStorage.getItem('type'), sessionStorage.getItem('career'));
+        sessionStorage.removeItem('page');
+        sessionStorage.removeItem('query');
+        sessionStorage.removeItem('type');
+        sessionStorage.removeItem('career');
+
       }else{
         obtenerDatos(page, searchQuery, selecteType, selectedCareer);
       }
