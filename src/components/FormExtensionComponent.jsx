@@ -281,7 +281,7 @@ const FormExtensionComponent = () => {
         </div>
         <div className="grid grid-flow-col gap-4">
           <div className="grid grid-flow-row ">
-            <h4 className="text-md font-bold text-[#9ca3af]">Materia</h4>
+            <h4 className="text-md font-bold text-[#9ca3af]">Asignatura</h4>
             <div className="flex justify-center items-center flex-col w-full">
               {subjects.map((subject) => (
                 <div key={subject.id} className="flex justify-center items-center w-full mb-4">
@@ -290,7 +290,7 @@ const FormExtensionComponent = () => {
                       id={subject.id}
                       name="subjects"
                       type="box2"
-                      placeholder="Materia"
+                      placeholder="Asignatura"
                       variant="form-input"
                       options={[...materias]}
                       onChange={handleChange}

@@ -45,7 +45,7 @@ function degreeTablePage() {
   ];
 
  useEffect(() => {
-      obtenerDatos(''); 
+      obtenerDatos(); 
   }, []);
   
 
@@ -57,7 +57,7 @@ function degreeTablePage() {
     }
   
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/getAdminRecord?id_requestDetail=${caso}&userAdmin`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/getAdminRecord?${caso}userAdmin`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -88,9 +88,9 @@ function degreeTablePage() {
 
   const handleCarreras =  (e) => {
     if(e == 'Configuracion'){
-      obtenerDatos('0');
+      obtenerDatos('id_requestDetail=0&');
     }else if(e == 'Procesos'){
-      obtenerDatos('');
+      obtenerDatos();
     }
     
   };

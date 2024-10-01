@@ -61,7 +61,7 @@ const InfoStudentRequestPage = () => {
             setDetail2(false);
             setDetail3(true);
             setDetail4(false);
-        }else if (tipo=='Postulación a Grados'){
+        }else if (tipo=='Postulación a grados'){
             setDetail2(false);
             setDetail3(false);
             setDetail4(true);

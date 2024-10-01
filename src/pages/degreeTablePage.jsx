@@ -185,7 +185,7 @@ function degreeTablePage() {
           <UserCArdComponent user={'Secretaria academica'} number={2}></UserCArdComponent>
         </div>
         <div className='w-full mt-6'>
-          <TitleComponent title={"Postulacion a Grados"} />
+          <TitleComponent title={"Postulación a grados"} />
         </div>
 
         <div className='w-full mt-16'>

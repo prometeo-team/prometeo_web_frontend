@@ -429,14 +429,14 @@ const FormAddition_CancelComponent = ({type}) => {
         </div>
         <div className="flex w-full flex-col">
           <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">
-            <h4 className="text-md font-bold text-[#9ca3af]">Materia</h4>
+            <h4 className="text-md font-bold text-[#9ca3af]">Asignatura</h4>
             {subjects.map((subject) => (
               <InputComponent
                 key={subject.id} // Asegura que cada InputComponent tenga una key única
                 id={subject.id}
                 name="subjects"
                 type="box2"
-                placeholder="Materia"
+                placeholder="Asignatura"
                 variant="form-input"
                 options={[ ...materias]}
                 onChange={handleChange}
