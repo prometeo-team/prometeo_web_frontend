@@ -14,11 +14,6 @@ import '../App.css';
 
 const user = sessionStorage.getItem('user');
 var career;
-const url = window.location.href;
-const urlObj = new URL(url);
-const params = new URLSearchParams(urlObj.search);
-const flag = params.get('flag');
-console.log(flag);
 
 const { Search } = Input;
 
@@ -35,6 +30,7 @@ const InfoAdminRequestPage = () => {
   const [selecteType, setSelecteType] = useState("");
   const [totalItems, setTotalItems] = useState(0);
   const [isTableLoading, setIsTableLoading] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [page, setPage] = useState(1);
 
   const chart1Ref = useRef(null);
@@ -46,37 +42,46 @@ const InfoAdminRequestPage = () => {
   }, []);
  
   useEffect(() => {
+    if (
+      sessionStorage.getItem('page') != null ||
+      sessionStorage.getItem('query') != null ||
+      sessionStorage.getItem('type') != null ||
+      sessionStorage.getItem('career') != null
+    ) {
+      console.log('memoria');
+      const storedPage = Number(sessionStorage.getItem('page'));
+      const storedQuery = sessionStorage.getItem('query');
+      const storedType = sessionStorage.getItem('type');
+      const storedCareer = sessionStorage.getItem('career');
+
+      // Setear los valores desde el sessionStorage
+      setSelectedCareer(storedCareer);
+      setPage(storedPage);
+      setSearchQuery(storedQuery);
+      setSelecteType(storedType);
+      
+
+      // Obtener los datos usando los valores del sessionStorage
+      obtenerDatos(storedPage, storedQuery, storedType, storedCareer);
+      sessionStorage.removeItem('page');
+      sessionStorage.removeItem('query');
+      sessionStorage.removeItem('type');
+      sessionStorage.removeItem('career');
+      setFlag(true);
+    }
     
-  }, [flag]);
+  }, []);
   
   useEffect(() => {
-    if (careerList.length > 0 ) {
+    if (careerList.length > 0 && flag==false) {
+      console.log('career list');
       setSelectedCareer(careerList[0].label); 
     }
-  }, [careerList]);
+  }, [careerList,flag]);
 
   useEffect(() => {
     if (careerList.length > 0 && selectedCareer ) {
-      if (
-        flag === 'yes' &&
-        sessionStorage.getItem('page') !== null &&
-        sessionStorage.getItem('query') !== null &&
-        sessionStorage.getItem('type') !== null &&
-        sessionStorage.getItem('career') !== null
-      ) {
-        setPage(Number(sessionStorage.getItem('page'))||1);
-        setSearchQuery(sessionStorage.getItem('query') || "");
-        setSelecteType(sessionStorage.getItem('type') || "");
-        setSelectedCareer(sessionStorage.getItem('career') || "");
-        obtenerDatos(sessionStorage.getItem('page'), sessionStorage.getItem('query'), sessionStorage.getItem('type'), sessionStorage.getItem('career'));
-        sessionStorage.removeItem('page');
-        sessionStorage.removeItem('query');
-        sessionStorage.removeItem('type');
-        sessionStorage.removeItem('career');
-
-      }else{
         obtenerDatos(page, searchQuery, selecteType, selectedCareer);
-      }
     }
 
   }, [page, searchQuery, selecteType, selectedCareer]);
