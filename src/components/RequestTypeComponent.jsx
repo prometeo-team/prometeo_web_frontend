@@ -91,7 +91,7 @@ function RequestTypeComponent() {
 
       switch (option) {
          case 1:
-            setCardProcess('Adición de Créditos');
+            setCardProcess('Adición de créditos');
             setIsModalOpen(true);
             where = '/student/solicitud-adicion';
             console.log('Adición de créditos');

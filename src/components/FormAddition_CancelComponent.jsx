@@ -151,7 +151,7 @@ const FormAddition_CancelComponent = ({type}) => {
       }));
       const requestJson = new Blob([JSON.stringify({
         userEntity: user,
-        requestTypeEntity: 'Adición de Créditos',
+        requestTypeEntity: 'Adición de créditos',
         programStudent: career,
         subjectList: subjectList
       })], { type: 'application/json' });

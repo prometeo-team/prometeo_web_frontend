@@ -50,7 +50,7 @@ function NavbarTypeComponent({ onClick }) {
     
 
     const buttonData = [
-        { id: 'Adición de Créditos', label: 'Adición de Créditos' },
+        { id: 'Adición de créditos', label: 'Adición de créditos' },
         { id: 'Retiro de Créditos', label: 'Retiro de Créditos' },
         { id: 'Incapacidades Estudiantes', label: 'Incapacidades' },
         { id: 'Supletorios', label: 'Supletorios' },
