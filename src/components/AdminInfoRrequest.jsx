@@ -460,6 +460,7 @@ const ComponentInfoSR = () => {
 
   const handleCancel2 = () => {
     setIsEditModalVisible2(false);
+    setIsEditModalVisible(false);
   };
   const handleCancel3 = () => {
     setIsFirmaModalVisible(false);
