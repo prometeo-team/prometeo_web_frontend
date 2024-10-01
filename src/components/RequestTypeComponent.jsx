@@ -97,7 +97,7 @@ function RequestTypeComponent() {
             console.log('Adición de créditos');
             break;
          case 2:
-            setCardProcess('Retiro de Créditos');
+            setCardProcess('Retiro de créditos');
             setIsModalOpen(true);
             where="/student/solicitud-cancelacion";
             console.log('Cancelación de créditos');
@@ -202,7 +202,7 @@ function RequestTypeComponent() {
                            handleCardClick(2);
                         }}
                      >
-                        <CardComponent title="Retiro de Créditos" icon="2" onCardClick={() => handleCardClick(2)} />
+                        <CardComponent title="Retiro de créditos" icon="2" onCardClick={() => handleCardClick(2)} />
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>

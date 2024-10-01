@@ -30,7 +30,7 @@ const FormAddition_CancelComponent = ({type}) => {
   if(type=="Adición de creditos"){
     text =`*El estudiante podrá sobre acreditarse hasta por un 20% adicional a la carga máxima de créditos establecida para el periodo. `;
     txtcredits = `Cantidad de créditos : ${credits}`;
-  }else if(type == "Retiro de Créditos"){
+  }else if(type == "Retiro de créditos"){
     text =`*El estudiante podrá presentar una solicitud de retiro de uno o más créditos antes de transcurrido el 10% del periodo académico en curso. La cancelación de asignaturas
             no genera reembolso alguno.`;
     txtcredits = '';
@@ -58,7 +58,7 @@ const FormAddition_CancelComponent = ({type}) => {
           setStudentInfo(result.data[0]);
           if(proceses=="Adición de creditos"){
             adicion();
-          }else if(proceses=="Retiro de Créditos"){
+          }else if(proceses=="Retiro de créditos"){
             cancelacion();
             console.log('si');
           }
@@ -163,7 +163,7 @@ const FormAddition_CancelComponent = ({type}) => {
         redirect: "follow"
       };
       fetchRequest(requestOptions);
-    } else if(type=="Retiro de Créditos"){
+    } else if(type=="Retiro de créditos"){
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
       const formdata = new FormData();
@@ -173,7 +173,7 @@ const FormAddition_CancelComponent = ({type}) => {
       }));
       const requestJson = new Blob([JSON.stringify({
         userEntity: user,
-        requestTypeEntity: 'Retiro de Créditos',
+        requestTypeEntity: 'Retiro de créditos',
         programStudent: career,
         subjectList: subjectList
       })], { type: 'application/json' });
@@ -223,7 +223,7 @@ const FormAddition_CancelComponent = ({type}) => {
       } else {
         console.warn('selectedOption is undefined:', option);
       }
-    } else if (type == "Retiro de Créditos") {
+    } else if (type == "Retiro de créditos") {
       setIsButtonVisible2(true);
       setIsButtonVisible(true);
       if (option && option.selectedOption) {
@@ -274,7 +274,7 @@ const FormAddition_CancelComponent = ({type}) => {
           )
         );
         setIsButtonVisible(false);
-      }else if(type=="Retiro de Créditos"){
+      }else if(type=="Retiro de créditos"){
         const id = `subject${subjects.length-1}`;
         setSubjects((prevSub) =>
           prevSub.map((subject) =>
@@ -346,7 +346,7 @@ const FormAddition_CancelComponent = ({type}) => {
             );
           });
           setIsButtonVisible(true);
-      }else if(type=="Retiro de Créditos"){
+      }else if(type=="Retiro de créditos"){
         const id = `subject${subjects.length-1}`;
         const index = newCredits.findIndex(credit => credit.id === id);
           console.log(index);
