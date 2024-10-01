@@ -94,7 +94,7 @@ const InfoStudentRequestPage = () => {
     };
 
     const setbutton = (e) =>{
-        if(e['Pendiente pago']==true && (tipo =='Adición de Créditos' || tipo =='Supletorios' || tipo =='Postulación a grados' )){
+        if(e['Pendiente pago']==true && (tipo =='Adición de créditos' || tipo =='Supletorios' || tipo =='Postulación a grados' )){
             setForPay(true);
         }
         console.log(e)
@@ -133,7 +133,7 @@ const InfoStudentRequestPage = () => {
                 if(tipo == 'Supletorios'){
                     fetchput2();
                 }
-                if(tipo == 'Adición de Créditos'){
+                if(tipo == 'Adición de créditos'){
                     fetchput();
                 }
                 if(tipo == 'Postulación a grados'){
@@ -153,7 +153,7 @@ const InfoStudentRequestPage = () => {
         const urlObj = new URL(url);
         const params = new URLSearchParams(urlObj.search);
         const id2 = params.get('id');
-        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Pendiente Inscripción&username=${sessionStorage.getItem('user')}`, {
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Pendiente inscripción&username=${sessionStorage.getItem('user')}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const InfoStudentRequestPage = () => {
           if (response2.ok) {
             notification.success({
               message: 'Estado actualizado',
-              description: `El estado se ha cambiado a Pendiente Inscripción.`,
+              description: `El estado se ha cambiado a Pendiente inscripción.`,
             });
             location.reload();
           } else {

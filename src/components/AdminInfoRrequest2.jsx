@@ -36,7 +36,7 @@ const ComponentInfoSR = () => {
       }
     };
 
-    if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
+    if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
       fetchStatuses();
     }
     
