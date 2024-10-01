@@ -39,7 +39,7 @@ const CouncilFacultyPage = () => {
                     setRole('ROLE_ACADEMIC');
                 }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
                     setRole('ROLE_DECANO');
-                  }
+                }
             } catch (error) {
                 console.error('Error decoding token:', error);
             }
@@ -278,7 +278,7 @@ const CouncilFacultyPage = () => {
                     </div>
                 </div>
             </div>
-            {role === 'ROLE_ACADEMIC' || role === 'ROLE_DECANO' && (
+            {(role === 'ROLE_ACADEMIC' || role === 'ROLE_DECANO') && (
                 <div className="flex justify-center items-center w-full mb-4">
                     <Button
                         onClick={handleClick}
