@@ -98,7 +98,7 @@ const ComponentInfoSR = () => {
 
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
 
-        if (selectedStatus === 'No valida') {
+        if (selectedStatus === 'No válido') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -212,7 +212,7 @@ const ComponentInfoSR = () => {
         </Descriptions.Item>
         
         {/* Confirm Button Section */}
-        {selectedStatus === 'No Aprobado' ? (
+        {selectedStatus === 'No aprobado' ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">

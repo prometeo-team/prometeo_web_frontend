@@ -127,13 +127,13 @@ const StudentRequestPage = () => {
         let color;
         if (status === 'Iniciado') {
           color = 'green';
-        } else if (status === 'En Verificacion') {
+        } else if (status === 'En verificación') {
           color = '#F1C40F';
-        } else if (status === 'En Finanzas') {
+        } else if (status === 'En finanzas') {
           color = 'blue';
         } else if (status === 'Consejo') {
           color = 'cyan';
-        } else if (status === 'No valida') {
+        } else if (status === 'No válido') {
           color = 'volcano';
         }
         return <Tag color={color}>{status || 'DESCONOCIDO'}</Tag>;

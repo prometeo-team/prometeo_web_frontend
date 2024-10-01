@@ -82,7 +82,7 @@ function App() {
 
     const isNoNavbarRoute = noNavbarRoutes.includes(pathname);
 
-    const isNotFoundRoute = !['/login', '/', '/home', '/admin/Traceability','/student/crear-solicitud', '/teacher/crear-solicitud', '/student/mis-solicitudes', '/teacher/mis-solicitudes','/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad','/teacher/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/postulacion-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ,'/teacher/mi-solicitud' ].includes(pathname) && pathname !== '*';
+    const isNotFoundRoute = !['/login', '/', '/home', '/admin/Traceability','/student/crear-solicitud', '/teacher/crear-solicitud', '/student/mis-solicitudes', '/teacher/mis-solicitudes','/student/mi-solicitud', '/student/legalizacion-matricula', '/student/reintegro', '/student/reembolso', '/student/activacion-cupo', '/student/reserva', '/admin/dashboard', '/admin/consejo-tabla', '/admin/consejo-facultad', '/admin/solicitud', '/admin/grados-tabla', '/student/solicitud-incapacidad','/teacher/solicitud-incapacidad', '/student/solicitud-supletorio', '/student/solicitud-otra', '/student/solicitud-adicion', '/student/solicitud-cancelacion', '/student/Postulación-grado', '/admin/config', '/admin/historial-consejo','/admin/legalizacion-solicitud' ,'/teacher/mi-solicitud' ].includes(pathname) && pathname !== '*';
 
     return !(isNoNavbarRoute || isNotFoundRoute);
   };
@@ -291,7 +291,7 @@ function App() {
             <RegistrationCancelPage />
           </ProtectedRoute>
         } />
-        <Route path="/student/postulacion-grado" element={
+        <Route path="/student/Postulación-grado" element={
           <ProtectedRoute allowedRoles={["ROLE_STUDENT"]}>
             <RegistrationDegreePage />
           </ProtectedRoute>

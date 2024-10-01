@@ -21,7 +21,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
     useEffect(() => {
         if (isVisible) {
             document.body.classList.add('modal-body-blur');
-            if(process=='Postulación a Grados'){
+            if(process=='Postulación a grados'){
                 fetchDegree();
             }else{
                 fetchPrograms(); 

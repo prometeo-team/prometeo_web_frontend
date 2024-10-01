@@ -79,20 +79,20 @@ function ComponentInfoSR({setbutton}) {
   }
 
   const stepsData = Object.keys(statusData).filter(key =>
-    key !== "No Aprobado" &&
+    key !== "No aprobado" &&
     key !== "Finalizado" &&
-    key !== "No valida" &&  // Evitar que se elimine en el filtro inicial
-    (key !== "Pendiente Firma 100%" || statusData["Pendiente Firma 100%"] === true) &&
-    (key !== "Pendiente Firma 85%" || statusData["Pendiente Firma 85%"] === true) &&
-    (key !== "Pendiente Firma 50%" || statusData["Pendiente Firma 50%"] === true)
+    key !== "No válido" &&  // Evitar que se elimine en el filtro inicial
+    (key !== "Pendiente firma 100%" || statusData["Pendiente firma 100%"] === true) &&
+    (key !== "Pendiente firma 85%" || statusData["Pendiente firma 85%"] === true) &&
+    (key !== "Pendiente firma 50%" || statusData["Pendiente firma 50%"] === true)
   );
 
-  if (statusData["No Aprobado"]) {
-    stepsData.push("No Aprobado");
+  if (statusData["No aprobado"]) {
+    stepsData.push("No aprobado");
   }
 
-  if (statusData["No valida"]) {
-    stepsData.push("No valida");
+  if (statusData["No válido"]) {
+    stepsData.push("No válido");
   }
 
   stepsData.push("Finalizado");

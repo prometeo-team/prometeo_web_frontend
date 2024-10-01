@@ -89,7 +89,7 @@ const FormActivationComponent = () => {
         formData.append("request", requestJson);
 
         try {
-            const response = await fetch(`http://localhost:3030/api/request/uploadAndCreateRequest`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,

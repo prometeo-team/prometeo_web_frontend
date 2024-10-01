@@ -241,9 +241,9 @@ const InfoAdminRequestPage = () => {
         let color;
         if (status === 'Iniciado') {
           color = 'green';
-        } else if (status === 'En Verificacion') {
+        } else if (status === 'En verificación') {
           color = '#F1C40F';
-        } else if (status === 'En Finanzas') {
+        } else if (status === 'En finanzas') {
           color = 'red';
         }
         return <Tag color={color}>{status ? status : 'DESCONOCIDO'}</Tag>;

@@ -50,16 +50,16 @@ function NavbarTypeComponent({ onClick }) {
     
 
     const buttonData = [
-        { id: 'Adición de Créditos', label: 'Adición' },
+        { id: 'Adición de Créditos', label: 'Adición de Créditos' },
         { id: 'Retiro de Créditos', label: 'Retiro de Créditos' },
         { id: 'Incapacidades Estudiantes', label: 'Incapacidades' },
         { id: 'Supletorios', label: 'Supletorios' },
-        { id: 'Postulación a Grados', label: 'Grados' },
+        { id: 'Postulación a grados', label: 'Grados' },
         { id: 'Reintegro', label: 'Reintegro' },
-        { id: 'Reserva de Cupo', label: 'Reserva de Cupo' },
+        { id: 'Reserva de cupo', label: 'Reserva de cupo' },
         { id: 'Reembolso', label: 'Reembolso' },
         { id: 'Legalización de matrícula', label: 'Legalización de matrícula' },
-        { id: 'Activación de Cupo', label: 'Activación de Cupo' },
+        { id: 'Activación de cupo', label: 'Activación de cupo' },
         { id: 'Otras solicitudes', label: 'Otras solicitudes' },
         { id: 'all', label: 'Todas' }
     ];

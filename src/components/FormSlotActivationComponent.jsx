@@ -80,7 +80,7 @@ const FormActivationComponent = () => {
 
         const requestJson = new Blob([JSON.stringify({
             userEntity: user,
-            requestTypeEntity: 'Activación de Cupo',
+            requestTypeEntity: 'Activación de cupo',
             programStudent: career,
             html: htmlContent
         })], { type: 'application/json' });
@@ -89,7 +89,7 @@ const FormActivationComponent = () => {
         formData.append("request", requestJson);
 
         try {
-            const response = await fetch(`http://localhost:3030/api/request/uploadAndCreateRequest`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/request/uploadAndCreateRequest`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -113,7 +113,7 @@ const FormActivationComponent = () => {
     useEffect(() => {
         const fetchDocument = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/template/getTemplateDocumentWord?username=${user}&requestType=Activación de Cupo&career=${career}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/template/getTemplateDocumentWord?username=${user}&requestType=Activación de cupo&career=${career}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

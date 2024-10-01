@@ -30,15 +30,18 @@ const ComponentInfoSR = () => {
   const [initialStatus, setInitialStatus] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isEditModalVisible2, setIsEditModalVisible2] = useState(false);
   const [isFirmaModalVisible, setIsFirmaModalVisible] = useState(false);
   const [initialStatusValue, setInitialStatusValue] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [loading, setLoading] = useState(false);
   const [htmlContent, setHtmlContent] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
+  const [htmlContent2, setHtmlContent2] = useState('<h1>Este es tu documento</h1><p>El contenido con estilos aparecerá aquí.</p>');
   const [isEditing, setIsEditing] = useState(false);
   const contentRef = useRef(null);
   const [pdfUrl, setPdfUrl] = useState('');
-  const [pdfName, setPdfName] = useState(''); // URL del PDF
+  const [pdfName, setPdfName] = useState('');
+  const [boleanNP, setBoleanNP] = useState(false);
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -135,23 +138,38 @@ const ComponentInfoSR = () => {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
+      
       const result = await response.json();
       const { data: statusData } = result.data;
+
       console.log(statusData[0]);
-      if (statusData[0] == "Pendiente Firma") {
+
+      if (statusData[0] === "Pendiente firma") {
         documentToFirm();
       }
+
+      if (statusData[0] === "No aprobado") {
+        documentToFirm();
+      }
+
       setStatuses(statusData);
+
       if (statusData.length > 0) {
         const initial = statusData[0];
         setInitialStatus(initial);
         setInitialStatusValue(initial);
         setSelectedStatus(initial);
       }
+      console.log('statusData:', statusData);
+      setBoleanNP(statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");
+      console.log('Is only "No aprobado":', statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");      
+
     } catch (error) {
       console.error("Error al obtener los estados:", error);
     }
   };
+
+  
 
   const sendDocument = async (html) => {
     const myHeaders = new Headers();
@@ -176,11 +194,43 @@ const ComponentInfoSR = () => {
 
       console.log('Archivo subido exitosamente');
       setIsEditModalVisible(false);
-      changeStatus('Pendiente Firma');
+      changeStatus('Pendiente firma');
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+  const sendDocumentNAproved = async (html2) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+  
+    const formData = new FormData();
+    formData.append("idRequest", id);
+    console.log(id);
+    formData.append("username", sessionStorage.getItem('user'));
+    console.log(sessionStorage.getItem('user'));
+    formData.append("html", html2);
+  
+    try {
+      const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequestNotApproved`, {
+        method: 'PUT',
+        headers: myHeaders,
+        body: formData
+      });
+  
+      if (!uploadResponse.ok) {
+        throw new Error('No se pudo enviar el documento');
+      }
+  
+      console.log('Documento enviado exitosamente');
+      setIsEditModalVisible(false);
+      changeStatus('Enviado para Aprobación');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+  
 
   const changeStatus = async (status) => {
     const myHeaders = new Headers();
@@ -231,7 +281,7 @@ const ComponentInfoSR = () => {
     if (selectedStatus !== initialStatus) {
       try {
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
-        if (selectedStatus === 'No valida') {
+        if (selectedStatus === 'No válido') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -302,7 +352,7 @@ const ComponentInfoSR = () => {
 
   const fetchHtml2Content = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}&userAdmin=${sessionStorage.getItem('user')}&flag${true}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request/HTML?requestId=${id}&userAdmin=${sessionStorage.getItem('user')}&flag=${true}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -311,7 +361,7 @@ const ComponentInfoSR = () => {
       });
       const result = await response.json();
       if (result.status === "200") {
-        setHtmlContent(result.data);
+        setHtmlContent2(result.data);
       }
     } catch (error) {
       console.error('Error fetching HTML content:', error);
@@ -320,6 +370,7 @@ const ComponentInfoSR = () => {
 
   useEffect(() => {
     fetchHtmlContent();
+    fetchHtml2Content();
   }, [id]);
 
 
@@ -343,9 +394,12 @@ const ComponentInfoSR = () => {
       const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions)
       const result = await response2.json();
       if (response2.ok) {
+        fetchStatuses();
         setIsFirmaModalVisible(false);
-        if (tipo == "Reserva de Cupo" || tipo == "Reembolso" || tipo == "Activación de Cupo") {
-          changeStatus('En Finanzas');
+        if ((tipo == "Reserva de cupo" && selectedStatus != 'No aprobado') || (tipo == "Reembolso" && selectedStatus != 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus != 'No aprobado')) {
+          changeStatus('En finanzas');
+         } else if ((tipo == "Reserva de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reembolso" && selectedStatus == 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reintegro" && selectedStatus == 'No aprobado')) {
+          changeStatus('No aprobado');
         } else {
           changeStatus('Finalizado');
         }
@@ -381,6 +435,16 @@ const ComponentInfoSR = () => {
 
   };
 
+  const handleSave2 = () => {
+    setLoading(true);
+    setIsEditing(false);
+    const content2 = contentRef.current.innerHTML;
+    const sanitizedHtmlContent2 = sanitizeHtml(content2);
+    console.log(sanitizedHtmlContent2);
+    setHtmlContent2(content2);
+    sendDocumentNAproved(sanitizedHtmlContent2);
+  };
+
   const sanitizeHtml = (html) => {
     // Crear un documento DOM a partir del HTML
     const parser = new DOMParser();
@@ -395,7 +459,7 @@ const ComponentInfoSR = () => {
   };
 
   const handleCancel2 = () => {
-    setIsEditModalVisible(false);
+    setIsEditModalVisible2(false);
   };
   const handleCancel3 = () => {
     setIsFirmaModalVisible(false);
@@ -459,30 +523,32 @@ const ComponentInfoSR = () => {
           </div>
         </Descriptions.Item>
 
-        {(selectedStatus === 'No Aprobado' &&
-          (tipo === 'Reintegro' || tipo === 'Reembolos' || tipo === 'Activación de Cupo' || tipo === 'Reserva de Cupo')) ? (
+        {(selectedStatus === 'No aprobado' &&
+          (tipo === 'Reintegro' || tipo === 'Reembolso' || tipo === 'Activación de cupo' || tipo === 'Reserva de cupo')) ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
-            <div className="flex flex-col items-start justify-between w-full">
+            <div className="flex flex-col items-start pr-5">
               <Button
                 type="primary"
                 className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
                 onClick={() => {
-                  if (selectedStatus === 'No Aprobado') {
-                    setIsEditModalVisible(true);
-                  } else if (initialStatusValue.includes('Firma')) {
+                  console.log(boleanNP)
+                  if (boleanNP) { 
+                    setIsEditModalVisible2(false);
                     setIsFirmaModalVisible(true);
+                  } else if (selectedStatus === 'No aprobado') {
+                    setIsEditModalVisible2(true);
                   } else {
                     setIsModalVisible(true);
-                  }
+                  }                  
                 }}
                 disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
               >
-                {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'}
+                {initialStatusValue.includes('No aprobado') ? 'Firmar' : 'Confirmar'}
                 <FaCheck className="ml-2 md:ml-4" />
               </Button>
             </div>
           </Descriptions.Item>
-        ) : (selectedStatus === 'No Aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos')) ? (
+        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos')) ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
@@ -510,7 +576,7 @@ const ComponentInfoSR = () => {
               type="primary"
               className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
               onClick={() => {
-                if (selectedStatus == 'En Elaboración') {
+                if (selectedStatus == 'En elaboración') {
                   setIsEditModalVisible(true);
                 } else if (initialStatusValue.includes('Firma')) {
                   setIsFirmaModalVisible(true);
@@ -545,6 +611,7 @@ const ComponentInfoSR = () => {
         onOk={handleSave}
         onCancel={handleCancel2}
         width={800}
+        className='-mt-16'
         footer={[
           !loading && (
             <Button key="cancel" onClick={handleCancel2}>
@@ -572,6 +639,49 @@ const ComponentInfoSR = () => {
           contentEditable={isEditing}
           ref={contentRef}
           dangerouslySetInnerHTML={{ __html: htmlContent }}
+          style={{
+            border: isEditing ? '1px solid gray' : 'none',
+            padding: '10px',
+            height: '600px',
+            overflowY: 'auto',
+          }}
+        />
+      </Modal>
+
+      <Modal
+        title="Creación de carta"
+        visible={isEditModalVisible2}
+        onOk={handleSave}
+        onCancel={handleCancel2}
+        width={800}
+        className='-mt-16'
+        footer={[
+          !loading && (
+            <Button key="cancel" onClick={handleCancel2}>
+              Cancelar
+            </Button>
+          ),
+          !loading && (
+            <Button key="edit" onClick={toggleEdit}>
+              {isEditing ? 'Dejar de editar' : 'Editar'}
+            </Button>
+          ),
+          !loading && (
+            <Button key="save" type="primary" onClick={handleSave2}>
+              Guardar
+            </Button>
+          ),
+          loading && (
+            <div className="loader-container">
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </div>
+          )
+        ]}
+      >
+        <div
+          contentEditable={isEditing}
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: htmlContent2 }}
           style={{
             border: isEditing ? '1px solid gray' : 'none',
             padding: '10px',
