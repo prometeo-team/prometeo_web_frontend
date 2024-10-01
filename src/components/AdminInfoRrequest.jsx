@@ -578,15 +578,15 @@ const ComponentInfoSR = () => {
               onClick={() => {
                 if (selectedStatus == 'En elaboración') {
                   setIsEditModalVisible(true);
-                } else if (initialStatusValue.includes('Firma')) {
+                } else if (initialStatusValue.includes('firma')) {
                   setIsFirmaModalVisible(true);
                 } else {
                   setIsModalVisible(true);
                 }
               }}
-              disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
+              disabled={initialStatusValue.includes('firma') && role !== 'ROLE_ACADEMIC'}
             >
-              {initialStatusValue.includes('Firma') ? 'Firmar' : 'Confirmar'}
+              {initialStatusValue.includes('firma') ? 'Firmar' : 'Confirmar'}
               <FaCheck className="ml-2 md:ml-4" />
             </Button>
           </Descriptions.Item>
