@@ -52,7 +52,7 @@ const InfoStudentRequestPage = () => {
         if (isModalOpen) {
             obtenerDocumentos();
         }
-        if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de Créditos' || tipo=='Retiro de Créditos' || tipo=='Supletorios') {
+        if (tipo=='Incapacidades Estudiantes' || tipo=='Adición de créditos' || tipo=='Retiro de créditos' || tipo=='Supletorios') {
             setDetail2(true);
             setDetail3(false);
             setDetail4(false);
@@ -61,7 +61,7 @@ const InfoStudentRequestPage = () => {
             setDetail2(false);
             setDetail3(true);
             setDetail4(false);
-        }else if (tipo=='Postulación a Grados'){
+        }else if (tipo=='Postulación a grados'){
             setDetail2(false);
             setDetail3(false);
             setDetail4(true);

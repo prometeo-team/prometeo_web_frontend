@@ -91,13 +91,13 @@ function RequestTypeComponent() {
 
       switch (option) {
          case 1:
-            setCardProcess('Adición de Créditos');
+            setCardProcess('Adición de créditos');
             setIsModalOpen(true);
             where = '/student/solicitud-adicion';
             console.log('Adición de créditos');
             break;
          case 2:
-            setCardProcess('Retiro de Créditos');
+            setCardProcess('Retiro de créditos');
             setIsModalOpen(true);
             where="/student/solicitud-cancelacion";
             console.log('Cancelación de créditos');
@@ -125,12 +125,12 @@ function RequestTypeComponent() {
             where="/student/reembolso";
             break;
          case 7:
-            setCardProcess('Reserva de Cupo');
+            setCardProcess('Reserva de cupo');
             setIsModalOpen(true);
             where="/student/reserva";
             break;
          case 8:
-            setCardProcess('Activación de Cupo');
+            setCardProcess('Activación de cupo');
             setIsModalOpen(true);
             where="/student/activacion-cupo";
             break;
@@ -140,9 +140,9 @@ function RequestTypeComponent() {
             where="/student/legalizacion-matricula";
             break;
          case 10:
-            setCardProcess('Postulación a Grados');
+            setCardProcess('Postulación a grados');
             setIsModalOpen(true);
-            where="/student/postulacion-grado";
+            where="/student/Postulación-grado";
             break;
          default:
             break;
@@ -202,7 +202,7 @@ function RequestTypeComponent() {
                            handleCardClick(2);
                         }}
                      >
-                        <CardComponent title="Retiro de Créditos" icon="2" onCardClick={() => handleCardClick(2)} />
+                        <CardComponent title="Retiro de créditos" icon="2" onCardClick={() => handleCardClick(2)} />
                      </Link>
                   </Col>
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
@@ -283,15 +283,15 @@ function RequestTypeComponent() {
                      </Link>
                   </Col>
                   {isVisibleDegree &&(
-                  <Col id='postulacionG' className="card-col" xs={24} sm={12} md={8} lg={6}>
+                  <Col id='PostulaciónG' className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
-                        to="/student/postulacion-grado"
+                        to="/student/Postulación-grado"
                         onClick={(e) => {
                            e.preventDefault();
                            handleCardClick(10);
                         }}
                      >
-                        <CardComponent title="Postulación a Grados" icon="10" onCardClick={() => handleCardClick(10)} />
+                        <CardComponent title="Postulación a grados" icon="10" onCardClick={() => handleCardClick(10)} />
                      </Link>
                   </Col>
                   )}

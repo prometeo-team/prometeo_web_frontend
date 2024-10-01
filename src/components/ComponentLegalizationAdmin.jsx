@@ -96,7 +96,7 @@ const ComponentLegalizationAdmin = () => {
 
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${username}`;
 
-        if (selectedStatus === 'No valida') {
+        if (selectedStatus === 'No válido') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -210,7 +210,7 @@ const ComponentLegalizationAdmin = () => {
             </select>
           </div>
         </Descriptions.Item>
-        {selectedStatus === 'No valida' ? (
+        {selectedStatus === 'No válido' ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full">
               <div className="flex flex-col w-full md:w-3/5">

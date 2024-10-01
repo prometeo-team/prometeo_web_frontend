@@ -118,7 +118,7 @@ const FormDegreeComponent = () => {
         const formdata = new FormData();
         const requestJson = new Blob([JSON.stringify({
           userEntity: user,
-          requestTypeEntity: 'Postulación a Grados',
+          requestTypeEntity: 'Postulación a grados',
           programStudent: career
         })], { type: 'application/json' });
   
