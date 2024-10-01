@@ -1,31 +1,68 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './validatePdfPage.css';
 
 const ValidatePdfPage = () => {
     const { requestId } = useParams();
-    const [file, setFile] = useState(null);
+    const location = useLocation();
+    const [fileUrl, setFileUrl] = useState(null);
+    const [fileBlob, setFileBlob] = useState(null);
     const [validationResult, setValidationResult] = useState('');
     const [validationCompleted, setValidationCompleted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // Nueva bandera
     const navigate = useNavigate();
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setFile(selectedFile);
-    };
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const url = queryParams.get('pdfUrl');
+        console.log('fileUrl', url);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!file) {
-            alert("Por favor, sube un archivo PDF para validar.");
+        if (!url) {
+            console.error("No se proporcionó una URL para el archivo.");
+            return;
+        }
+
+        setFileUrl(url);
+
+        // Descargamos el archivo como Blob
+        const downloadFile = async () => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("Error al descargar el archivo");
+                }
+                const blob = await response.blob();
+                setFileBlob(blob);
+            } catch (error) {
+                console.error("Error al descargar el archivo:", error);
+            }
+        };
+
+        downloadFile();
+    }, [location.search]);
+
+    // Nuevo useEffect para detectar cuando fileBlob cambia y no estamos ya enviando
+    useEffect(() => {
+        if (fileBlob && !isSubmitting && !validationCompleted) {
+            handleSubmit();
+        }
+    }, [fileBlob]);
+
+    const handleSubmit = async () => {
+        if (!fileBlob) {
+            alert("No se pudo descargar el archivo. Intenta de nuevo.");
             return;
         }
 
         setIsLoading(true);
+        setIsSubmitting(true); // Evitar múltiples envíos
 
+        // Creamos un FormData y adjuntamos el Blob directamente
         const formData = new FormData();
-        formData.append("file", file);
+        // Extraer el nombre de archivo de la URL si es posible
+        const filename = extractFilenameFromUrl(fileUrl) || 'documento.pdf';
+        formData.append("file", fileBlob, filename);
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/validate/document/${requestId}`, {
@@ -41,7 +78,13 @@ const ValidatePdfPage = () => {
             setValidationCompleted(true);
         } finally {
             setIsLoading(false);
+            setIsSubmitting(false); // Restablecer la bandera
         }
+    };
+
+    // Función para extraer el nombre de archivo de la URL
+    const extractFilenameFromUrl = (url) => {
+        return url.substring(url.lastIndexOf('/') + 1);
     };
 
     return (
@@ -54,7 +97,7 @@ const ValidatePdfPage = () => {
                             <p className="validation-result">{validationResult}</p>
                             <button 
                                 className="submit-button"
-                                onClick={() => navigate('/')} // Redirige a la página de inicio
+                                onClick={() => navigate('/')} 
                             >
                                 Salir
                             </button>
@@ -66,29 +109,11 @@ const ValidatePdfPage = () => {
                         </div>
                     ) : (
                         <>
-                            <h2 className="modal-header">Validacion de documentos </h2>
-                            <form onSubmit={handleSubmit} className="modal-form">
-                                <div className="file-upload-area">
-                                    <input
-                                        id="file-upload"
-                                        type="file"
-                                        accept="application/pdf"
-                                        onChange={handleFileChange}
-                                        className="file-input"
-                                    />
-                                    <label htmlFor="file-upload" className="file-upload-label">
-                                        <i className="upload-icon">&#8682;</i>
-                                        <p>{file ? file.name : 'Archivo no seleccionado'}</p>
-                                    </label>
-                                </div>
-                                <button 
-                                    type="submit" 
-                                    className="submit-button"
-                                    disabled={!file}
-                                >
-                                    Cargar documentos
-                                </button>
-                            </form>
+                            <h2 className="modal-header">Validación de documentos</h2>
+                            <div className="file-upload-area">
+                                <p>{fileBlob ? 'Archivo cargado. Iniciando validación...' : 'Cargando archivo desde la URL...'}</p>
+                            </div>
+                            {/* Eliminamos el botón de validación */}
                         </>
                     )}
                 </div>
