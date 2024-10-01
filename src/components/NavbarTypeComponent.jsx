@@ -51,7 +51,7 @@ function NavbarTypeComponent({ onClick }) {
 
     const buttonData = [
         { id: 'Adición de créditos', label: 'Adición de créditos' },
-        { id: 'Retiro de Créditos', label: 'Retiro de Créditos' },
+        { id: 'Retiro de créditos', label: 'Retiro de créditos' },
         { id: 'Incapacidades Estudiantes', label: 'Incapacidades' },
         { id: 'Supletorios', label: 'Supletorios' },
         { id: 'Postulación a grados', label: 'Grados' },

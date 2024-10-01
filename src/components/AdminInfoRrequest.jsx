@@ -285,7 +285,7 @@ const ComponentInfoSR = () => {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
-        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -302,7 +302,7 @@ const ComponentInfoSR = () => {
             message: 'Estado actualizado',
             description: `El estado se ha cambiado a ${selectedStatus}.`,
           });
-          if (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos') {
+          if (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') {
             notification.success({
               message: 'Estado actualizado',
               description: `Correo enviado.`,
@@ -548,7 +548,7 @@ const ComponentInfoSR = () => {
               </Button>
             </div>
           </Descriptions.Item>
-        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de Créditos')) ? (
+        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos')) ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">

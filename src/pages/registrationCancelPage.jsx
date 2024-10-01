@@ -11,10 +11,10 @@ const registrationCancelPage = () => {
                 <UserCArdComponent user={'Pepito Perez'} number={2}></UserCArdComponent>
             </div>
             <div>
-                <TitleComponent title="Solicitud Retiro de Créditos" />
+                <TitleComponent title="Solicitud Retiro de créditos" />
             </div>
             <div>
-                <FormAddition_CancelComponent type="Retiro de Créditos" />
+                <FormAddition_CancelComponent type="Retiro de créditos" />
             </div>
         </div>
 
