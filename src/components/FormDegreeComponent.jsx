@@ -87,7 +87,6 @@ const FormDegreeComponent = () => {
         if(option){
             setIsButtonVisible(true);
         }
-        setMod
         setModalVisible2(false);
         notification.info({
             message: 'Importante',

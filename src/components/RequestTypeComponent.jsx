@@ -14,6 +14,18 @@ function RequestTypeComponent() {
    const [isVisible, setIsVisible] = useState(true);
    const [isVisibleDegree, setIsVisibleDegree] = useState(false);
    const [isModalOpen, setIsModalOpen] = useState(false);
+   const [visibleReintegro, setVisibleReintegro] = useState(false);
+   const [visibleReservaCupo, setVisibleReservaCupo] = useState(false);
+   const [visibleReembolso, setVisibleReembolso] = useState(false);
+   const [visibleLegalizacionMatricula, setVisibleLegalizacionMatricula] = useState(false);
+   const [visibleActivacionCupo, setVisibleActivacionCupo] = useState(false);
+   const [visibleOtrasSolicitudes, setVisibleOtrasSolicitudes] = useState(false);
+   const [visibleAdicionCreditos, setVisibleAdicionCreditos] = useState(false);
+   const [visibleRetiroCreditos, setVisibleRetiroCreditos] = useState(false);
+   const [visibleIncapacidadesEstudiantes, setVisibleIncapacidadesEstudiantes] = useState(false);
+   const [visibleIncapacidadesDocentes, setVisibleIncapacidadesDocentes] = useState(false);
+   const [visibleSupletorios, setVisibleSupletorios] = useState(false);
+   const [visiblePostulacionGrados, setVisiblePostulacionGrados] = useState(false);
    const [CardProcess, setCardProcess] = useState(null);
    const [Degree, setDegree] = useState([]);
    const navigate = useNavigate();
@@ -54,6 +66,7 @@ function RequestTypeComponent() {
         }
       }
       fetchdegre();
+      fetchdegreAvailable();
     }, []);
 
     const fetchdegre = async () =>{
@@ -72,6 +85,50 @@ function RequestTypeComponent() {
             const prevDegree = result.map(subjet =>subjet.title.split(" - ")[1]);
             console.log(prevDegree);
             setDegree(prevDegree);
+         }
+      }catch(error){
+         console.error("Error al obtener los datos:", error);
+      }
+   }
+
+   const fetchdegreAvailable = async () =>{
+      try {
+         const response = await fetch(`${import.meta.env.VITE_API_URL}/requestType/requestsAvailable`, {
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json',
+             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+           },
+         });
+         
+         const result = await response.json();
+         if(response.ok){
+            const reintegro = result.data[0].Reintegro;
+            const reservaDeCupo = result.data[1]["Reserva de cupo"];
+            const reembolso = result.data[2].Reembolso;
+            const legalizacionMatricula = result.data[3]["Legalización de matrícula"];
+            const activacionCupo = result.data[4]["Activación de cupo"];
+            const otrasSolicitudes = result.data[5]["Otras solicitudes"];
+            const adicionCreditos = result.data[6]["Adición de créditos"];
+            const retiroCreditos = result.data[7]["Retiro de créditos"];
+            const incapacidadesEstudiantes = result.data[8]["Incapacidades Estudiantes"];
+            const incapacidadesDocentes = result.data[9]["Incapacidades Docentes"];
+            const supletorios = result.data[10].Supletorios;
+            const postulacionGrados = result.data[11]["Postulación a Grados"];
+
+            setVisibleReintegro(reintegro);
+            setVisibleReservaCupo(reservaDeCupo);
+            setVisibleReembolso(reembolso);
+            setVisibleLegalizacionMatricula(legalizacionMatricula);
+            setVisibleActivacionCupo(activacionCupo);
+            setVisibleOtrasSolicitudes(otrasSolicitudes);
+            setVisibleAdicionCreditos(adicionCreditos);
+            setVisibleRetiroCreditos(retiroCreditos);
+            setVisibleIncapacidadesEstudiantes(incapacidadesEstudiantes);
+            setVisibleIncapacidadesDocentes(incapacidadesDocentes);
+            setVisibleSupletorios(supletorios);
+            setVisiblePostulacionGrados(postulacionGrados);
+
          }
       }catch(error){
          console.error("Error al obtener los datos:", error);
@@ -142,7 +199,7 @@ function RequestTypeComponent() {
          case 10:
             setCardProcess('Postulación a grados');
             setIsModalOpen(true);
-            where="/student/Postulación-grado";
+            where="/student/Postulacion-grado";
             break;
          default:
             break;
@@ -152,7 +209,6 @@ function RequestTypeComponent() {
    const handleModalConfirm = () => {
       var carrera = document.getElementById('carrer_select').value;
       sessionStorage.setItem('Carrera', carrera);
-      console.log('prueba osama'+carrera);
       setIsModalOpen(false);
       navigate(where+'?carrera='+carrera); // Navigate to the reintegro page
    };
@@ -183,6 +239,7 @@ function RequestTypeComponent() {
             <div className="requestLayout mt-16 ml-12" id="options">
                {role=="ROLE_STUDENT" && (
                <Row gutter={[16, 16]} justify="center">
+                  {visibleAdicionCreditos &&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/solicitud-adicion"
@@ -194,6 +251,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Adición de créditos" icon="1" onCardClick={() => handleCardClick(1)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleRetiroCreditos&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/solicitud-cancelacion"
@@ -205,6 +264,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Retiro de créditos" icon="2" onCardClick={() => handleCardClick(2)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleIncapacidadesEstudiantes&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/solicitud-incapacidad"
@@ -216,6 +277,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Incapacidades Médicas" icon="3" onCardClick={() => handleCardClick(3)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleSupletorios && (
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/solicitud-supletorio"
@@ -227,6 +290,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Supletorios" icon="4" onCardClick={() => handleCardClick(4)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleReintegro&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/reintegro"
@@ -238,6 +303,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Reintegro" icon="5" onCardClick={() => handleCardClick(5)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleReembolso&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/reembolso"
@@ -249,6 +316,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Reembolso" icon="6" onCardClick={() => handleCardClick(6)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleActivacionCupo&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/activacion-cupo"
@@ -260,6 +329,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Activación reserva de cupo" icon="9" onCardClick={() => handleCardClick(8)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleReservaCupo&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/reserva"
@@ -271,6 +342,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Reserva de cupo" icon="7" onCardClick={() => handleCardClick(7)} />
                      </Link>
                   </Col>
+                  )}
+                  {visibleLegalizacionMatricula&&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/legalizacion-matricula"
@@ -282,7 +355,8 @@ function RequestTypeComponent() {
                         <CardComponent title="Legalización de matrícula" icon="8" onCardClick={() => handleCardClick(9)} />
                      </Link>
                   </Col>
-                  {isVisibleDegree &&(
+                  )}
+                  {(isVisibleDegree && visiblePostulacionGrados) &&(
                   <Col id='PostulaciónG' className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/student/Postulación-grado"
@@ -299,6 +373,7 @@ function RequestTypeComponent() {
                )}
                {role=="ROLE_TEACHER" && (
                <Row gutter={[16, 16]} justify="center">
+                  {visibleIncapacidadesDocentes &&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/teacher/solicitud-incapacidad"
@@ -309,6 +384,7 @@ function RequestTypeComponent() {
                         <CardComponent title="Incapacidades Médicas" icon="3" onCardClick={() => handleCardClick(3)} />
                      </Link>
                   </Col>
+                  )}
                </Row>
                )}
                <FloatButton

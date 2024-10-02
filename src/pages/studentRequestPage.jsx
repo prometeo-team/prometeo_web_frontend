@@ -181,7 +181,7 @@ const StudentRequestPage = () => {
         <>
           <UserCardComponent number={2} />
           <div>
-            <TitleComponent title={'Mis Solicitudes'} />
+            <TitleComponent title={'Mis solicitudes'} />
           </div>
 
           <div className="table-container ">
