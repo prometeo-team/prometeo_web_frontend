@@ -375,6 +375,7 @@ const ComponentInfoSR = () => {
 
 
   const firmDocument = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(pdfUrl);
       const blob = await response.blob();
@@ -652,12 +653,12 @@ const ComponentInfoSR = () => {
         title="Creación de carta"
         visible={isEditModalVisible2}
         onOk={handleSave}
-        onCancel={handleCancel2}
+        onCancel={handleCancel3}
         width={800}
         className='-mt-16'
         footer={[
           !loading && (
-            <Button key="cancel" onClick={handleCancel2}>
+            <Button key="cancel" onClick={handleCancel3}>
               Cancelar
             </Button>
           ),
@@ -699,12 +700,21 @@ const ComponentInfoSR = () => {
         className='w-14 -mt-16'
         width={1000}
         footer={[
+          !loading && (
           <Button key="cancel" onClick={handleCancel3}>
             Cancelar
-          </Button>,
+          </Button>
+          ),
+          !loading && (
           <Button key="firmar" type="primary" onClick={firmDocument}>
             Firmar
-          </Button>,
+          </Button>
+          ),
+          loading && (
+            <div className="loader-container">
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </div>
+          )
         ]}
       >
         <p>Por favor, revise el documento antes de firmarlo.</p>

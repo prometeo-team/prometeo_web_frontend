@@ -59,7 +59,7 @@ function NavbarTypeComponent({ onClick }) {
         { id: 'Reserva de cupo', label: 'Reserva de cupo' },
         { id: 'Reembolso', label: 'Reembolso' },
         { id: 'Legalización de matrícula', label: 'Legalización de matrícula' },
-        { id: 'Activación de cupo', label: 'Activación de cupo' },
+        { id: 'Activación de cupo', label: 'Activación reserva de cupo' },
         { id: 'Otras solicitudes', label: 'Otras solicitudes' },
         { id: 'all', label: 'Todas' }
     ];
