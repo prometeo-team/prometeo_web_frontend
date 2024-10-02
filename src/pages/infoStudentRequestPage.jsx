@@ -94,7 +94,7 @@ const InfoStudentRequestPage = () => {
     };
 
     const setbutton = (e) =>{
-        if(e['Pendiente pago']==true && (tipo =='Adición de créditos' || tipo =='Supletorios' || tipo =='Postulación a grados' )){
+        if(e['Pendiente pago']==true && (tipo =='Adición de créditos' || tipo =='Supletorios' || tipo =='Postulación a Grados' )){
             setForPay(true);
         }
         console.log(e)
@@ -136,10 +136,9 @@ const InfoStudentRequestPage = () => {
                 if(tipo == 'Adición de créditos'){
                     fetchput();
                 }
-                if(tipo == 'Postulación a grados'){
+                if(tipo == 'Postulación a Grados'){
                     fetchput3();
                 }
-                console.log('guardado');
             } else {
                 console.error("Error en la respuesta:", result.message);
             }
@@ -180,7 +179,7 @@ const InfoStudentRequestPage = () => {
         const urlObj = new URL(url);
         const params = new URLSearchParams(urlObj.search);
         const id2 = params.get('id');
-        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=Pendiente firma&username=${sessionStorage.getItem('user')}`, {
+        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id2}&status=En elaboración&username=${sessionStorage.getItem('user')}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
