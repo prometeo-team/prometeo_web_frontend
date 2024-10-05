@@ -1,21 +1,27 @@
 import { useState, useEffect } from 'react';
 import InfoSRComponent from '../components/ComponentInfoStudentRequest';
+import ModalOtherRequestComponent from "../components/ModalOtherRequestComponent";
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
 import { Button, Modal, List, notification } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
+import { IoMdCheckmarkCircle } from "react-icons/io";
 import { AiOutlineUpload } from "react-icons/ai";
 import { Link } from 'react-router-dom';
 import UserCArdComponent from '../components/UserCardComponet';
 import ModalMultiUpload from '../components/ModalMultiUpload';
+import ModalComponent from "../components/ModalComponent";
 
 const InfoStudentRequestPage = () => {
     const [role, setRole] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleOther, setModalVisibleOther] = useState(false);
     const [forPay, setForPay] = useState(false);
     const [documents, setDocuments] = useState([]); 
+    const [waitingDocuments, setWaitingDocuments] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
 
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -89,6 +95,10 @@ const InfoStudentRequestPage = () => {
         setIsModalOpen(true);
     };
 
+    const handleCloseModalCheck = () => {
+      setModalVisibleCheck(false);
+    };
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -96,7 +106,9 @@ const InfoStudentRequestPage = () => {
     const setbutton = (e) =>{
         if(e['Pendiente pago']==true && (tipo =='Adición de créditos' || tipo =='Supletorios' || tipo =='Postulación a Grados' )){
             setForPay(true);
-        }
+        } else  if(e['Pendiente completitud']==true){
+          setWaitingDocuments(true);
+      }
         console.log(e)
     };
 
@@ -147,6 +159,47 @@ const InfoStudentRequestPage = () => {
         }
     };
 
+    const fetchSave2 = async (document) => {
+      const url = window.location.href;
+      const urlObj = new URL(url);
+      const params = new URLSearchParams(urlObj.search);
+      const id2 = params.get('id');
+      const tipo = params.get('tipo');
+      console.log(document);
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
+      const formdata = new FormData();
+      
+      formdata.append("id_request", id2);
+
+      if (document.length > 0) {
+        console.log(document);
+        document.forEach((file) => {
+          formdata.append("files", file.originalfile);
+        });
+      }
+      
+      const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: formdata,
+          redirect: "follow"
+      };
+      
+      try {
+      const response = await  fetch(`${import.meta.env.VITE_API_URL}/documents/addDocumentsToRequest`, requestOptions)
+      const result = await response.json();
+          if (result.status === "200 OK") {
+            setModalVisibleOther(false)
+            setModalVisibleCheck(true);
+          } else {
+              console.error("Error en la respuesta:", result.message);
+          }
+      } catch (error) {
+          console.error("Error al obtener los programas:", error);
+      }
+  };
+
     const fetchput = async () =>{
         const url = window.location.href;
         const urlObj = new URL(url);
@@ -173,6 +226,7 @@ const InfoStudentRequestPage = () => {
             });
           }
     }
+
 
     const fetchput2 = async () =>{
         const url = window.location.href;
@@ -255,6 +309,9 @@ const InfoStudentRequestPage = () => {
                     {forPay &&(
                     <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4 ml-5' onClick={() => setModalVisible(true)} icon={<AiOutlineUpload />}>Comprobante de pago</Button>
                     )}
+                    {waitingDocuments &&(
+                    <Button type="primary" className='shadow-lg color-button text-sm md:text-base lg:text-lg h-12 mt-4 ml-5' onClick={() => setModalVisibleOther(true)} icon={<AiOutlineUpload />}>Documentos Faltantes</Button>
+                    )}
                 </div>
                 )}
                 
@@ -314,6 +371,17 @@ const InfoStudentRequestPage = () => {
                 title = {'Comprobante de pago'}
                 detail ={''}
             />
+            <ModalOtherRequestComponent
+            visible={modalVisibleOther}
+            onClose={handleCloseModal}
+            setDocuments={fetchSave2}
+          />
+          <ModalComponent
+                visible={modalVisibleCheck}
+                onClose={handleCloseModalCheck}
+                content="Solicitud realizada correctamente"
+                icon={<IoMdCheckmarkCircle />}
+              />
             </div>
         </div>
         

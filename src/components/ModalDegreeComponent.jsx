@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./ModalDegreeComponent.css";
 import UploadDocumentComponent from "./UploadDocumentComponent";
 
-const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
+const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf1, setPdf1] = useState(null);
   const [pdf2, setPdf2] = useState(null);
@@ -30,6 +30,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
   const [originalfile6, setOriginalfile6] = useState(null);
   const [originalfile7, setOriginalfile7] = useState(null);
   const [originalfile8, setOriginalfile8] = useState(null);
+  let allFilesSelected;
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -49,8 +50,12 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
       setConfirmLoading(false);
     }, 1000);
   };
-
-  const allFilesSelected = pdf1  && pdf3  && pdf5 && pdf6 && pdf8;
+  if((document_type=="Cédula de Ciudadanía" || document_type=="Tarjeta de Identidad")){
+    allFilesSelected = pdf1  && pdf2  && pdf3 && pdf4 && pdf5 && pdf6 && pdf8;
+  }else{
+    allFilesSelected = pdf1  && pdf3  && pdf5 && pdf6 && pdf7 && pdf8;
+  }
+ 
 
   const handleCancel = () => {
     document.querySelector(".center-modal").classList.add("animate__zoomOut");
@@ -238,6 +243,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       isRequired={true}
                     />
                   </div>
+                  {(document_type=="Cédula de Ciudadanía" || document_type=="Tarjeta de Identidad") && (
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="2"
@@ -252,10 +258,12 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       isRequired={false}
                     />
                   </div>
+                  )}
                   
                 </div>
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
-                <div className="w-5/12 max-md:w-full">
+                  
+                  <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="3"
                       onChange={handleFileChange3}
@@ -269,6 +277,8 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       isRequired={true}
                     />
                   </div>
+                  
+                  {(document_type=="Cédula de Ciudadanía" || document_type=="Tarjeta de Identidad") && (
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="4"
@@ -282,7 +292,8 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       detail="-"
                       isRequired={false}
                     />
-                    </div>
+                  </div>
+                  )}
                      
                 </div>
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
@@ -317,7 +328,8 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                   
                 </div>
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
-                <div className="w-5/12 max-md:w-full">
+                  {(document_type!="Cédula de Ciudadanía" && document_type!="Tarjeta de Identidad")&& (
+                  <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="7"
                       onChange={handleFileChange7}
@@ -331,6 +343,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
                       isRequired={false}
                     />
                   </div>
+                  )}
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="8"
