@@ -278,10 +278,13 @@ const ComponentInfoSR = () => {
 
   const handleOk = async () => {
     const user2 = sessionStorage.getItem('user');
-    if (selectedStatus !== initialStatus) {
+    if (selectedStatus !== initialStatus || selectedStatus == "Pendiente completitud" ) {
       try {
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
         if (selectedStatus === 'No válido') {
+          putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
+        }
+        if (selectedStatus === 'Pendiente completitud') {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -550,7 +553,7 @@ const ComponentInfoSR = () => {
               </Button>
             </div>
           </Descriptions.Item>
-        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos')) ? (
+        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') || selectedStatus === 'Pendiente completitud' ) ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
