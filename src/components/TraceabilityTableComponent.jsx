@@ -19,13 +19,17 @@ function TraceabilityTableComponent({ dataSource, columns, careers, selectedDocu
   const [selectedCareer, setSelectedCareer] = useState(careerList.length > 0 ? careerList[0].value : undefined);
   const [isButtonVisible2, setIsButtonVisible2] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [columnsadd, setColumnsadd] = useState([]);
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
     setPageSize(pageSize);
   };
 
-  const [columnsadd, setColumnsadd] = useState(columns);
+  useEffect(()=>{
+    setColumnsadd(columns);
+  },[columns])
+  
 
  
 

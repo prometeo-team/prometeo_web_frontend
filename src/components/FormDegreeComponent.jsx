@@ -48,6 +48,7 @@ const FormDegreeComponent = () => {
                 const result = await response.json();
                 if (result.status === "200 OK") {
                     setStudentInfo(result.data[0]);
+                    console.log(result.data[0]);
                 } else {
                     console.error("Error en la respuesta:", result.message);
                 }
@@ -210,11 +211,13 @@ const FormDegreeComponent = () => {
                         visible={modalVisible}
                         onClose={handleCloseModal}
                         setDocuments={setDocuments}
+                        document_type={studentInfo.document_type}
                     />
                     <ModalDegree2Component
                         visible={modalVisible2}
                         onClose={handleCloseModal2}
                         setDocuments={setDocuments}
+                        document_type={studentInfo.document_type}
                     />
                 </div>
                 <div className="grid grid-cols-4 gap-4">

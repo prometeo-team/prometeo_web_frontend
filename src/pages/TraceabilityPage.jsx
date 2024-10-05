@@ -12,38 +12,34 @@ function degreeTablePage() {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
   const [careerList, setcareerList] = useState(['Procesos','Configuracion']);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
+  const [columns, setColumns] = useState([{
+    title: "Id Solicitud",
+    dataIndex: "id",
+    key: "id",
+  },
+  {
+    title: "Usuario",
+    dataIndex: "user",
+    key: "user",
+  },
+  {
+    title: "Accion previa",
+    dataIndex: "ACPRV",
+    key: "ACPRV",
+  },
+  {
+    title: "Accion Nueva",
+    dataIndex: "ACN",
+    key: "ACN",
+  },
+  {
+    title: "Fecha",
+    dataIndex: "date",
+    key: "date",
+  },]);
   const [filas, setFilas] = useState([]);
   const navigate = useNavigate();
   
-  const columns = [
-   
-    {
-      title: "Id Solicitud",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Usuario",
-      dataIndex: "user",
-      key: "user",
-    },
-    {
-      title: "Accion previa",
-      dataIndex: "ACPRV",
-      key: "ACPRV",
-    },
-    {
-      title: "Accion Nueva",
-      dataIndex: "ACN",
-      key: "ACN",
-    },
-    {
-      title: "Fecha",
-      dataIndex: "date",
-      key: "date",
-    },
-  ];
-
  useEffect(() => {
       obtenerDatos(); 
   }, []);
@@ -88,8 +84,53 @@ function degreeTablePage() {
 
   const handleCarreras =  (e) => {
     if(e == 'Configuracion'){
+      setColumns([{
+        title: "Id Solicitud",
+        dataIndex: "id",
+        key: "id",
+      },
+      {
+        title: "Usuario",
+        dataIndex: "user",
+        key: "user",
+      },
+      {
+        title: "Parametro Nuevo",
+        dataIndex: "ACN",
+        key: "ACN",
+      },
+      {
+        title: "Fecha",
+        dataIndex: "date",
+        key: "date",
+      },])
       obtenerDatos('id_requestDetail=0&');
     }else if(e == 'Procesos'){
+      setColumns([{
+        title: "Id Solicitud",
+        dataIndex: "id",
+        key: "id",
+      },
+      {
+        title: "Usuario",
+        dataIndex: "user",
+        key: "user",
+      },
+      {
+        title: "Accion previa",
+        dataIndex: "ACPRV",
+        key: "ACPRV",
+      },
+      {
+        title: "Accion Nueva",
+        dataIndex: "ACN",
+        key: "ACN",
+      },
+      {
+        title: "Fecha",
+        dataIndex: "date",
+        key: "date",
+      },])
       obtenerDatos();
     }
     
