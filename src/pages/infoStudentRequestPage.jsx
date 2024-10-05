@@ -99,6 +99,10 @@ const InfoStudentRequestPage = () => {
       setModalVisibleCheck(false);
     };
 
+    const handleCloseModalOther = () => {
+      setModalVisibleOther(false);
+    };
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -373,7 +377,7 @@ const InfoStudentRequestPage = () => {
             />
             <ModalOtherRequestComponent
             visible={modalVisibleOther}
-            onClose={handleCloseModal}
+            onClose={handleCloseModalOther}
             setDocuments={fetchSave2}
           />
           <ModalComponent

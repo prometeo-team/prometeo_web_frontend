@@ -54,7 +54,7 @@ function NavbarTypeComponent({ onClick }) {
         { id: 'Retiro de créditos', label: 'Retiro de créditos' },
         { id: 'Incapacidades Estudiantes', label: 'Incapacidades' },
         { id: 'Supletorios', label: 'Supletorios' },
-        { id: 'Postulación a grados', label: 'Grados' },
+        { id: 'Postulación a Grados', label: 'Grados' },
         { id: 'Reintegro', label: 'Reintegro' },
         { id: 'Reserva de cupo', label: 'Reserva de cupo' },
         { id: 'Reembolso', label: 'Reembolso' },
