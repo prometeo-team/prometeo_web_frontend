@@ -146,15 +146,7 @@ const InfoStudentRequestPage = () => {
         const response = await  fetch(`${import.meta.env.VITE_API_URL}/documents/addDocumentsToRequest`, requestOptions)
         const result = await response.json();
             if (result.status === "200 OK") {
-                if(tipo == 'Supletorios'){
-                    fetchput2();
-                }
-                if(tipo == 'Adición de créditos'){
-                    fetchput();
-                }
-                if(tipo == 'Postulación a Grados'){
-                    fetchput3();
-                }
+              setModalVisibleCheck(true);
             } else {
                 console.error("Error en la respuesta:", result.message);
             }
@@ -383,7 +375,7 @@ const InfoStudentRequestPage = () => {
           <ModalComponent
                 visible={modalVisibleCheck}
                 onClose={handleCloseModalCheck}
-                content="Solicitud realizada correctamente"
+                content="Actualización realizada correctamente"
                 icon={<IoMdCheckmarkCircle />}
               />
             </div>
