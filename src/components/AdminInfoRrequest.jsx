@@ -400,13 +400,9 @@ const ComponentInfoSR = () => {
       if (response2.ok) {
         fetchStatuses();
         setIsFirmaModalVisible(false);
-        if ((tipo == "Reserva de cupo" && selectedStatus != 'No aprobado') || (tipo == "Reembolso" && selectedStatus != 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus != 'No aprobado')) {
-          changeStatus('En finanzas');
-         } else if ((tipo == "Reserva de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reembolso" && selectedStatus == 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reintegro" && selectedStatus == 'No aprobado')) {
+        if ((tipo == "Reserva de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reembolso" && selectedStatus == 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reintegro" && selectedStatus == 'No aprobado')) {
           changeStatus('No aprobado');
-        } else {
-          changeStatus('Finalizado');
-        }
+        } 
       } else {
         console.error("Error en la respuesta:", result.message);
       }

@@ -4,10 +4,12 @@ import { CiSquarePlus, CiSquareMinus  } from "react-icons/ci";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { LoadingOutlined } from '@ant-design/icons';
-import {Spin}  from "antd";
+import {Spin,Input}  from "antd";
 import InputComponent from "./InputComponent";
 import ModalComponent from "./ModalComponent";
 import './FormLegalizationComponent.css';
+
+const { TextArea } = Input;
 
 const user = sessionStorage.getItem('user');
 
@@ -17,7 +19,7 @@ var txtcredits = '';
 var text = '';
 const FormAddition_CancelComponent = ({type}) => {
   const [modalVisibleCheck, setModalVisibleCheck] = useState(false);
-  const [subjects, setSubjects] = useState([{ id: "subject0", disabled: false }]); // Estado inicial para las materias
+  const [subjects, setSubjects] = useState([{ id: "subject0", idtxt: "subject0_txt", disabled: false }]); // Estado inicial para las materias
   const [materias, setMaterias] = useState([]);
   const [studentInfo, setStudentInfo] = useState({});
   const [newCredits, setNewCredits] = useState([]);
@@ -142,12 +144,13 @@ const FormAddition_CancelComponent = ({type}) => {
     setIsButtonVisible2(false);
     setLoading(true);
     if(type=="Adición de creditos"){
-      const myHeaders = new Headers();
+       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
       const formdata = new FormData();
       const subjectList = newCredits.map(credit => ({
         id_subject: credit.id_subject,
-        subject_name: credit.subject_name
+        subject_name: credit.subject_name,
+        detail: credit.txt
       }));
       const requestJson = new Blob([JSON.stringify({
         userEntity: user,
@@ -199,6 +202,7 @@ const FormAddition_CancelComponent = ({type}) => {
       if (option && option.selectedOption) {
         const selectedCredits = parseInt(option.selectedOption.key, 10);
         const id = option.target.id;
+        const idtxt = option.target.id+'_txt';
         const id_subject = option.selectedOption.value;
         const label = option.selectedOption.label;
         if(credits+selectedCredits<=rule){
@@ -215,7 +219,7 @@ const FormAddition_CancelComponent = ({type}) => {
             credits=credits+selectedCredits;
           }else{
             credits=credits+selectedCredits;
-            setNewCredits([...newCredits, {id: id, credits: selectedCredits, id_subject: id_subject, subject_name: label}]);
+            setNewCredits([...newCredits, {id: id, idtxt: idtxt, credits: selectedCredits, id_subject: id_subject, subject_name: label, txt: ''}]);
           }
             setIsButtonVisible(credits<rule);
         }
@@ -249,9 +253,10 @@ const FormAddition_CancelComponent = ({type}) => {
 
   const handlePlusButton = () => {
     if(subjects.length<materias.length){
-      const newId = `subject${subjects.length}`; // Genera un ID único para cada nuevo componente
-      setSubjects([...subjects, { id: newId, disabled: false}]); // Añade una nueva entrada al estado
       if(type=="Adición de creditos"){
+        const newId = `subject${subjects.length}`;
+        const newIdText = `subject${subjects.length}_txt`; // Genera un ID único para cada nuevo componente
+        setSubjects([...subjects, { id: newId, idtxt: newIdText, disabled: false}]); // Añade una nueva entrada al estado
         const id = `subject${subjects.length-1}`;
         setSubjects((prevSub) =>
           prevSub.map((subject) =>
@@ -275,6 +280,8 @@ const FormAddition_CancelComponent = ({type}) => {
         );
         setIsButtonVisible(false);
       }else if(type=="Retiro de créditos"){
+        const newId = `subject${subjects.length}`; // Genera un ID único para cada nuevo componente
+        setSubjects([...subjects, { id: newId, disabled: false}]); // Añade un
         const id = `subject${subjects.length-1}`;
         setSubjects((prevSub) =>
           prevSub.map((subject) =>
@@ -304,9 +311,7 @@ const FormAddition_CancelComponent = ({type}) => {
           }
           const id2 = `subject${subjects.length-2}`;
           const index2 = newCredits.findIndex(credit => credit.id === id2);
-          console.log("creditos: "+(credits-newCredits[index2].credits))
           const creditLimit = rule - (credits - newCredits[index2].credits);
-          console.log("limite: "+creditLimit)
               setMaterias(prevMaterias =>
                 prevMaterias.map(materia =>
                   parseInt(materia.key, 10) > creditLimit
@@ -379,6 +384,25 @@ const FormAddition_CancelComponent = ({type}) => {
     }
   };
 
+  const handelText = (id, text) =>{
+    console.log(id)
+    const index = newCredits.findIndex(credit => credit.idtxt === id);
+    const idM = id.split("_")[0];
+    console.log(idM)
+    if (index!=-1) {
+      setNewCredits((prevCredits) =>
+        prevCredits.map((subject) =>
+          subject.idtxt === id
+          ?{...subject, txt: text}
+          :subject
+        )
+      );
+    }else{
+      console.log("no existe");
+      setNewCredits([...newCredits, {id: idM, idtxt: id, id_subject: null, subject_name: null, txt: text}]);
+    }
+  };
+
   return (
     <div className='reserva-container bg-white p-4 rounded-lg shadow-md m-5 warp margenL'>
       <Link to="/student/crear-solicitud">
@@ -418,67 +442,156 @@ const FormAddition_CancelComponent = ({type}) => {
       <div>
         <div className="w-full border-t border-black"></div>
       </div>
-      {/* Actividades */}
-      <div className="activity_box ml-2 mb-6">
-        <div className="">
-          <h2 className="text-xl font-bold text-black mt-5 mb-5">
-            {type}
-          </h2>
-          <h3 className="text-base font-semibold text-black truncate">{txtcredits}</h3>
-          <h3 className="text-base text-wrap font-semibold text-red-500 truncate">{text}</h3>
-        </div>
-        <div className="flex w-full flex-col">
-          <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">
-            <h4 className="text-md font-bold text-[#9ca3af]">Asignatura</h4>
-            {subjects.map((subject) => (
-              <InputComponent
-                key={subject.id} // Asegura que cada InputComponent tenga una key única
-                id={subject.id}
-                name="subjects"
-                type="box2"
-                placeholder="Asignatura"
-                variant="form-input"
-                options={[ ...materias]}
-                onChange={handleChange}
-                disabled={subject.disabled}
-              />
-            ))}
-            <div className="flex flex-row">
-              {isButtonVisible && (
-              <CiSquarePlus id="pulsbutton" className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handlePlusButton} />
-              )}
-              {subjects.length > 1 && ( // Mostrar el botón de eliminar solo si hay más de un componente
-                <CiSquareMinus className="w-8 h-8 text-[#374151] cursor-pointer" onClick={handleMinusButton} />
-              )}
-            </div>
-            <br />
-          </div>
-          <div className="flex justify-end">
-          {isButtonVisible2 && (
-              <button
-                className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
-                onClick={handleOpenModalCheck}
-              >
-              <span>Generar Solicitud</span>
-              <BsPersonFillCheck className="ml-2 h-5 w-6" />
-            </button>
-            )}
-            {loading  && (
-              <div className="loader-container">
-                <Spin indicator={<LoadingOutlined spin />} size="large" />
-            </div>
-            )}
-          </div>
-          
-          <ModalComponent
-            visible={modalVisibleCheck}
-            onClose={handleCloseModalCheck}
-            content="Solicitud realizada correctamente"
-            icon={<IoMdCheckmarkCircle />}
+      {/* Actividades */} 
+      {type === "Retiro de créditos" ? (
+  <div className="activity_box ml-2 mb-6">
+    <div className="">
+      <h2 className="text-xl font-bold text-black mt-5 mb-5">{type}</h2>
+      <h3 className="text-base font-semibold text-black truncate">{txtcredits}</h3>
+      <h3 className="text-base text-wrap font-semibold text-red-500 truncate">{text}</h3>
+    </div>
+    <div className="flex w-full flex-col">
+      <div id="subjects" className="w-1/3 flex flex-col max-md:w-full">
+        <h4 className="text-md font-bold text-[#9ca3af]">Asignatura</h4>
+        {subjects.map((subject) => (
+          <InputComponent
+            key={subject.id}
+            id={subject.id}
+            name="subjects"
+            type="box2"
+            placeholder="Asignatura"
+            variant="form-input"
+            options={[...materias]}
+            onChange={handleChange}
+            disabled={subject.disabled}
           />
+        ))}
+        <div className="flex flex-row">
+          {isButtonVisible && (
+            <CiSquarePlus
+              id="pulsbutton"
+              className="w-8 h-8 text-[#374151] cursor-pointer"
+              onClick={handlePlusButton}
+            />
+          )}
+          {subjects.length > 1 && (
+            <CiSquareMinus
+              className="w-8 h-8 text-[#374151] cursor-pointer"
+              onClick={handleMinusButton}
+            />
+          )}
+        </div>
+        <br />
+      </div>
+      <div className="flex justify-end">
+        {isButtonVisible2 && (
+          <button
+            className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+            onClick={handleOpenModalCheck}
+          >
+            <span>Generar Solicitud</span>
+            <BsPersonFillCheck className="ml-2 h-5 w-6" />
+          </button>
+        )}
+        {loading && (
+          <div className="loader-container">
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </div>
+        )}
+      </div>
+      <ModalComponent
+        visible={modalVisibleCheck}
+        onClose={handleCloseModalCheck}
+        content="Solicitud realizada correctamente"
+        icon={<IoMdCheckmarkCircle />}
+      />
+    </div>
+  </div>
+) : type === "Adición de creditos" ? (
+  <div className="activity_box ml-2 mb-6">
+    <div className="grid grid-flow-col">
+      <h2 className="text-xl font-bold text-black mt-5 mb-5">{type}</h2>
+      <h3 className="text-lg text-black ml-4 mt-5 mb-5">Grupo y horario</h3>
+    </div>
+    <h3 className="text-base font-semibold text-black truncate">{txtcredits}</h3>
+    <h3 className="text-base text-wrap font-semibold text-red-500 truncate">{text}</h3>
+    
+    <div className="grid grid-flow-col gap-4">
+      <div className="grid grid-flow-row ">
+        <h4 className="text-md font-bold text-[#9ca3af]">Asignatura</h4>
+        <div className="flex justify-center items-center flex-col w-full">
+          {subjects.map((subject) => (
+            <div key={subject.id} className="flex justify-center items-center w-full mb-4">
+              <div className="w-3/4 p-1">
+                <InputComponent
+                  id={subject.id}
+                  name="subjects"
+                  type="box2"
+                  placeholder="Asignatura"
+                  variant="form-input"
+                  options={[...materias]}
+                  onChange={handleChange}
+                  disabled={subject.disabled}
+                />
+              </div>
+              <div className="w-11/12">
+                <TextArea
+                  id={subject.idtxt}
+                  showCount
+                  maxLength={200}
+                  onChange={(e) => handelText(subject.idtxt, e.target.value)}
+                  style={{ height: 80, resize: "none" }}
+                />
+              </div>
+            </div>
+          ))}
+          <div className="flex flex-row">
+            {isButtonVisible && (
+              <CiSquarePlus
+                id="pulsbutton"
+                className="w-8 h-8 text-[#374151] cursor-pointer"
+                onClick={handlePlusButton}
+              />
+            )}
+            {subjects.length > 1 && (
+              <CiSquareMinus
+                className="w-8 h-8 text-[#374151] cursor-pointer"
+                onClick={handleMinusButton}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
+    
+    <div className="flex justify-end">
+      {isButtonVisible2 && (
+        <button
+          className="w-52 h-12 text-white rounded-lg shadow-md color-button font-semibold text-lg flex justify-center items-center"
+          onClick={handleOpenModalCheck}
+        >
+          <span>Generar Solicitud</span>
+          <BsPersonFillCheck className="ml-2 h-5 w-6" />
+        </button>
+      )}
+      {loading && (
+        <div className="loader-container">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
+        </div>
+      )}
+    </div>
+    
+    <ModalComponent
+      visible={modalVisibleCheck}
+      onClose={handleCloseModalCheck}
+      content="Solicitud realizada correctamente"
+      icon={<IoMdCheckmarkCircle />}
+    />
+  </div>
+) : null}
+</div>
+
+      
   );
 };
 
