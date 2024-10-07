@@ -228,8 +228,8 @@ const FormActivationComponent = () => {
                     title="Vista previa del documento"
                     visible={isModalVisible}
                     onCancel={handleCancel}
-                    className="bg-white"
-                    width={700}
+                    className=" -mt-16"
+                    width={800}
                     footer={[
                         <Button key="cancel" onClick={handleCancel}>
                             Cancelar
@@ -254,6 +254,7 @@ const FormActivationComponent = () => {
                             padding: '10px',
                             height: '600px',
                             overflowY: 'auto',
+                            backgroundColor: 'white',
                         }}
                     />
                 </Modal>

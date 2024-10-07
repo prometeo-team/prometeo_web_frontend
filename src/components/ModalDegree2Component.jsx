@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import "./ModalDegreeComponent.css";
 import UploadDocumentComponent from "./UploadDocumentComponent";
 
-const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
+const ModalDegree2Component = ({ visible, onClose, setDocuments, document_type }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [pdf1, setPdf1] = useState(null);
   const [pdf2, setPdf2] = useState(null);
@@ -21,6 +21,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
   const [originalfile3, setOriginalfile3] = useState(null);
   const [originalfile4, setOriginalfile4] = useState(null);
   const [originalfile5, setOriginalfile5] = useState(null);
+  let allFilesSelected;
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -38,8 +39,12 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
       setConfirmLoading(false);
     }, 1000);
   };
-
-  const allFilesSelected = pdf1 && pdf2 && pdf3 && pdf5 ;
+  if(document_type=="Cédula de Ciudadanía" || document_type=="Tarjeta de Identidad"){
+    allFilesSelected = pdf1 && pdf2 && pdf3 && pdf5 ;
+  }else{
+    allFilesSelected = pdf1 && pdf2 && pdf3 && pdf4 && pdf5 ;
+  }
+ 
 
   const handleCancel = () => {
     document.querySelector(".center-modal").classList.add("animate__zoomOut");
@@ -203,6 +208,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                       isRequired={true}
                     />
                   </div>
+                  {(document_type!="Cédula de Ciudadanía" && document_type!="Tarjeta de Identidad") && (
                   <div className="w-5/12 max-md:w-full">
                     <UploadDocumentComponent
                       id="4"
@@ -217,6 +223,7 @@ const ModalDegree2Component = ({ visible, onClose, setDocuments }) => {
                       isRequired={false}
                     />
                   </div>
+                  )}
                 </div>
                 <div className="flex flex-row justify-around items-end max-md:flex-col">
                   <div className="w-5/12 max-md:w-full">
