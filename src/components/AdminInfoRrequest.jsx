@@ -611,7 +611,7 @@ const ComponentInfoSR = () => {
       </Modal>
 
       <Modal
-        title="Firma del Documento"
+        title="Elaboración de carta"
         visible={isEditModalVisible}
         onOk={handleSave}
         onCancel={handleCancel2}

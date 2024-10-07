@@ -8,11 +8,12 @@ import "./ModalLegalizationComponent.css";
 const ModalLegalizationComponent = ({ visible, onClose, setDocuments, title, detail }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [doc6, setDoc6] = useState({ pdf: null, fileName: "Archivo no seleccionado", originalfile: null });
+  const [hasAcceptedAgreement, setHasAcceptedAgreement] = useState(false);
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
-      const documentsWithNames = [ doc6]
+      const documentsWithNames = [doc6]
         .filter((file) => file.pdf && file.pdf !== null)
         .map((file) => ({
           url: file.pdf,
@@ -51,7 +52,15 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments, title, det
     }, 500);
   };
 
-  const allFilesSelected = [ doc6].every((doc) => doc.pdf !== null);
+  const handleAcceptAgreement = () => {
+    setHasAcceptedAgreement(true);
+  };
+
+  const handleRejectAgreement = () => {
+    onClose();
+  };
+
+  const allFilesSelected = [doc6].every((doc) => doc.pdf !== null);
 
   const renderUploadField = (id, doc, setDoc, label, detail, isRequired) => (
     <div key={id} className="text-center">
@@ -108,23 +117,42 @@ const ModalLegalizationComponent = ({ visible, onClose, setDocuments, title, det
             centered
             wrapClassName="my-5 animate__animated animate__zoomIn"
           >
-            <div className="text-center mx-4">
-              <h4 className="text-lg font-bold">{title}</h4>
-            </div>
-            <div className="flex items-center justify-center">
-              {renderUploadField(6, doc6, setDoc6, title, detail, true)}
-            </div>
-            <div className="text-center mt-2">
-              {allFilesSelected ? (
-                <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              ) : (
-                <Button disabled className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              )}
-            </div>
+            {!hasAcceptedAgreement ? (
+              <div className="text-center mx-4">
+                <h4 className="text-lg font-bold">Acuerdo Ético</h4>
+                <p>
+                  Al aceptar este acuerdo, usted otorga su consentimiento explícito para el uso, almacenamiento y procesamiento de los archivos que subirá al sistema. Estos archivos serán utilizados exclusivamente para el proceso de las solicitudes de la facultad y no serán compartidos con terceros. Por favor, asegúrese de que los documentos no contienen información sensible no autorizada para ser utilizada en este contexto.
+                </p>
+                <div className="mt-4">
+                  <Button type="primary" onClick={handleAcceptAgreement} className="mx-2">
+                    Aceptar
+                  </Button>
+                  <Button type="danger" onClick={handleRejectAgreement} className="mx-2">
+                    Rechazar
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mx-4">
+                  <h4 className="text-lg font-bold">{title}</h4>
+                </div>
+                <div className="flex items-center justify-center">
+                  {renderUploadField(6, doc6, setDoc6, detail, true)}
+                </div>
+                <div className="text-center mt-2">
+                  {allFilesSelected ? (
+                    <Button key="submit" onClick={handleOk} className="text-white mx-auto custom-btn">
+                      Cargar documentos
+                    </Button>
+                  ) : (
+                    <Button disabled className="text-white mx-auto custom-btn">
+                      Cargar documentos
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </Modal>
         </div>
       )}
