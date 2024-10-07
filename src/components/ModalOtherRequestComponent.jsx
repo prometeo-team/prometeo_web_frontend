@@ -10,23 +10,24 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
   const [filesArr, setFilesArr] = useState([
     { id: "file0", pdf: null, fileName: "Archivo no seleccionado", originalfile: null }
   ]);
+  const [hasAcceptedAgreement, setHasAcceptedAgreement] = useState(false);
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       const documentsWithNames = filesArr
         .filter((file) => file.pdf)
-        .map((file) => {
-          console.log(file); // Agrega este log para depuración
-          return { url: file.pdf, name: file.fileName, originalfile: file.originalfile };
-        });
-  
+        .map((file) => ({
+          url: file.pdf,
+          name: file.fileName,
+          originalfile: file.originalfile,
+        }));
+
       setDocuments(documentsWithNames);
       onClose();
       setConfirmLoading(false);
     }, 1000);
   };
-  
 
   const handleCancel = () => {
     document.querySelector(".center-modal").classList.add("animate__zoomOut");
@@ -65,7 +66,6 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
       )
     );
   };
-  
 
   const handlePlusButton = () => {
     if (filesArr.length < 5) {
@@ -85,7 +85,14 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
     }
   };
 
-  // Check if the first file in the array has a PDF loaded
+  const handleAcceptAgreement = () => {
+    setHasAcceptedAgreement(true);
+  };
+
+  const handleRejectAgreement = () => {
+    onClose();
+  };
+
   const isFirstFileLoaded = filesArr[0].pdf;
 
   return (
@@ -102,75 +109,93 @@ const ModalOtherRequestComponent = ({ visible, onClose, setDocuments }) => {
             centered
             wrapClassName="center-modal animate__animated animate__zoomIn"
           >
-            <div className="text-center mb-4">
-              <h4 className="text-lg font-bold">Documento - Formato .pdf*</h4>
-            </div>
-            <div className="grid">
-              {filesArr.map((fileObj) => (
-                <div key={fileObj.id} className="text-center">
-                  <div>
-                    <p className="text-sm font-bold mb-1">Documento</p>
-                    <p className="text-xs text-gray-600 mb-4"></p>
-                  </div>
-                  <div
-                    className="flex justify-center items-center border-dashed border-2 cursor-pointer rounded-md form-color h-20"
-                    onClick={() => document.getElementById(fileObj.id).click()}
-                  >
-                    <Input
-                      id={fileObj.id}
-                      type="file"
-                      accept=".pdf"
-                      className="input-field"
-                      hidden
-                      onChange={(event) => handleFileChange(fileObj.id, event)}
-                    />
-                    {fileObj.pdf ? (
-                      <div className="flex items-center">
-                        <AiFillFilePdf color="#000" size={48} />
-                        <p>{fileObj.fileName.length > 20 ? `${fileObj.fileName.slice(0, 17)}...${fileObj.fileName.split('.').pop()}` : fileObj.fileName}</p>
-                      </div>
-                    ) : (
-                      <MdCloudUpload color="#000" size={50} />
-                    )}
-                  </div>
-                  <span className="flex items-center uploaded-row">
-                    {fileObj.fileName === "Archivo no seleccionado" ? (
-                      "Archivo no seleccionado"
-                    ) : (
-                      <>
-                        Eliminar archivo -
-                        <MdDelete className="delete-icon" onClick={() => handleDelete(fileObj.id)} />
-                      </>
-                    )}
-                  </span>
+            {!hasAcceptedAgreement ? (
+              <div className="text-center mx-4">
+                <h4 className="text-lg font-bold">Acuerdo Ético</h4>
+                <p>
+                  Al aceptar este acuerdo, usted otorga su consentimiento explícito para el uso, almacenamiento y procesamiento de los archivos que subirá al sistema. Estos archivos serán utilizados exclusivamente para el proceso de las solicitudes de la facultad y no serán compartidos con terceros. Por favor, asegúrese de que los documentos no contienen información sensible no autorizada para ser utilizada en este contexto.
+                </p>
+                <div className="mt-4">
+                  <Button type="primary" onClick={handleAcceptAgreement} className="mx-2">
+                    Aceptar
+                  </Button>
+                  <Button type="danger" onClick={handleRejectAgreement} className="mx-2">
+                    Rechazar
+                  </Button>
                 </div>
-              ))}
-            </div>
-            <div className="text-center mt-2">
-              {filesArr.some((file) => file.pdf) ? (
-                <Button onClick={handleOk} className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              ) : (
-                <Button disabled className="text-white mx-auto custom-btn">
-                  Cargar documentos
-                </Button>
-              )}
-              {isFirstFileLoaded && (
-                <Button 
-                  onClick={handlePlusButton} 
-                  className="text-white mx-auto custom-btn" 
-                  disabled={filesArr.length >= 5}
-                >
-                  Añadir otro
-                </Button>
-              )}
-              {filesArr.length > 1 && (
-                <Button onClick={handleMinusButton} className="text-white mx-auto custom-btn">
-                  Eliminar último
-                </Button>
-              )}
-            </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mb-4">
+                  <h4 className="text-lg font-bold">Documento - Formato .pdf*</h4>
+                </div>
+                <div className="grid">
+                  {filesArr.map((fileObj) => (
+                    <div key={fileObj.id} className="text-center">
+                      <div>
+                        <p className="text-sm font-bold mb-1">Documento</p>
+                      </div>
+                      <div
+                        className="flex justify-center items-center border-dashed border-2 cursor-pointer rounded-md form-color h-20"
+                        onClick={() => document.getElementById(fileObj.id).click()}
+                      >
+                        <Input
+                          id={fileObj.id}
+                          type="file"
+                          accept=".pdf"
+                          className="input-field"
+                          hidden
+                          onChange={(event) => handleFileChange(fileObj.id, event)}
+                        />
+                        {fileObj.pdf ? (
+                          <div className="flex items-center">
+                            <AiFillFilePdf color="#000" size={48} />
+                            <p>{fileObj.fileName.length > 20 ? `${fileObj.fileName.slice(0, 17)}...${fileObj.fileName.split('.').pop()}` : fileObj.fileName}</p>
+                          </div>
+                        ) : (
+                          <MdCloudUpload color="#000" size={50} />
+                        )}
+                      </div>
+                      <span className="flex items-center uploaded-row">
+                        {fileObj.fileName === "Archivo no seleccionado" ? (
+                          "Archivo no seleccionado"
+                        ) : (
+                          <>
+                            Eliminar archivo -
+                            <MdDelete className="delete-icon" onClick={() => handleDelete(fileObj.id)} />
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center mt-2">
+                  {filesArr.some((file) => file.pdf) ? (
+                    <Button onClick={handleOk} className="text-white mx-auto custom-btn">
+                      Cargar documentos
+                    </Button>
+                  ) : (
+                    <Button disabled className="text-white mx-auto custom-btn">
+                      Cargar documentos
+                    </Button>
+                  )}
+                  {isFirstFileLoaded && (
+                    <Button 
+                      onClick={handlePlusButton} 
+                      className="text-white mx-auto custom-btn" 
+                      disabled={filesArr.length >= 5}
+                    >
+                      Añadir otro
+                    </Button>
+                  )}
+                  {filesArr.length > 1 && (
+                    <Button onClick={handleMinusButton} className="text-white mx-auto custom-btn">
+                      Eliminar último
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </Modal>
         </div>
       )}

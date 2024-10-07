@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Tooltip, notification } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { LuUpload, LuDownload } from 'react-icons/lu';
+import { LuUpload } from 'react-icons/lu';
 import { FaCheck } from 'react-icons/fa6';
 import { IoAlertCircleSharp } from 'react-icons/io5';
 import ModalLegalizationComponent from '../components/ModalUploadRComponent.jsx';

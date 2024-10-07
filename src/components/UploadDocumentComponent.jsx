@@ -1,4 +1,6 @@
-import { message, Form, Input } from "antd";
+import { useState } from "react";
+import { message, Modal, Form, Input } from "antd";
+import PropTypes from "prop-types";
 import { AiFillFilePdf } from "react-icons/ai";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import "./UploadDocumentComponent.css";
@@ -10,11 +12,16 @@ const UploadDocumentComponent = ({
   onDelete,
   label,
   detail,
-  requiredValue,
   id,
 }) => {
+  const [hasAcceptedAgreement, setHasAcceptedAgreement] = useState(false);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!hasAcceptedAgreement) {
+      message.warning("Debe aceptar el acuerdo ético para continuar.");
+      return;
+    }
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
         message.error(`${file.name}: El archivo no debe pesar más de 10MB`, 10);
@@ -28,6 +35,32 @@ const UploadDocumentComponent = ({
     }
   };
 
+  const handleClick = () => {
+    if (!hasAcceptedAgreement) {
+      showAgreementModal();
+    } else {
+      document.getElementById(`input-file-${id}`).click(); // Utiliza un ID único para cada input
+    }
+  };
+
+  const showAgreementModal = () => {
+    Modal.confirm({
+      title: "Acuerdo Ético",
+      content: (
+        <div>
+          <p>
+            Al aceptar este acuerdo, usted otorga su consentimiento explícito para el uso, almacenamiento y procesamiento de los archivos que subirá al sistema. Estos archivos serán utilizados exclusivamente para el proceso de las solicitudes de la facultad y no serán compartidos con terceros. Por favor, asegúrese de que los documentos no contienen información sensible no autorizada para ser utilizada en este contexto.
+          </p>
+        </div>
+      ),
+      okText: "Aceptar",
+      okType: "primary",
+      cancelText: "Rechazar",
+      onOk: () => setHasAcceptedAgreement(true),
+      onCancel: () => message.info("Debe aceptar el acuerdo ético para continuar."),
+    });
+  };
+
   const truncateFileName = (fileName) => {
     if (!fileName) return ""; // Maneja el caso cuando `fileName` es `undefined`
 
@@ -38,10 +71,6 @@ const UploadDocumentComponent = ({
     const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
     const truncatedName = fileName.slice(0, MAX_LENGTH - fileExtension.length - 4) + "..." + fileExtension;
     return truncatedName;
-  };
-
-  const handleClick = () => {
-    document.getElementById(`input-file-${id}`).click(); // Utiliza un ID único para cada input
   };
 
   return (
@@ -86,6 +115,16 @@ const UploadDocumentComponent = ({
       </span>
     </div>
   );
+};
+
+UploadDocumentComponent.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  pdf: PropTypes.string,
+  fileName: PropTypes.string,
+  onDelete: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  detail: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default UploadDocumentComponent;
