@@ -223,8 +223,8 @@ const ComponentInfoSR = () => {
       }
   
       console.log('Documento enviado exitosamente');
-      setIsEditModalVisible(false);
-      changeStatus('Enviado para Aprobación');
+      setIsEditModalVisible2(false);
+      //changeStatus('Enviado para Aprobación');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -463,7 +463,7 @@ const ComponentInfoSR = () => {
     setIsEditModalVisible(false);
   };
   const handleCancel3 = () => {
-    setIsFirmaModalVisible(false);
+    setIsEditModalVisible2(false);
   };
 
   if (isLoading) {
