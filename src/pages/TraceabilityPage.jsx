@@ -95,7 +95,12 @@ function degreeTablePage() {
         key: "user",
       },
       {
-        title: "Parametro Nuevo",
+        title: "Descripción",
+        dataIndex: "ACPRV",
+        key: "ACPRV",
+      },
+      {
+        title: "Configuración",
         dataIndex: "ACN",
         key: "ACN",
       },
