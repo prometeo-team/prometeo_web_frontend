@@ -223,8 +223,8 @@ const ComponentInfoSR = () => {
       }
   
       console.log('Documento enviado exitosamente');
-      setIsEditModalVisible(false);
-      changeStatus('Enviado para Aprobación');
+      setIsEditModalVisible2(false);
+      //changeStatus('Enviado para Aprobación');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -288,7 +288,7 @@ const ComponentInfoSR = () => {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
-        if (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') {
+        if ((selectedStatus === 'Pendiente' || selectedStatus === 'No aprobado') && (tipo == 'Retiro de créditos' || tipo == 'Adición de créditos' || tipo == 'Incapacidades Estudiantes' || tipo == 'Supletorios' || tipo == 'Legalización de matrícula' || tipo == 'Incapacidades Docentes')) {
           putUrl += `&msgNotApproved=${encodeURIComponent(additionalInfo)}`;
         }
 
@@ -399,6 +399,7 @@ const ComponentInfoSR = () => {
       const result = await response2.json();
       if (response2.ok) {
         fetchStatuses();
+        setIsLoading(false);
         setIsFirmaModalVisible(false);
         if ((tipo == "Reserva de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reembolso" && selectedStatus == 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reintegro" && selectedStatus == 'No aprobado')) {
           changeStatus('No aprobado');
@@ -461,9 +462,10 @@ const ComponentInfoSR = () => {
   const handleCancel2 = () => {
     setIsEditModalVisible2(false);
     setIsEditModalVisible(false);
+    setIsFirmaModalVisible(false)
   };
   const handleCancel3 = () => {
-    setIsFirmaModalVisible(false);
+    setIsEditModalVisible2(false);
   };
 
   if (isLoading) {
@@ -696,12 +698,12 @@ const ComponentInfoSR = () => {
         title="Firma del Documento"
         visible={isFirmaModalVisible}
         onOk={firmDocument}
-        onCancel={handleCancel3}
+        onCancel={handleCancel2}
         className='w-14 -mt-16'
         width={1000}
         footer={[
           !loading && (
-          <Button key="cancel" onClick={handleCancel3}>
+          <Button key="cancel" onClick={handleCancel2}>
             Cancelar
           </Button>
           ),
