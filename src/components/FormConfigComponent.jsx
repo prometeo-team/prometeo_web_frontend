@@ -60,7 +60,7 @@ const FormConfigComponent = () => {
   }, []);
 
   const handleDateChange = (id, dateType, date) => {
-    setRequestTypes(prevTypes => 
+    setRequestTypes(prevTypes =>
       prevTypes.map(type =>
         type.id === id
           ? { ...type, [dateType]: date }
@@ -73,21 +73,21 @@ const FormConfigComponent = () => {
     const userInfo = getInfoToken();
     const token = sessionStorage.getItem('token');
     const selectedType = requestTypes.find(type => type.id === id);
-  
+
     if (!selectedType) return;
-  
+
     const initDate = dayjs(selectedType.initDate).format('YYYY-MM-DD');
     const dueDate = dayjs(selectedType.dueDate).format('YYYY-MM-DD');
-  
+
     const url = `${import.meta.env.VITE_API_URL}/requestType/updateRequestType`;
-  
+
     const bodyData = {
       nameType: nameType,
       initDate: initDate,
       dueDate: dueDate,
       userAdmin: userInfo.sub,
     };
-  
+
     try {
       const response = await fetch(url, {
         method: 'PUT',
@@ -95,27 +95,27 @@ const FormConfigComponent = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(bodyData), 
+        body: JSON.stringify(bodyData),
       });
-  
+
       if (response.ok) {
         setButtonStates(prevStates => ({
           ...prevStates,
           [id]: { color: 'bg-[#97B749]', icon: <FaCircleCheck /> },
         }));
-  
+
         notification.success({
           message: 'Actualización exitosa',
           description: `Las fechas de ${nameType} han sido actualizadas correctamente.`,
         });
-  
+
         setTimeout(() => {
           setButtonStates(prevStates => ({
             ...prevStates,
             [id]: { color: 'bg-[#97B749]', icon: null },
           }));
         }, 1000);
-  
+
       } else {
         console.error("Error al enviar los datos:", response.statusText);
         setButtonStates(prevStates => ({
@@ -131,9 +131,9 @@ const FormConfigComponent = () => {
       }));
     }
   };
-  
-  
-  
+
+
+
   useEffect(() => {
     if (triggerPost.state && selectedDate) {
       const userInfo = getInfoToken();
@@ -182,14 +182,14 @@ const FormConfigComponent = () => {
 
       saveDateProcess();
     }
-  }, [triggerPost, selectedDate, processType, savedDates]);  
+  }, [triggerPost, selectedDate, processType, savedDates]);
 
   return (
     <div className="h-auto bg-white p-4 rounded-lg shadow-md m-5">
-       <div className="activity_box ml-2 mb-6">
+      <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
           <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
-            Comité de Procesos
+            Comité de procesos académicos - administrativos.
           </h2>
         </div>
         <div id="date_comite" className="flex flex-col md:flex-row w-full items-end">
