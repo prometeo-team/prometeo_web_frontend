@@ -49,7 +49,10 @@ const UploadDocumentComponent = ({
       content: (
         <div>
           <p>
-            Al aceptar este acuerdo, usted otorga su consentimiento explícito para el uso, almacenamiento y procesamiento de los archivos que subirá al sistema. Estos archivos serán utilizados exclusivamente para el proceso de las solicitudes de la facultad y no serán compartidos con terceros. Por favor, asegúrese de que los documentos no contienen información sensible no autorizada para ser utilizada en este contexto.
+            Al aceptar este acuerdo, usted otorga su consentimiento explícito para el uso, almacenamiento y procesamiento de los archivos que subirá al sistema. Dichos archivos se utilizarán exclusivamente para el procesamiento de las solicitudes de la facultad y no serán compartidos con terceros.
+          </p> <br />
+          <p>
+            Además, usted declara y garantiza que los documentos que presenta no han sido alterados ni modificados y son auténticos. Le solicitamos que se asegure de que los documentos no contengan información sensible no autorizada para su uso en este contexto.
           </p>
         </div>
       ),

@@ -109,7 +109,7 @@ const ModalListCouncill = () => {
             <table className="min-w-full table-auto">
               <thead className="hidden md:table-header-group">
                 <tr>
-                  <th className="px-4 py-2 text-xl font-bold text-black">Fechas de Comité</th>
+                  <th className="px-4 py-2 text-xl font-bold text-black">Fechas de Comité de procesos académicos - administrativos.</th>
                 </tr>
               </thead>
               <tbody>

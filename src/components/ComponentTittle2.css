@@ -1,0 +1,7 @@
+.expired-button {
+    @apply bg-red-600 text-white border-none;
+}
+
+.expired-button:hover {
+    @apply bg-white text-red-600 !important;
+}

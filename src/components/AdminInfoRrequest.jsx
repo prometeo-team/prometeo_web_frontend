@@ -225,6 +225,7 @@ const ComponentInfoSR = () => {
       console.log('Documento enviado exitosamente');
       setIsEditModalVisible2(false);
       //changeStatus('Enviado para Aprobación');
+      window.location.reload();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -371,10 +372,7 @@ const ComponentInfoSR = () => {
     }
   };
 
-  useEffect(() => {
-    fetchHtmlContent();
-    fetchHtml2Content();
-  }, [id]);
+
 
 
   const firmDocument = async () => {
@@ -536,9 +534,11 @@ const ComponentInfoSR = () => {
                 onClick={() => {
                   console.log(boleanNP)
                   if (boleanNP) { 
+
                     setIsEditModalVisible2(false);
                     setIsFirmaModalVisible(true);
                   } else if (selectedStatus === 'No aprobado') {
+                    fetchHtml2Content();
                     setIsEditModalVisible2(true);
                   } else {
                     setIsModalVisible(true);
@@ -580,6 +580,7 @@ const ComponentInfoSR = () => {
               className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
               onClick={() => {
                 if (selectedStatus == 'En elaboración') {
+                  fetchHtmlContent();
                   setIsEditModalVisible(true);
                 } else if (initialStatusValue.includes('firma')) {
                   setIsFirmaModalVisible(true);
