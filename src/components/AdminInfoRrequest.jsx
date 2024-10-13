@@ -1,16 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
-import { Descriptions, Button, Modal, notification } from 'antd';
+import { Descriptions, Button, Modal, notification, Space } from 'antd';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { Spin } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, BorderBottomOutlined } from '@ant-design/icons';
 import './AdminInfoRrequest.css';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { SpecialZoomLevel } from '@react-pdf-viewer/core';
+
 
 
 // Importa GlobalWorkerOptions desde pdfjs-dist
@@ -42,6 +43,8 @@ const ComponentInfoSR = () => {
   const [pdfUrl, setPdfUrl] = useState('');
   const [pdfName, setPdfName] = useState('');
   const [boleanNP, setBoleanNP] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
+  const [isBadRequest, setIsBadRequest] = useState(false);
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   const username = userInfo ? userInfo.sub : '';
@@ -50,6 +53,14 @@ const ComponentInfoSR = () => {
   const params = new URLSearchParams(urlObj.search);
   const id = params.get('id');
   const tipo = params.get('tipo');
+
+  const openNotification = (title, description) => {
+    notification.error({
+      message: title,
+      description: description,
+      duration: 2, // Duración de la notificación en segundos
+    });
+  };
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin({
     toolbarPlugin: {
@@ -138,7 +149,7 @@ const ComponentInfoSR = () => {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
-      
+
       const result = await response.json();
       const { data: statusData } = result.data;
 
@@ -162,14 +173,14 @@ const ComponentInfoSR = () => {
       }
       console.log('statusData:', statusData);
       setBoleanNP(statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");
-      console.log('Is only "No aprobado":', statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");      
+      console.log('Is only "No aprobado":', statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");
 
     } catch (error) {
       console.error("Error al obtener los estados:", error);
     }
   };
 
-  
+
 
   const sendDocument = async (html) => {
     const myHeaders = new Headers();
@@ -203,25 +214,25 @@ const ComponentInfoSR = () => {
   const sendDocumentNAproved = async (html2) => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
-  
+
     const formData = new FormData();
     formData.append("idRequest", id);
     console.log(id);
     formData.append("username", sessionStorage.getItem('user'));
     console.log(sessionStorage.getItem('user'));
     formData.append("html", html2);
-  
+
     try {
       const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/request/updateStatusRequestNotApproved`, {
         method: 'PUT',
         headers: myHeaders,
         body: formData
       });
-  
+
       if (!uploadResponse.ok) {
         throw new Error('No se pudo enviar el documento');
       }
-  
+
       console.log('Documento enviado exitosamente');
       setIsEditModalVisible2(false);
       //changeStatus('Enviado para Aprobación');
@@ -230,8 +241,8 @@ const ComponentInfoSR = () => {
       console.error('Error:', error);
     }
   };
-  
-  
+
+
 
   const changeStatus = async (status) => {
     const myHeaders = new Headers();
@@ -279,7 +290,7 @@ const ComponentInfoSR = () => {
 
   const handleOk = async () => {
     const user2 = sessionStorage.getItem('user');
-    if (selectedStatus !== initialStatus || selectedStatus == "Pendiente completitud" ) {
+    if (selectedStatus !== initialStatus || selectedStatus == "Pendiente completitud") {
       try {
         let putUrl = `${import.meta.env.VITE_API_URL}/request/updateStatusRequest?idRequest=${id}&status=${selectedStatus}&username=${user2}`;
         if (selectedStatus === 'No válido') {
@@ -372,11 +383,8 @@ const ComponentInfoSR = () => {
     }
   };
 
-
-
-
   const firmDocument = async () => {
-    setIsLoading(true);
+    setIsLoading(true); // Activa el loading
     try {
       const response = await fetch(pdfUrl);
       const blob = await response.blob();
@@ -393,22 +401,36 @@ const ComponentInfoSR = () => {
         body: formdata,
         redirect: "follow"
       };
-      const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions)
+
+      const response2 = await fetch(`${import.meta.env.VITE_API_URL}/request/firmDocumentMail`, requestOptions);
       const result = await response2.json();
+
       if (response2.ok) {
-        fetchStatuses();
-        setIsLoading(false);
-        setIsFirmaModalVisible(false);
-        if ((tipo == "Reserva de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reembolso" && selectedStatus == 'No aprobado') || (tipo == "Activación de cupo" && selectedStatus == 'No aprobado') || (tipo == "Reintegro" && selectedStatus == 'No aprobado')) {
-          changeStatus('No aprobado');
-        } 
+        if (result.status === "401") {
+          openNotification('Documento ya firmado', 'El documento ya ha sido firmado anteriormente.');
+          setIsLoading(false); // Detiene el loading
+          return; // Salir de la función para no continuar
+        } else if (result.status === "200") {
+          fetchStatuses();
+          setIsLoading(false);
+          // Cerrar el modal
+          setIsFirmaModalVisible(false);
+          // Cambiar estado según condiciones
+          if ((tipo === "Reserva de cupo" && selectedStatus === 'No aprobado') ||
+            (tipo === "Reembolso" && selectedStatus === 'No aprobado') ||
+            (tipo === "Activación de cupo" && selectedStatus === 'No aprobado') ||
+            (tipo === "Reintegro" && selectedStatus === 'No aprobado')) {
+            changeStatus('No aprobado');
+          }
+        }
       } else {
         console.error("Error en la respuesta:", result.message);
       }
     } catch (error) {
       console.error("Error al obtener los programas:", error);
+    } finally {
+      setIsLoading(false); // Asegúrate de que el loading se detenga en cualquier caso
     }
-
   };
 
   const handleSelectChange = (value) => {
@@ -533,7 +555,7 @@ const ComponentInfoSR = () => {
                 className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
                 onClick={() => {
                   console.log(boleanNP)
-                  if (boleanNP) { 
+                  if (boleanNP) {
 
                     setIsEditModalVisible2(false);
                     setIsFirmaModalVisible(true);
@@ -542,7 +564,7 @@ const ComponentInfoSR = () => {
                     setIsEditModalVisible2(true);
                   } else {
                     setIsModalVisible(true);
-                  }                  
+                  }
                 }}
                 disabled={initialStatusValue.includes('Firma') && role !== 'ROLE_ACADEMIC'}
               >
@@ -551,7 +573,7 @@ const ComponentInfoSR = () => {
               </Button>
             </div>
           </Descriptions.Item>
-        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') || selectedStatus === 'Pendiente completitud' ) ? (
+        ) : (selectedStatus === 'No aprobado' || (selectedStatus === 'Pendiente' && tipo == 'Retiro de créditos') || selectedStatus === 'Pendiente completitud') ? (
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
@@ -698,26 +720,29 @@ const ComponentInfoSR = () => {
       <Modal
         title="Firma del Documento"
         visible={isFirmaModalVisible}
-        onOk={firmDocument}
         onCancel={handleCancel2}
         className='w-14 -mt-16'
         width={1000}
         footer={[
-          !loading && (
-          <Button key="cancel" onClick={handleCancel2}>
-            Cancelar
-          </Button>
+          !isLoading && (
+            <Button key="cancel" onClick={handleCancel2}>
+              Cancelar
+            </Button>
           ),
-          !loading && (
-          <Button key="firmar" type="primary" onClick={firmDocument}>
-            Firmar
-          </Button>
+          !isLoading && (
+            <Button
+              key="firmar"
+              type="primary"
+              onClick={firmDocument} // Solo llama a firmDocument
+            >
+              Firmar
+            </Button>
           ),
-          loading && (
+          isLoading && (
             <div className="loader-container">
               <Spin indicator={<LoadingOutlined spin />} size="large" />
             </div>
-          )
+          ),
         ]}
       >
         <p>Por favor, revise el documento antes de firmarlo.</p>
