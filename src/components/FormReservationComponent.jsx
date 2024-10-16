@@ -82,7 +82,7 @@ const FormActivationComponent = () => {
             userEntity: user,
             requestTypeEntity: 'Reserva de cupo',
             programStudent: career,
-            html: htmlContent
+            html: sanitizedContent
         })], { type: 'application/json' });
 
         const formData = new FormData();
