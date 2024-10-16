@@ -83,7 +83,7 @@ const FormActivationComponent = () => {
             userEntity: user,
             requestTypeEntity: 'Reintegro',
             programStudent: career,
-            html: htmlContent
+            html: sanitizedContent
         })], { type: 'application/json' });
 
         const formData = new FormData();
