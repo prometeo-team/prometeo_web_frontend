@@ -52,7 +52,11 @@ function NavbarComponent({ menuItems }) {
                             const liOption = isManagement ? 'mt-6' : '';
                             return (
                                 <li onClick={() => {
-                                                    navigate(item.path);
+                                                    if(item.name === "Ayuda"){
+                                                        window.open('https://www.youtube.com/channel/UCTs3kT5RC__uca7Jx3Bt6kA','_blank')
+                                                    }else{
+                                                        navigate(item.path);
+                                                    }
                                                     sessionStorage.removeItem('urlAnt');
                                                     }} key={index}
                                     className={`navbar_wrapper flex items-center gap-2 mb-5 text-white  max-md:text-2xl max-md:mb-5 transition ease-in-out delay-15 hover:-translate-y-1 hover:scale-110 duration-300 rounded itemp p-1 ${liClass} ${liOption}`}>
