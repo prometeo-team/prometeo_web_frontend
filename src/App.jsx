@@ -43,13 +43,13 @@ function App() {
     { name: 'Mis Solicitudes', path: '/student/mis-solicitudes' },
     { name: 'Crear Solicitud', path: '/student/crear-solicitud' },
     { name: 'Otras Solicitudes', path: '/student/solicitud-otra' },
-    //{ name: 'Ayuda' }
+    { name: 'Ayuda' }
   ];
   const menuTeacher = [
     { name: 'Inicio', path: '/' },
     { name: 'Mis Solicitudes', path: '/teacher/mis-solicitudes' },
     { name: 'Crear Solicitud', path: '/teacher/crear-solicitud' },
-    //{ name: 'Ayuda' }
+    { name: 'Ayuda' }
   ];
 
   const menuManagement = [
