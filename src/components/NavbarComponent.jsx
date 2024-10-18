@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NavbarComponent.css';
 import logoUni from '../assets/Logo_de_la_Universidad_El_Bosque.png';
@@ -13,7 +14,43 @@ import { FaClipboardList } from "react-icons/fa";
 import { MdPerson } from "react-icons/md";
 
 function NavbarComponent({ menuItems }) {
-  const navigate = useNavigate();
+    const [role, setRole] = useState(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if (token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+            );
+            const decodedToken = JSON.parse(jsonPayload);
+            if (decodedToken.authorities.includes('ROLE_STUDENT')) {
+            setRole('ROLE_STUDENT');
+            } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
+            setRole('ROLE_ADMIN');
+            }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
+            setRole('ROLE_TEACHER');
+            }else if (decodedToken.authorities.includes('ROLE_ACADEMIC')) {
+            setRole('ROLE_ACADEMIC');
+            }else if (decodedToken.authorities.includes('ROLE_SUBACADEMIC')) {
+            setRole('ROLE_SUBACADEMIC');
+            }else if (decodedToken.authorities.includes('ROLE_COORDINADORPRE')) {
+            setRole('ROLE_COORDINADORPRE');
+            }else if (decodedToken.authorities.includes('ROLE_COORDINADORPOS')) {
+            setRole('ROLE_COORDINADORPOS');
+            }else if (decodedToken.authorities.includes('ROLE_DECANO')) {
+            setRole('ROLE_DECANO');
+            }
+        } catch (error) {
+            console.error('Error decoding token:', error);
+        }
+        }
+    }, []);
 
     return (
         <>
@@ -53,7 +90,11 @@ function NavbarComponent({ menuItems }) {
                             return (
                                 <li onClick={() => {
                                                     if(item.name === "Ayuda"){
-                                                        window.open('https://www.youtube.com/channel/UCTs3kT5RC__uca7Jx3Bt6kA','_blank')
+                                                        if(role=='ROLE_STUDENT' || role=='ROLE_TEACHER'){
+                                                            window.open('https://www.youtube.com/channel/UCTs3kT5RC__uca7Jx3Bt6kA','_blank');
+                                                        }else{
+                                                            window.open('https://www.youtube.com/playlist?list=PLsC8QGKKdZwMofNWIhwhktNFeX9RQa0Ap ','_blank');
+                                                        }
                                                     }else{
                                                         navigate(item.path);
                                                     }
