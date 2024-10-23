@@ -65,12 +65,12 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
   };
 
   const handleFileChange1 = (file) => {
-    console.log("file1");
-    console.log(file);
+     
+     
     setFileName1(file[0].fileName);
     setPdf1(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(Diploma o Convalidación).pdf";
     const originalFile2 = file[0].originalfile;
@@ -82,7 +82,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName2(file[0].fileName);
     setPdf2(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(Acta de grado).pdf";
     const originalFile2 = file[0].originalfile;
@@ -94,7 +94,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName3(file[0].fileName);
     setPdf3(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(Documento de Identidad).pdf";
     const originalFile2 = file[0].originalfile;
@@ -106,7 +106,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName4(file[0].fileName);
     setPdf4(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(SABER 11).pdf";
     const originalFile2 = file[0].originalfile;
@@ -118,7 +118,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName5(file[0].fileName);
     setPdf5(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(Afiliación EPS).pdf";
     const originalFile2 = file[0].originalfile;
@@ -130,7 +130,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName6(file[0].fileName);
     setPdf6(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(SABER PRO).pdf";
     const originalFile2 = file[0].originalfile;
@@ -142,7 +142,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName7(file[0].fileName);
     setPdf7(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(VISA).pdf";
     const originalFile2 = file[0].originalfile;
@@ -154,7 +154,7 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments, document_type })
     setFileName8(file[0].fileName);
     setPdf8(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"(Formato solicitud de grado).pdf";
     const originalFile2 = file[0].originalfile;

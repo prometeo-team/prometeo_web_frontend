@@ -48,7 +48,7 @@ const FormDegreeComponent = () => {
                 const result = await response.json();
                 if (result.status === "200 OK") {
                     setStudentInfo(result.data[0]);
-                    console.log(result.data[0]);
+                     
                 } else {
                     console.error("Error en la respuesta:", result.message);
                 }
@@ -70,7 +70,7 @@ const FormDegreeComponent = () => {
     };
 
     const handleCloseModal = (option) => {
-        console.log(documents);
+         
         if(option){
             setIsButtonVisible(true);
         }
@@ -84,7 +84,7 @@ const FormDegreeComponent = () => {
     };
 
     const handleCloseModal2 = (option) => {
-        console.log(documents);
+         
         if(option){
             setIsButtonVisible(true);
         }
@@ -125,7 +125,7 @@ const FormDegreeComponent = () => {
         formdata.append("request", requestJson);
   
         if (documents.length > 0) {
-          console.log(documents);
+           
           documents.forEach((file) => {
             formdata.append("files", file.originalfile);
           });

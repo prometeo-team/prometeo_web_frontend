@@ -62,7 +62,7 @@ const FormAddition_CancelComponent = ({type}) => {
             adicion();
           }else if(proceses=="Retiro de créditos"){
             cancelacion();
-            console.log('si');
+             
           }
         }else {
           console.error("Error en la respuesta:", result.message);
@@ -104,7 +104,7 @@ const FormAddition_CancelComponent = ({type}) => {
         const carearrsubjects = result.data.subjects.map(program => ({ key: program.credits, value: program.id, label: program.name }));
         const semesterCredits = result.data.totalSemesterCredits;
         const limite = Math.floor((semesterCredits * 0.2) + semesterCredits);
-        console.log(limite);
+         
         setRule(limite);
         setMaterias(carearrsubjects);
       }else {
@@ -301,10 +301,10 @@ const FormAddition_CancelComponent = ({type}) => {
   const handleMinusButton = () => {
     if (subjects.length > 1) {
       if(type=="Adición de creditos"){
-        console.log('entro');
+         
         const id = `subject${subjects.length-1}`;
         const index = newCredits.findIndex(credit => credit.id === id);
-          console.log(index);
+           
           if (index!=-1) {
               credits = credits-newCredits[index].credits;
               newCredits.splice(index,1);  
@@ -319,13 +319,13 @@ const FormAddition_CancelComponent = ({type}) => {
                     : { ...materia, disabled: false }
                 )
               );
-          console.log("id menos"+id);
+           
           for (let index = 0; index < (subjects.length-2); index++) {
             const id = `subject${index}`;
-            console.log("ciclo: "+id);
+             
             const indexC = newCredits.findIndex(credit => credit.id === id);
             const BMateria =newCredits[indexC].id_subject;
-            console.log("BMateria: "+BMateria);
+             
             const indexM = materias.findIndex(subject => subject.value === BMateria);
             materias[indexM].disabled=true;
           }
@@ -354,7 +354,7 @@ const FormAddition_CancelComponent = ({type}) => {
       }else if(type=="Retiro de créditos"){
         const id = `subject${subjects.length-1}`;
         const index = newCredits.findIndex(credit => credit.id === id);
-          console.log(index);
+           
           if (index!=-1) {
               newCredits.splice(index,1);  
           }
@@ -380,15 +380,15 @@ const FormAddition_CancelComponent = ({type}) => {
             );
           });
       }
-      console.log(subjects); // Elimina el último elemento del array
+        // Elimina el último elemento del array
     }
   };
 
   const handelText = (id, text) =>{
-    console.log(id)
+     
     const index = newCredits.findIndex(credit => credit.idtxt === id);
     const idM = id.split("_")[0];
-    console.log(idM)
+     
     if (index!=-1) {
       setNewCredits((prevCredits) =>
         prevCredits.map((subject) =>
@@ -398,7 +398,7 @@ const FormAddition_CancelComponent = ({type}) => {
         )
       );
     }else{
-      console.log("no existe");
+       
       setNewCredits([...newCredits, {id: idM, idtxt: id, id_subject: null, subject_name: null, txt: text}]);
     }
   };

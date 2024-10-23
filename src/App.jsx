@@ -152,8 +152,6 @@ function App() {
       return <Navigate to="/login" />;
     } 
     if (!allowedRoles.includes(role)) {
-      console.log("no encontrado");
-      console.log("no encontrado");
       return <Navigate to="/" />;
     }
     return children;

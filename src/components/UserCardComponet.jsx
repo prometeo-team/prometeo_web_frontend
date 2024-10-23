@@ -187,8 +187,8 @@ function UserCardComponent({ number }) {
         } catch (error) {
             console.error("Error al manejar la notificación:", error);
         }
-       console.log('id: '+id);
-       console.log('request: '+ request);
+        
+        
 
     };
 

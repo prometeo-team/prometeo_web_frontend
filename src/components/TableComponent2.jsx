@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 import "./TableComponent.css";
 
 function TableComponent2({ dataSource, columns, parameterAction, careers, select }) {
-  console.log(careers[0]);
+   
 
   const filasConKey = dataSource.map((fila, index) => ({
     ...fila,
     key: fila.id_solicitud || index, // Asegúrate de que 'id_solicitud' esté definido
   }));
-  //console.log(dataSource);
+  // 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [searchText, setSearchText] = useState("");
