@@ -32,12 +32,12 @@ const ModalDegreeComponent = ({ visible, onClose, setDocuments }) => {
   };
 
   const handleFileChange1 = (file) => {
-    console.log("file1");
-    console.log(file);
+     
+     
     setFileName1(file[0].fileName);
     setPdf1(file[0].pdf);
     var name = file[0].fileName;
-    console.log(name);
+     
     name = name.split(".pdf")[0];
     name = name+"__Biblioteca.pdf";
     const originalFile2 = file[0].originalfile;

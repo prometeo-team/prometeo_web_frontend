@@ -10,7 +10,7 @@ const ModalList = () => {
 
   useEffect(() => {
     const userInfo = getInfoToken();
-    console.log('userInfo:', userInfo);
+     
 
     const fetchDates = async () => {
       try {
@@ -26,7 +26,7 @@ const ModalList = () => {
         }
 
         const result = await response.json();
-        console.log('Response Data:', result);
+         
         const data = result.data;
 
         const comiteMatch = data.match(/Comité de Procesos, Dates: ([^}]*)/);
@@ -79,7 +79,7 @@ const ModalList = () => {
       }
 
       const result = await response.json();
-      console.log('Response Data:', result);
+       
       const data = result.data;
 
       const comiteMatch = data.match(/Comité de Procesos, Dates: ([^}]*)/);

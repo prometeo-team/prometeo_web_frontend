@@ -73,10 +73,10 @@ const FormActivationComponent = () => {
     };
 
     const handleCreateRequest = async () => {
-        console.log(htmlContent);
+         
         // Asegúrate de que htmlContent sea una cadena
         const sanitizedContent = sanitizeHtml(htmlContent);
-        console.log(sanitizedContent)
+         
 
         const requestJson = new Blob([JSON.stringify({
             userEntity: user,
@@ -124,7 +124,7 @@ const FormActivationComponent = () => {
 
                 if (result.status === "200" && result.data) {
                     setHtmlContent(result.data);
-                    console.log(result.data)
+                     
                 } else {
                     console.error('No se encontró el documento.');
                 }

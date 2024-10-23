@@ -19,7 +19,7 @@ const OtherRequestPage = () => {
     const handleModalConfirm = () => {
         carrera = document.getElementById('carrer_select').value;
         sessionStorage.setItem('Carrera', carrera);
-        console.log('prueba osama'+carrera);
+         
         setIsModalOpen(false);
     };
 

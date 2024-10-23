@@ -62,7 +62,6 @@ function TableComponent({ dataSource, columns, parameterAction }) {
           <Button
             type="primary"
             className="color-button text-sm md:text-base lg:text-lg h-auto ml-2"
-            onClick={() => console.log('Buscar...')}
           >
             Buscar
           </Button>

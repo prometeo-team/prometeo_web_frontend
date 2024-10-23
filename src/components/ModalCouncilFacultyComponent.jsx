@@ -12,7 +12,6 @@ const ModalReEnrollmentComponent = ({ visible, onClose, setDocuments }) => {
     setConfirmLoading(true);
     setTimeout(() => {
       const newDocument = pdf ? { url: pdf, name: fileName } : null;
-      console.log("Nuevo documento:", newDocument); // Agrega este console.log
       setDocuments([newDocument].filter(Boolean));
       onClose();
       setConfirmLoading(false);

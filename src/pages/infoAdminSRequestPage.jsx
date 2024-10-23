@@ -44,7 +44,7 @@ const InfoStudentRequestPage = () => {
                 });
                 const result = await response.json();
                 setDocuments(result.data || []); // Asegurarse de que 'documents' siempre sea un array
-                console.log('Documentos obtenidos:', result.data);
+                 
             } catch (error) {
                 console.error("Error al obtener los documentos:", error);
             } finally {

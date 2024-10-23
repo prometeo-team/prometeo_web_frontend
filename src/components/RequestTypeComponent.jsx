@@ -74,7 +74,7 @@ function RequestTypeComponent() {
          if(response.status===200){
             setIsVisibleDegree(true);
             const prevDegree = result.map(subjet =>subjet.title.split(" - ")[1]);
-            console.log(prevDegree);
+             
             setDegree(prevDegree);
          }
       }catch(error){
@@ -94,7 +94,7 @@ function RequestTypeComponent() {
          
          const result = await response.json();
          if(response.ok){
-            console.log(result.data)
+             
             const adicionCreditos = result.data[6]["Adición de créditos"];
             const retiroCreditos = result.data[7]["Retiro de créditos"];
 
@@ -139,13 +139,13 @@ function RequestTypeComponent() {
             setCardProcess('Incapacidades Estudiantes');
             setIsModalOpen(true);
             where="/student/solicitud-incapacidad";
-            console.log('Incapacidades Médicas');
+             
             break;
          case 4:
             setCardProcess('Supletorios');
             setIsModalOpen(true);
             where="/student/solicitud-supletorio";
-            console.log('Supletorios');
+             
             break;
          case 5:
             setCardProcess('Reintegro');

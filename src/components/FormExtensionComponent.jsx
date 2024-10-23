@@ -69,7 +69,7 @@ const FormExtensionComponent = () => {
       const result = await response.json();
       if (response.status===200 ) {
         const carearrsubjects = result.data.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
-        console.log(carearrsubjects);
+         
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
@@ -109,7 +109,7 @@ const FormExtensionComponent = () => {
             )
           );
         }else{
-          console.log("no existe");
+           
           setNewCredits([...newCredits, {id: id, idtxt: idtxt, id_subject: id_subject, subject_name: label, txt: ''}]);
         }
     }
@@ -119,11 +119,11 @@ const FormExtensionComponent = () => {
     if(subjects.length<materias.length){
       const newId = `subject${subjects.length}`;
       const newIdText = `subject${subjects.length}_txt`; // Genera un ID único para cada nuevo componente
-      console.log("nuevo id: "+newId);
+       
       setSubjects([...subjects, { id: newId, idtxt: newIdText, disabled: false}]); // Añade una nueva entrada al estado
       const id = `subject${subjects.length-1}`;
       
-      console.log("id adicion "+id);
+       
       setSubjects((prevSub) =>
         prevSub.map((subject) =>
           subject.id === id
@@ -143,7 +143,7 @@ const FormExtensionComponent = () => {
     if (subjects.length > 1) {
       const id = `subject${subjects.length-1}`;
       const index = newCredits.findIndex(credit => credit.id === id);
-      console.log(index);
+       
       if (index!=-1) {
           newCredits.splice(index,1);  
       }
@@ -174,7 +174,7 @@ const FormExtensionComponent = () => {
   const handelText = (id, text) =>{
     const index = newCredits.findIndex(credit => credit.idtxt === id);
     const idM = id.split("_")[0];
-    console.log(idM)
+     
     if (index!=-1) {
       setNewCredits((prevCredits) =>
         prevCredits.map((subject) =>
@@ -184,7 +184,7 @@ const FormExtensionComponent = () => {
         )
       );
     }else{
-      console.log("no existe");
+       
       setNewCredits([...newCredits, {id: idM, idtxt: id, id_subject: null, subject_name: null, txt: text}]);
     }
   }

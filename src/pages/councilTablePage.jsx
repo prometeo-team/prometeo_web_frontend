@@ -48,7 +48,7 @@ function councilTablePage() {
   const handleView = (e, record) => {
     e.preventDefault();
     // Aquí se puede agregar la lógica para ver el registro
-    console.log("Ver registro:", record.id_solicitud);
+     
   };
 
   /*const [filas, setFilas] = useState([]);

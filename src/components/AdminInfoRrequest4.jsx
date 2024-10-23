@@ -55,7 +55,7 @@ const ComponentInfoSR = () => {
         });
         const result = await response.json();
         if (response.ok) {
-          console.log(result.data)
+           
           if(result.data.Biblioteca==true){
             setBiblioteca(false);
           }
@@ -76,7 +76,7 @@ const ComponentInfoSR = () => {
   };
 
   const fetchSave = async (document) => {
-    console.log(document[0].originalfile);
+     
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
     const formdata = new FormData();
@@ -102,7 +102,7 @@ const ComponentInfoSR = () => {
   const result = await response.json();
       if (result.status === "200 OK") {
         //setModalVisibleCheck(true);
-        console.log('guardado');
+         
       } else {
         console.error("Error en la respuesta:", result.message);
       }

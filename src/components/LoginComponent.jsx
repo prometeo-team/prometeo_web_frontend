@@ -34,7 +34,7 @@ const LoginComponent = () => {
     const onFinish = async (values) => {
         const { username, password } = values;
         const userCredentials = { username, password };
-        console.log('User credentials:', userCredentials);
+         
 
         setLoading(true);
 

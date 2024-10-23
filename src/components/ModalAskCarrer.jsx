@@ -33,7 +33,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
 
     const fetchPrograms = async () => {
         const userInfo = getInfoToken();
-        console.log('userInfo:', userInfo);
+         
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getProgramsStudent?username=${userInfo.sub}`, {
                 method: 'GET',
@@ -52,7 +52,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
                 }else{
                     setPrograms(programOptions);
                 }
-                console.log('Programas obtenidos:', programOptions);
+                 
             } else {
                 console.error("Error en la respuesta:", result.message);
             }
@@ -63,7 +63,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
 
     const fetchDegree = async () => {
         const userInfo = getInfoToken();
-        console.log('userInfo:', userInfo);
+         
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/user/getProgramsAndTypeByStudent?username=${userInfo.sub}`, {
                 method: 'GET',
@@ -83,7 +83,7 @@ const ModalAskCarrer = ({ isVisible, onConfirm, process, degreePrograms }) => {
                         : program
                     )
                   );
-                console.log('Programas obtenidos:', programOptions);
+                 
             } else {
                 console.error("Error en la respuesta:", result.message);
             }

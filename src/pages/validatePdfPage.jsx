@@ -16,7 +16,7 @@ const ValidatePdfPage = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const url = queryParams.get('pdfUrl');
-        console.log('fileUrl', url);
+         
 
         if (!url) {
             console.error("No se proporcionó una URL para el archivo.");
