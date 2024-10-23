@@ -149,7 +149,7 @@ const FormConfigComponent = () => {
           });
 
           if (response.ok) {
-            console.log("Datos enviados exitosamente");
+             
             setSavedDates([...savedDates, { date: selectedDate, type: processType }]);
             setButtonStates(prevState => ({
               ...prevState,

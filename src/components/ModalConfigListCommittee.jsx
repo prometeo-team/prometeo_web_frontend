@@ -24,7 +24,7 @@ const ModalListCouncill = () => {
       }
 
       const result = await response.json();
-      console.log('Response Data:', result);
+       
       const data = result.data;
 
       const comiteMatch = data.match(/Comité de Procesos, Dates: ([^}]*)/);
@@ -79,7 +79,7 @@ const ModalListCouncill = () => {
         setComiteDates(prevDates => prevDates.filter(d => d !== date));
       } 
 
-      console.log(`Fecha ${date} eliminada con éxito del ${processType}`);
+       
     } catch (error) {
       console.error("Error al eliminar la fecha:", error);
     }

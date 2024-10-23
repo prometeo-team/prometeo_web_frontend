@@ -153,7 +153,7 @@ const ComponentInfoSR = () => {
       const result = await response.json();
       const { data: statusData } = result.data;
 
-      console.log(statusData[0]);
+       
 
       if (statusData[0] === "Pendiente firma") {
         documentToFirm();
@@ -171,9 +171,8 @@ const ComponentInfoSR = () => {
         setInitialStatusValue(initial);
         setSelectedStatus(initial);
       }
-      console.log('statusData:', statusData);
+       
       setBoleanNP(statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");
-      console.log('Is only "No aprobado":', statusData.length === 1 && statusData[0].trim().toLowerCase() === "no aprobado");
 
     } catch (error) {
       console.error("Error al obtener los estados:", error);
@@ -203,7 +202,7 @@ const ComponentInfoSR = () => {
         throw new Error('No se pudo subir el archivo');
       }
 
-      console.log('Archivo subido exitosamente');
+       
       setIsEditModalVisible(false);
       changeStatus('Pendiente firma');
     } catch (error) {
@@ -217,9 +216,8 @@ const ComponentInfoSR = () => {
 
     const formData = new FormData();
     formData.append("idRequest", id);
-    console.log(id);
+     
     formData.append("username", sessionStorage.getItem('user'));
-    console.log(sessionStorage.getItem('user'));
     formData.append("html", html2);
 
     try {
@@ -233,7 +231,7 @@ const ComponentInfoSR = () => {
         throw new Error('No se pudo enviar el documento');
       }
 
-      console.log('Documento enviado exitosamente');
+       
       setIsEditModalVisible2(false);
       //changeStatus('Enviado para Aprobación');
       window.location.reload();
@@ -258,7 +256,7 @@ const ComponentInfoSR = () => {
         throw new Error('No se pudo subir el archivo');
       }
 
-      console.log('Estatus actualizado');
+       
       window.location.reload();
     } catch (error) {
       console.error('Error:', error);
@@ -450,7 +448,7 @@ const ComponentInfoSR = () => {
     setIsEditing(false);
     const content = contentRef.current.innerHTML;
     const sanitizedHtmlContent = sanitizeHtml(content);
-    console.log(sanitizedHtmlContent);
+     
     setHtmlContent(content);
     sendDocument(sanitizedHtmlContent);
 
@@ -461,7 +459,7 @@ const ComponentInfoSR = () => {
     setIsEditing(false);
     const content2 = contentRef.current.innerHTML;
     const sanitizedHtmlContent2 = sanitizeHtml(content2);
-    console.log(sanitizedHtmlContent2);
+     
     setHtmlContent2(content2);
     sendDocumentNAproved(sanitizedHtmlContent2);
   };
@@ -554,7 +552,6 @@ const ComponentInfoSR = () => {
                 type="primary"
                 className="custom-btn -mt-6 ml-4 w-full h-9 text-xs md:text-sm text-white rounded-lg shadow-md color-button font-bold flex items-center justify-center"
                 onClick={() => {
-                  console.log(boleanNP)
                   if (boleanNP) {
 
                     setIsEditModalVisible2(false);

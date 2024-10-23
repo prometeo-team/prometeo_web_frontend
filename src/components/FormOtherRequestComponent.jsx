@@ -51,14 +51,14 @@ const FormOtherRequestComponent = ({carrer}) => {
       formdata.append("request", requestJson);
 
       if (documents.length > 0) {
-        console.log(documents);
+         
         documents.forEach((file) => {
           formdata.append("files", file.originalfile);
         });
       }
 
       for (let pair of formdata.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
+         
       }
 
       const requestOptions = {

@@ -48,7 +48,7 @@ const InfoAdminRequestPage = () => {
       sessionStorage.getItem('type') != null ||
       sessionStorage.getItem('career') != null
     ) {
-      console.log('memoria');
+       
       const storedPage = Number(sessionStorage.getItem('page'));
       const storedQuery = sessionStorage.getItem('query');
       const storedType = sessionStorage.getItem('type');
@@ -74,7 +74,7 @@ const InfoAdminRequestPage = () => {
   
   useEffect(() => {
     if (careerList.length > 0 && flag==false) {
-      console.log('career list');
+       
       setSelectedCareer(careerList[0].label); 
     }
   }, [careerList,flag]);
@@ -133,7 +133,7 @@ const InfoAdminRequestPage = () => {
       setIsLoading(false);
 
       if (result && result.data) {
-        console.log(result.data.content);
+         
         const extractedData = result.data.content.map(item => ({
           id_solicitud: item.requestEntity.idRequest,
           name: `${item.requestEntity.userEntity.name} ${item.requestEntity.userEntity.lastName}`,
@@ -141,7 +141,7 @@ const InfoAdminRequestPage = () => {
           status: item.requestDetailEntity.status.name,
           tipo_solicitud: item.requestEntity.requestTypeEntity.nameType,
         }));
-        console.log(extractedData);
+         
         setFilas(extractedData);
         setTotalItems(result.data.totalElements);
       } else {
@@ -204,7 +204,7 @@ const InfoAdminRequestPage = () => {
   };
 
   const handleCarreras = (e) => {
-    console.log(e);
+     
     career = e;
     // Destruir los gráficos actuales
     if (chart1Ref.current) chart1Ref.current.destroy();

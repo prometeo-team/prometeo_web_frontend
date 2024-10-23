@@ -56,8 +56,8 @@ function degreeTablePage() {
   }, []);
 
   const handleSelectDocument = (username, checked) => {
-    console.log(username);
-    console.log(checked);
+     
+     
     setSelectedDocuments(prev =>
       checked
         ? [...prev, username] // Añadir si está marcado
@@ -84,7 +84,7 @@ function degreeTablePage() {
       const result = await response.json();
       if (response.ok) {
         if(result.data==null){
-          console.log(result.data)
+           
         }else{
         const extractedData = result.data.map(student => ({
           Id: student.userEntity.username,
@@ -93,7 +93,7 @@ function degreeTablePage() {
           lastName: student.userEntity.lastName,
           phone: student.phone
         }));
-        console.log(extractedData);
+         
         setFilas(extractedData);
         setSelectedDocuments(extractedData.map(student => student.Id));
       }
@@ -117,7 +117,7 @@ function degreeTablePage() {
       const result = await response.json();
       if (response.status === 200) {
         const carrerasSimuladas = result.data.career;
-        console.log(carrerasSimuladas)
+         
         setcareerList(carrerasSimuladas);
         career = careerList[0];
         // Retornar el primer elemento solo si careerList tiene elementos
@@ -135,7 +135,7 @@ function degreeTablePage() {
   };
 
   const handleCarreras =  (e) => {
-    console.log(e);
+     
     career=e;
     obtenerDatos();
   };
@@ -149,7 +149,7 @@ function degreeTablePage() {
       username: credit
     }));
     const raw = JSON.stringify(subjectList);
-    //console.log(subjectList);
+    // 
      
       const requestOptions = {
         method: "POST",
@@ -157,7 +157,7 @@ function degreeTablePage() {
         body: raw,
         redirect: "follow"
       };
-      console.log(requestOptions)
+       
 
 
     try {

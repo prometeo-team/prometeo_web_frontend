@@ -42,7 +42,7 @@ const InfoStudentRequestPage = () => {
                 });
                 const result = await response.json();
                 setDocuments(result.data || []); // Asegurarse de que 'documents' siempre sea un array
-                console.log('Documentos obtenidos:', result.data);
+                 
             } catch (error) {
                 console.error("Error al obtener los documentos:", error);
             } finally {
@@ -113,7 +113,7 @@ const InfoStudentRequestPage = () => {
         } else  if(e['Pendiente completitud']==true){
           setWaitingDocuments(true);
       }
-        console.log(e)
+         
     };
 
     const handleCloseModal = () =>{
@@ -126,7 +126,7 @@ const InfoStudentRequestPage = () => {
         const params = new URLSearchParams(urlObj.search);
         const id2 = params.get('id');
         const tipo = params.get('tipo');
-        console.log(document);
+         
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
         const formdata = new FormData();
@@ -161,7 +161,7 @@ const InfoStudentRequestPage = () => {
       const params = new URLSearchParams(urlObj.search);
       const id2 = params.get('id');
       const tipo = params.get('tipo');
-      console.log(document);
+       
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${sessionStorage.getItem('token')}`);
       const formdata = new FormData();
@@ -169,7 +169,7 @@ const InfoStudentRequestPage = () => {
       formdata.append("id_request", id2);
 
       if (document.length > 0) {
-        console.log(document);
+         
         document.forEach((file) => {
           formdata.append("files", file.originalfile);
         });

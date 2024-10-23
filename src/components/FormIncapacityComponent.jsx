@@ -42,13 +42,13 @@ const FormIncapacityComponent = () => {
         );
         const decodedToken = JSON.parse(jsonPayload);
         if (decodedToken.authorities.includes('ROLE_STUDENT')) {
-          console.log('ROLE_STUDENT');
+           
           setRole('ROLE_STUDENT');
         } else if (decodedToken.authorities.includes('ROLE_ADMIN')) {
-          console.log('ROLE_ADMIN');
+           
           setRole('ROLE_ADMIN');
         }else if (decodedToken.authorities.includes('ROLE_TEACHER')) {
-          console.log('ROLE_TEACHER');
+           
           setRole('ROLE_TEACHER');
         }
       } catch (error) {
@@ -99,7 +99,7 @@ const FormIncapacityComponent = () => {
       const result = await response.json();
       if (response.status===200 ) {
         const carearrsubjects = result.data.subjects.map(program => ({ value: program.id, label: program.name, disabled: false  }));
-        console.log(carearrsubjects);
+         
         setMaterias(carearrsubjects);
       }else {
         console.error("Error en la respuesta:", result.message);
@@ -156,7 +156,7 @@ const FormIncapacityComponent = () => {
             )
           );
         }else{
-          console.log("no existe");
+           
           setNewCredits([...newCredits, {id: id, idtxt: idtxt, id_subject: id_subject, subject_name: label, txt: ''}]);
         }
     }
@@ -166,11 +166,11 @@ const FormIncapacityComponent = () => {
     if(subjects.length<materias.length){
       const newId = `subject${subjects.length}`;
       const newIdText = `subject${subjects.length}_txt`; // Genera un ID único para cada nuevo componente
-      console.log("nuevo id: "+newId);
+       
       setSubjects([...subjects, { id: newId, idtxt: newIdText, disabled: false}]); // Añade una nueva entrada al estado
       const id = `subject${subjects.length-1}`;
       
-      console.log("id adicion "+id);
+       
       setSubjects((prevSub) =>
         prevSub.map((subject) =>
           subject.id === id
@@ -190,7 +190,7 @@ const FormIncapacityComponent = () => {
     if (subjects.length > 1) {
       const id = `subject${subjects.length-1}`;
       const index = newCredits.findIndex(credit => credit.id === id);
-      console.log(index);
+       
       if (index!=-1) {
           newCredits.splice(index,1);  
       }
@@ -221,7 +221,7 @@ const FormIncapacityComponent = () => {
   const handelText = (id, text) =>{
     const index = newCredits.findIndex(credit => credit.idtxt === id);
     const idM = id.split("_")[0];
-    console.log(idM)
+     
     if (index!=-1) {
       setNewCredits((prevCredits) =>
         prevCredits.map((subject) =>
@@ -231,7 +231,7 @@ const FormIncapacityComponent = () => {
         )
       );
     }else{
-      console.log("no existe");
+       
       setNewCredits([...newCredits, {id: idM, idtxt: id, id_subject: null, subject_name: null, txt: text}]);
     }
   };
@@ -255,7 +255,7 @@ const FormIncapacityComponent = () => {
       formdata.append("request", requestJson);
 
       if (documents.length > 0) {
-        console.log(documents);
+         
         documents.forEach((file) => {
           formdata.append("files", file.originalfile);
         });
@@ -295,7 +295,7 @@ const FormIncapacityComponent = () => {
     formdata.append("request", requestJson);
 
     if (documents.length > 0) {
-      console.log(documents);
+       
       documents.forEach((file) => {
         formdata.append("files", file.originalfile);
       });

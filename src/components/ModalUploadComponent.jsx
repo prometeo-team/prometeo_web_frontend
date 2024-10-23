@@ -16,7 +16,7 @@ const ModalUploadComponent = ({ visible, onClose, setDocuments }) => {
     setConfirmLoading(true);
     setTimeout(() => {
       const newDocument = pdf ? { url: pdf, name: fileName, originalFile: originalFile } : null;
-      console.log("Nuevo documento:", newDocument);
+       
       setDocuments([newDocument].filter(Boolean)); // Guardar el archivo original
       onClose();
       setConfirmLoading(false);
