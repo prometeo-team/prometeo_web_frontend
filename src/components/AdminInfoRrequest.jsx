@@ -577,10 +577,10 @@ const ComponentInfoSR = () => {
           <Descriptions.Item className="ml-4 w-full md:w-2/3">
             <div className="flex flex-col items-start justify-between w-full">
               <div className="flex flex-col w-full">
-                <h4 className="text-sm font-bold ml-5 mb-2">Razón de invalidez:</h4>
+                <h4 className="text-sm font-bold ml-5 mb-2">Razón de no aprobación:</h4>
                 <textarea
                   className="p-4 w-full h-24 mr-6 text-xs md:text-sm rounded-lg shadow-md resize-none overflow-auto border-2 border-[#43737E]"
-                  placeholder="Ingrese la razón de invalidez"
+                  placeholder="Ingrese la razón de no aprobación"
                   value={additionalInfo}
                   onChange={handleAdditionalInfoChange}
                   rows={4}
