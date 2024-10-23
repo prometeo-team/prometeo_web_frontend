@@ -6,12 +6,13 @@ import InfoSRComponent4 from '../components/AdminInfoRrequest4';
 import ChatSR from '../components/ComponentChat';
 import Title from '../components/ComponentTittle2';
 import './infoStudentRequestPage.css';
-import { Button, Modal, List } from 'antd';
+import { Button, Modal, List, Input } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import UserCardComponent from '../components/UserCardComponet';
 
 
+const { TextArea } = Input;
 const InfoStudentRequestPage = () => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +22,8 @@ const InfoStudentRequestPage = () => {
     const [detail2, setDetail2] = useState(false);
     const [detail3, setDetail3] = useState(false);
     const [detail4, setDetail4] = useState(false);
+    const [detail5, setDetail5] = useState(false);
+    const [txtDeatil, setTxtDeatil] = useState('');
 
     const url = window.location.href;
     const urlObj = new URL(url);
@@ -56,15 +59,24 @@ const InfoStudentRequestPage = () => {
             setDetail2(true);
             setDetail3(false);
             setDetail4(false);
+            setDetail5(false);
         }else if (tipo=='Incapacidades Docentes'){
             setDetail1(false);
             setDetail2(false);
             setDetail3(true);
             setDetail4(false);
+            setDetail5(false);
         }else if (tipo=='Postulación a Grados'){
             setDetail2(false);
             setDetail3(false);
             setDetail4(true);
+            setDetail5(false);
+        }else if (tipo=='Otras solicitudes'){
+            setDetail2(false);
+            setDetail3(false);
+            setDetail4(false);
+            obtenerDetalle();
+            setDetail5(true);
         }else{
             setDetail2(false);
             setDetail3(false);
@@ -72,6 +84,25 @@ const InfoStudentRequestPage = () => {
         }
 
     }, [id, isModalOpen]);
+
+    const obtenerDetalle = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/requestDetail/get?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            const result = await response.json();
+           if(response.ok){
+            setTxtDeatil(result.data.description);
+           }
+        } catch (error) {
+            console.error("Error al obtener el detalle:", error);
+        } 
+    };
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -121,6 +152,19 @@ const InfoStudentRequestPage = () => {
                 {detail4 && (
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4">
                     <InfoSRComponent4 />
+                </div>
+                )}
+                {detail5 && (
+                <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4">
+                     <span className="text-lg md:text-xl lg:text-2xl font-bold flex items-center">
+                     Detalle
+                    </span>
+                    <TextArea
+                    id="prueba"
+                    style={{ height: 80, resize: "none" }}
+                    value={txtDeatil}
+                    disabled={true}
+                  />
                 </div>
                 )}
                 <div className="bg-white shadow-lg p-4 rounded-lg xl:rounded-2xl border mt-4 mb-4">
