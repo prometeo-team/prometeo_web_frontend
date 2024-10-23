@@ -264,7 +264,7 @@ const CouncilFacultyPage = () => {
                     </div>
                 </div>
             </div>
-            {(role === 'ROLE_ACADEMIC' || role === 'ROLE_DECANO') && (
+            {(role === 'ROLE_ACADEMIC' || role === 'ROLE_DECANO' || role === 'ROLE_COORDINADORPRE' || role === 'ROLE_COORDINADORPOS' ) && (
                 <div className="flex justify-center items-center w-full mb-4">
                     <Button
                         onClick={handleClick}

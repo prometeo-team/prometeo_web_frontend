@@ -189,7 +189,7 @@ const FormConfigComponent = () => {
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
           <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
-            Comité de procesos académicos - administrativos.
+            Comité de gestión procesos
           </h2>
         </div>
         <div id="date_comite" className="flex flex-col md:flex-row w-full items-end">
@@ -218,7 +218,7 @@ const FormConfigComponent = () => {
       <div className="activity_box ml-2 mb-6">
         <div className="grid grid-flow-col">
           <h2 className="text-xl font-bold text-black mt-5 mb-5 break-words whitespace-normal">
-            Consejo académico
+            Consejo de facultad
           </h2>
         </div>
         <div id="date_consejo" className="flex flex-col md:flex-row w-full items-end">
