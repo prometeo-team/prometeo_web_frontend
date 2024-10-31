@@ -8,6 +8,7 @@ import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { AiOutlineUpload } from "react-icons/ai";
 import { Link } from 'react-router-dom';
+import { MdDownload } from "react-icons/md";
 import UserCArdComponent from '../components/UserCardComponet';
 import ModalMultiUpload from '../components/ModalMultiUpload';
 import ModalComponent from "../components/ModalComponent";
@@ -351,7 +352,10 @@ const InfoStudentRequestPage = () => {
                             return (
                                 <List.Item key={item.id}>
                                     <a href={item.url} target="_blank" rel="noopener noreferrer">
+                                      <div className='flex flex-row justify-between'>
                                         {fileName} - {new Date(item.uploaded_at).toLocaleString()}
+                                        <MdDownload />
+                                      </div>
                                     </a>
                                 </List.Item>
                             );

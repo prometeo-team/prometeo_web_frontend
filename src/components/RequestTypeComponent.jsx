@@ -339,7 +339,6 @@ function RequestTypeComponent() {
                )}
                {role=="ROLE_TEACHER" && (
                <Row gutter={[16, 16]} justify="center">
-                  {visibleIncapacidadesDocentes &&(
                   <Col className="card-col" xs={24} sm={12} md={8} lg={6}>
                      <Link
                         to="/teacher/solicitud-incapacidad"
@@ -350,7 +349,6 @@ function RequestTypeComponent() {
                         <CardComponent title="Incapacidades Médicas" icon="3" onCardClick={() => handleCardClick(3)} />
                      </Link>
                   </Col>
-                  )}
                </Row>
                )}
                <FloatButton
