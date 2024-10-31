@@ -203,10 +203,12 @@ const InfoStudentRequestPage = () => {
 
                             return (
                                 <List.Item key={item.id}>
-                                    <div className='flex flex-row justify-between'>
-                                        {fileName} - {new Date(item.uploaded_at).toLocaleString()}
-                                        <MdDownload />
-                                    </div>
+                                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                                        <div className='flex flex-row justify-between'>
+                                            {fileName} - {new Date(item.uploaded_at).toLocaleString()}
+                                            <MdDownload />
+                                        </div>
+                                    </a>
                                 </List.Item>
                             );
                         }}
