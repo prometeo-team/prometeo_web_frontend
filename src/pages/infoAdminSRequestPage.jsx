@@ -9,6 +9,7 @@ import './infoStudentRequestPage.css';
 import { Button, Modal, List, Input } from 'antd';
 import { FileTextFilled, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { MdDownload } from "react-icons/md";
 import UserCardComponent from '../components/UserCardComponet';
 
 
@@ -202,9 +203,10 @@ const InfoStudentRequestPage = () => {
 
                             return (
                                 <List.Item key={item.id}>
-                                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                                    <div className='flex flex-row justify-between'>
                                         {fileName} - {new Date(item.uploaded_at).toLocaleString()}
-                                    </a>
+                                        <MdDownload />
+                                    </div>
                                 </List.Item>
                             );
                         }}
